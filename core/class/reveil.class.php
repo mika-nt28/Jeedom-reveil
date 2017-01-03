@@ -42,7 +42,7 @@ class reveil extends eqLogic {
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
 						$options['slider'] = ceil($this->dawnSimulatorEngine($this->getConfiguration('DawnSimulatorEngineType'),$time, $this->getConfiguration('DawnSimulatorEngineStartValue'), $this->getConfiguration('DawnSimulatorEngineEndValue'), $this->getConfiguration('DawnSimulatorEngineDuration')));
-						$this->ExecuteAction($this->getConfiguration('DawnSimulatorEngineEquipement'),$options);
+						$this->ExecuteAction($this->getConfiguration('Equipements'),$options);
 						sleep(1000);
 					break;
 				}
@@ -137,7 +137,7 @@ class reveil extends eqLogic {
 		return $cron;
 	}
 	public function EvaluateCondition(){
-		foreach($this->getConfiguration('condition') as $condition){
+		foreach($this->getConfiguration('Conditions') as $condition){
 			$expression = scenarioExpression::setTags($condition['expression']);
 			$message = __('Evaluation de la condition : [', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
