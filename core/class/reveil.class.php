@@ -5,9 +5,14 @@ class reveil extends eqLogic {
 		$return = array();
 		$return['log'] = 'reveil';
 		$return['launchable'] = 'ok';
-		$return['state'] = 'nok';
-
 		$return['state'] = 'ok';
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$cron = cron::byClassAndFunction('reveil', 'pull');
+			if (is_object($cron)) 	{	
+				$return['state'] = 'nok';
+				return $return;
+			}
+		}
 		return $return;
 	}
 	public static function deamon_start($_debug = false) {
@@ -18,21 +23,21 @@ class reveil extends eqLogic {
 			return;
 		if ($deamon_info['state'] == 'ok') 
 			return;
-		/*foreach(eqLogic::byType('reveil') as $Volet)
-			$Volet->StartDemon();*/
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$reveil->save();
+		}
 	}
 	public static function deamon_stop() {	
-		/*$cron = cron::byClassAndFunction('reveil', 'ActionJour');
-		if (is_object($cron)) 	
-			$cron->remove();
-		$cron = cron::byClassAndFunction('reveil', 'ActionNuit');
-		if (is_object($cron)) 	
-			$cron->remove();
-		foreach(eqLogic::byType('reveil') as $Volet){
-			$listener = listener::byClassAndFunction('reveil', 'pull', array('reveil_id' => intval($Volet->getId())));
-			if (is_object($listener))
-				$listener->remove();
-		}*/
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$cron = cron::byClassAndFunction('reveil', 'pull');
+			if (is_object($cron)) 	
+				$cron->remove();
+		}
+	}
+	public function postSave() {
+		if($this->getIsEnable()){
+			$cron = $this->CreateCron($this->getConfiguration('ScheduleCron'), 'pull');
+		}
 	}
 	public function pull($_option){
 		$doWhile = true;
@@ -121,19 +126,16 @@ class reveil extends eqLogic {
 	}
 	public function CreateCron($Schedule, $logicalId) {
 		$cron =cron::byClassAndFunction('reveil', $logicalId);
-			if (!is_object($cron)) {
-				$cron = new cron();
-				$cron->setClass('reveil');
-				$cron->setFunction($logicalId);
-				$cron->setEnable(1);
-				$cron->setDeamon(0);
-				$cron->setSchedule($Schedule);
-				$cron->save();
-			}
-			else{
-				$cron->setSchedule($Schedule);
-				$cron->save();
-			}
+		if (!is_object($cron)) {
+			$cron = new cron();
+			$cron->setClass('reveil');
+			$cron->setFunction($logicalId);
+			$cron->setOption(array('id' => $this->getId()));
+			$cron->setEnable(1);
+			$cron->setDeamon(0);
+		}
+		$cron->setSchedule($Schedule);
+		$cron->save();
 		return $cron;
 	}
 	public function EvaluateCondition(){
