@@ -66,10 +66,10 @@ class reveil extends eqLogic {
 					return -$endValue / 2 * (($time - 1) * ($time - 3) - 1) + $startValue;
 			break;
 			case 'InOutExpo':
-				if ($time == 0 )
-					return $startValue 
+				if ($time == 0)
+					return $startValue ;
 				if ($time == $duration)
-					return $startValue + $endValue
+					return $startValue + $endValue;
 				$time = $time / $duration * 2;
 				if ($time < 1)
 					return $endValue / 2 * pow(2, 10 * ($time - 1)) + $startValue - $endValue * 0.0005;
