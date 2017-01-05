@@ -32,10 +32,6 @@ function saveEqLogic(_eqLogic) {
 function printEqLogic(_eqLogic) {
 	$('.ConditionGroup').remove();
 	$('.ActionGroup').remove();
-	$('.eqLogicAttr[data-l1key=configuration][data-l2key=Droite]').val(JSON.stringify(_eqLogic.configuration.Droite));
-	$('.eqLogicAttr[data-l1key=configuration][data-l2key=Centre]').val(JSON.stringify(_eqLogic.configuration.Centre));
-	$('.eqLogicAttr[data-l1key=configuration][data-l2key=Gauche]').val(JSON.stringify(_eqLogic.configuration.Gauche));
-	TraceMapZone(_eqLogic);
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Conditions) { 
 			if( (typeof _eqLogic.configuration.Conditions[index] === "object") && (_eqLogic.configuration.Conditions[index] !== null) )
