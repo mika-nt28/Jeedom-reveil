@@ -7,8 +7,8 @@ class reveil extends eqLogic {
 		$return['launchable'] = 'ok';
 		$return['state'] = 'ok';
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull');
-			if (is_object($cron)) 	{	
+			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
+			if (!is_object($cron)) 	{	
 				$return['state'] = 'nok';
 				return $return;
 			}
@@ -29,7 +29,7 @@ class reveil extends eqLogic {
 	}
 	public static function deamon_stop() {	
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull');
+			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
 			if (is_object($cron)) 	
 				$cron->remove();
 		}
@@ -112,20 +112,8 @@ class reveil extends eqLogic {
 			}
 		}
 	}
-	public function CalculHeureEvent($HeureStart, $delais) {
-		if(strlen($HeureStart)==3)
-			$Heure=substr($HeureStart,0,1);
-		else
-			$Heure=substr($HeureStart,0,2);
-		$Minute=substr($HeureStart,-2)+$this->getConfiguration($delais);
-		while($Minute>=60){
-			$Minute-=60;
-			$Heure+=1;
-		}
-		return mktime($Heure,$Minute);
-	}
 	public function CreateCron($Schedule, $logicalId) {
-		$cron =cron::byClassAndFunction('reveil', $logicalId);
+		$cron =cron::byClassAndFunction('reveil', $logicalId,$this->getId());
 		if (!is_object($cron)) {
 			$cron = new cron();
 			$cron->setClass('reveil');
