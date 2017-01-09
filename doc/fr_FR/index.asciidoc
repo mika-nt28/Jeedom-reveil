@@ -8,6 +8,7 @@ Ils est capable de reveiler / alerter :
 == Paramétrage
 Comme avec tous les plugins jeedom, nous allons commencer par créer un equipement de reveil.		
 Après l'avoir nommé, nous allons pouvoir le parametrer.		
+
 === Configuration générale Jeedom		
 		
 image::../images/ConfigurationGeneral.jpg[]		
