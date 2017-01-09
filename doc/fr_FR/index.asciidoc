@@ -20,6 +20,10 @@ image::../images/ConfigurationGeneral.jpg[]
 * Configurer l'heure du reveil : Heure de départ de votre reveil, c'est au format cron (si vous souhaité répéter pour sur plusieur jour 15 5 * * 0,1,2,3,4 =>du lundi au vendredit a 5h15)
 * Choisir le type de reveil : Choisir le type de simulation que vous souhaité
 
+==== Type de reveil  : Libre
+
+Ce type de reveil vous permet de declancher toutes les actions que vous voulez, a l'heure defini.
+
 ==== Type de reveil  : Simulateur d'aube
 
 * Type de simulateur d'aube : il existe plusieur type de simulateur d'aube, choisissez celle qui vous convient le mieu 
