@@ -155,6 +155,7 @@ $eqLogics = eqLogic::byType('reveil');
 								</label>
 								<div class="col-sm-5">
 									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="ReveilType">
+										<option value="default">Libre</option>
 										<option value="DawnSimulatorEngine">Simulateur d'aube</option>
 									</select>	
 								</div>
