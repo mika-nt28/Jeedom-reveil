@@ -1,11 +1,25 @@
 = Gestions des reveil
 
 == Description
-Ce plugin permet de gérer facilement vos reveil.
-Celui-ci est entirement basé sur le plugin Heliotrope qui est un prérequis pour l'utilisation de ce plugin.
-
-Vous avez la possibilité de fermer vos reveil a la tomber de la nuit et de les ré-ouvrir au levé du soleil.
-Vous avez egalement la possibilité de gérer vos reveil pour qu'il se ferme si le soleil est dans l'azimute de votre feunetre
+Ce plugin permet de cree des reveils. (Actuelement le plugin est limité a 1 seul reveil
+Ils est capable de reveiler / alerter :
+* Avec une simulation d'auble selon plusieur courbe
 
 == Paramétrage
-include::Parametrage.asciidoc[]
+Comme avec tous les plugins jeedom, nous allons commencer par créer un equipement de reveil.		
+Après l'avoir nommé, nous allons pouvoir le parametrer.		
+=== Configuration générale Jeedom		
+		
+image::../images/ConfigurationGeneral.jpg[]		
+* Nom  : le nom a déjà été paramétré, mais vous avez la possibilité de le changer.		
+* Objet parent : ce paramètre permet d'ajouter l'équipement dans un objet Jeedom.		
+* Catégorie : déclare l'équipement dans une catégorie.		
+* Visible : permet de rendre l'équipement visible dans le Dashboard.		
+* Activer : permet d'activer l'équipement.		
+* Configurer l'heure du reveil : Heure de départ de votre reveil, c'est au format cron (si vous souhaité répéter pour sur plusieur jour 15 5 * * 0,1,2,3,4 =>du lundi au vendredit a 5h15)
+* Choisir le type de reveil : Choisir le type de simulation que vous souhaité
+===Type de reveil  : Simulateur d'aube
+* Type de simulateur d'aube : il existe plusieur type de simulateur d'aube, choisissez celle qui vous convient le mieu 
+* Valeur de démarrage de la simulation : A quel luminausité (%) voulez vous lancer la simulation
+* Valeur d'arret de la simulation :  A quel luminausité (%) voulez vous arreter la simulation
+* Durée de la simulation : Sur quel periode voulez vous activé la simulation
