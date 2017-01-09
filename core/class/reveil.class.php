@@ -45,15 +45,24 @@ class reveil extends eqLogic {
 			if($reveil->EvaluateCondition()){
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
-						$options['slider'] = ceil($reveil->dawnSimulatorEngine(
-							$reveil->getConfiguration('DawnSimulatorEngineType'),
-							$time,
-							$reveil->getConfiguration('DawnSimulatorEngineStartValue'), 
-							$reveil->getConfiguration('DawnSimulatorEngineEndValue'), 
-							$reveil->getConfiguration('DawnSimulatorEngineDuration')
-						));
-						$reveil->ExecuteAction($this->getConfiguration('Equipements'),$options);
-						sleep(1000);
+						$simulationState=false;
+						while($simulationState){
+							$options['slider'] = ceil($reveil->dawnSimulatorEngine(
+								$reveil->getConfiguration('DawnSimulatorEngineType'),
+								$time,
+								$reveil->getConfiguration('DawnSimulatorEngineStartValue'), 
+								$reveil->getConfiguration('DawnSimulatorEngineEndValue'), 
+								$reveil->getConfiguration('DawnSimulatorEngineDuration')
+							));
+							$reveil->ExecuteAction($this->getConfiguration('Equipements'),$options);
+							if($options['slider'] == $reveil->getConfiguration('DawnSimulatorEngineEndValue'))
+								$simulationState=true;
+							else
+								sleep(1000);
+						}
+					break;
+					default:
+						$reveil->ExecuteAction($this->getConfiguration('Equipements'),'');
 					break;
 				}
 			}
