@@ -40,14 +40,19 @@ class reveil extends eqLogic {
 		}
 	}
 	public function pull($_option){
-		$doWhile = true;
 		$time = 0;
-		while ($doWhile) {
-			if($this->EvaluateCondition()){
+		foreach(eqLogic::byType('reveil') as $reveil){
+			if($reveil->EvaluateCondition()){
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
-						$options['slider'] = ceil($this->dawnSimulatorEngine($this->getConfiguration('DawnSimulatorEngineType'),$time, $this->getConfiguration('DawnSimulatorEngineStartValue'), $this->getConfiguration('DawnSimulatorEngineEndValue'), $this->getConfiguration('DawnSimulatorEngineDuration')));
-						$this->ExecuteAction($this->getConfiguration('Equipements'),$options);
+						$options['slider'] = ceil($reveil->dawnSimulatorEngine(
+							$reveil->getConfiguration('DawnSimulatorEngineType'),
+							$time,
+							$reveil->getConfiguration('DawnSimulatorEngineStartValue'), 
+							$reveil->getConfiguration('DawnSimulatorEngineEndValue'), 
+							$reveil->getConfiguration('DawnSimulatorEngineDuration')
+						));
+						$reveil->ExecuteAction($this->getConfiguration('Equipements'),$options);
 						sleep(1000);
 					break;
 				}
