@@ -133,6 +133,21 @@ $eqLogics = eqLogic::byType('reveil');
 								</div>
 							</div>
 							<div class="form-group">
+								<label class="col-sm-2 control-label">{{Configurer l'heure du reveil}}
+									<sup>
+										<i class="fa fa-question-circle tooltips" title="Configurer l'heure du reveil"></i>
+									</sup>
+								</label>
+								<div class=" col-sm-5 input-group">
+									<input class="eqLogicAttr form-control input-sm" data-l1key="configuration"  data-l2key="ScheduleCron" placeholder="{{Choisir a l'aide de l'assistant, l'heure de depart de votre reveil}}">
+									<span class="input-group-btn">
+										<a class="btn btn-success btn-sm ScheduleCron" >
+											<i class="fa fa-list-alt"></i>
+										</a>
+									</span>
+								</div>
+							</div>
+							<div class="form-group">
 								<label class="col-sm-2 control-label">{{Choisir le type de reveil}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="Séléctioner le type de réveil"></i>
@@ -140,6 +155,7 @@ $eqLogics = eqLogic::byType('reveil');
 								</label>
 								<div class="col-sm-5">
 									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="ReveilType">
+										<option value="default">Libre</option>
 										<option value="DawnSimulatorEngine">Simulateur d'aube</option>
 									</select>	
 								</div>

@@ -5,9 +5,14 @@ class reveil extends eqLogic {
 		$return = array();
 		$return['log'] = 'reveil';
 		$return['launchable'] = 'ok';
-		$return['state'] = 'nok';
-
 		$return['state'] = 'ok';
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			if (!is_object($cron)) 	{	
+				$return['state'] = 'nok';
+				return $return;
+			}
+		}
 		return $return;
 	}
 	public static function deamon_start($_debug = false) {
@@ -18,32 +23,46 @@ class reveil extends eqLogic {
 			return;
 		if ($deamon_info['state'] == 'ok') 
 			return;
-		/*foreach(eqLogic::byType('reveil') as $Volet)
-			$Volet->StartDemon();*/
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$reveil->save();
+		}
 	}
 	public static function deamon_stop() {	
-		/*$cron = cron::byClassAndFunction('reveil', 'ActionJour');
-		if (is_object($cron)) 	
-			$cron->remove();
-		$cron = cron::byClassAndFunction('reveil', 'ActionNuit');
-		if (is_object($cron)) 	
-			$cron->remove();
-		foreach(eqLogic::byType('reveil') as $Volet){
-			$listener = listener::byClassAndFunction('reveil', 'pull', array('reveil_id' => intval($Volet->getId())));
-			if (is_object($listener))
-				$listener->remove();
-		}*/
+		foreach(eqLogic::byType('reveil') as $reveil){
+			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			if (is_object($cron)) 	
+				$cron->remove();
+		}
+	}
+	public function postSave() {
+		if($this->getIsEnable()){
+			$cron = $this->CreateCron($this->getConfiguration('ScheduleCron'), 'pull');
+		}
 	}
 	public function pull($_option){
-		$doWhile = true;
 		$time = 0;
-		while ($doWhile) {
-			if($this->EvaluateCondition()){
+		foreach(eqLogic::byType('reveil') as $reveil){
+			if($reveil->EvaluateCondition()){
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
-						$options['slider'] = ceil($this->dawnSimulatorEngine($this->getConfiguration('DawnSimulatorEngineType'),$time, $this->getConfiguration('DawnSimulatorEngineStartValue'), $this->getConfiguration('DawnSimulatorEngineEndValue'), $this->getConfiguration('DawnSimulatorEngineDuration')));
-						$this->ExecuteAction($this->getConfiguration('DawnSimulatorEngineEquipement'),$options);
-						sleep(1000);
+						$simulationState=false;
+						while($simulationState){
+							$options['slider'] = ceil($reveil->dawnSimulatorEngine(
+								$reveil->getConfiguration('DawnSimulatorEngineType'),
+								$time,
+								$reveil->getConfiguration('DawnSimulatorEngineStartValue'), 
+								$reveil->getConfiguration('DawnSimulatorEngineEndValue'), 
+								$reveil->getConfiguration('DawnSimulatorEngineDuration')
+							));
+							$reveil->ExecuteAction($this->getConfiguration('Equipements'),$options);
+							if($options['slider'] == $reveil->getConfiguration('DawnSimulatorEngineEndValue'))
+								$simulationState=true;
+							else
+								sleep(1000);
+						}
+					break;
+					default:
+						$reveil->ExecuteAction($this->getConfiguration('Equipements'),'');
 					break;
 				}
 			}
@@ -66,10 +85,10 @@ class reveil extends eqLogic {
 					return -$endValue / 2 * (($time - 1) * ($time - 3) - 1) + $startValue;
 			break;
 			case 'InOutExpo':
-				if ($time == 0 )
-					return $startValue 
+				if ($time == 0)
+					return $startValue ;
 				if ($time == $duration)
-					return $startValue + $endValue
+					return $startValue + $endValue;
 				$time = $time / $duration * 2;
 				if ($time < 1)
 					return $endValue / 2 * pow(2, 10 * ($time - 1)) + $startValue - $endValue * 0.0005;
@@ -107,37 +126,22 @@ class reveil extends eqLogic {
 			}
 		}
 	}
-	public function CalculHeureEvent($HeureStart, $delais) {
-		if(strlen($HeureStart)==3)
-			$Heure=substr($HeureStart,0,1);
-		else
-			$Heure=substr($HeureStart,0,2);
-		$Minute=substr($HeureStart,-2)+$this->getConfiguration($delais);
-		while($Minute>=60){
-			$Minute-=60;
-			$Heure+=1;
-		}
-		return mktime($Heure,$Minute);
-	}
 	public function CreateCron($Schedule, $logicalId) {
-		$cron =cron::byClassAndFunction('reveil', $logicalId);
-			if (!is_object($cron)) {
-				$cron = new cron();
-				$cron->setClass('reveil');
-				$cron->setFunction($logicalId);
-				$cron->setEnable(1);
-				$cron->setDeamon(0);
-				$cron->setSchedule($Schedule);
-				$cron->save();
-			}
-			else{
-				$cron->setSchedule($Schedule);
-				$cron->save();
-			}
+		$cron =cron::byClassAndFunction('reveil', $logicalId/*,$this->getId()*/);
+		if (!is_object($cron)) {
+			$cron = new cron();
+			$cron->setClass('reveil');
+			$cron->setFunction($logicalId);
+			$cron->setOption(array('id' => $this->getId()));
+			$cron->setEnable(1);
+			$cron->setDeamon(0);
+		}
+		$cron->setSchedule($Schedule);
+		$cron->save();
 		return $cron;
 	}
 	public function EvaluateCondition(){
-		foreach($this->getConfiguration('condition') as $condition){
+		foreach($this->getConfiguration('Conditions') as $condition){
 			$expression = scenarioExpression::setTags($condition['expression']);
 			$message = __('Evaluation de la condition : [', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
@@ -162,103 +166,5 @@ class reveil extends eqLogic {
 class reveilCmd extends cmd {
     	public function execute($_options = null) {	
 	}
-}
-class dawnSimulatorEngine{
-	$_lastValue = 0;
-	$_startValue = 0;
-	$_endValue = 100;
-	$_duration = 1;
-	$_devices 
-	$_curve = "inExpo";
-	function __construct($startValue=0, $endValue=100, $duration=1, $devices={}, $curve){
-		$this->_lastValue = 0;
-		$this->_startValue = $startValue;
-		$this->_endValue = $endValue;
-		$this->_duration = $duration;
-		$this->_devices = $devices; 
-		$this->_curve = $curve;
-	}
-	public function _update($value){  
-		$this->_lastValue = $value;
-		foreach($this->_devices as $device){
-		//Mise a jours de la valeur de l'equipement
-		}
-	}
-	public function start(){
-		$omputedValue;
-		$doWhile = true;
-		$time = 0;
-		while ($doWhile) {
-			$computedValue = ceil(self::equations($this->_curve,$time, $this->_startValue, $this->_endValue, $this->_duration));
-			if ($computedValue ~= $this->_lastValue) {
-				self::_update(computedValue);
-			}
-			$time++;
-			if ($time > $this->_duration) {
-				$doWhile = false;
-				if ($this->_lastValue < $this->_endValue)
-					self::_update($computedValue);
-				else
-					sleep(1000);
-			}
-		}
-	}
-	public function equations($type, $time, $startValue, $endValue, $duration) {
-		switch ($type){
-			case 'Linear':
-				//linear = function(t, b, c, d)
-				return $endValue * $time / $duration + $startValue;
-			break;
-			case 'InQuad':
-				//inQuad = function(t, b, c, d)
-				$time = $time / $duration;
-				return $endValue * pow($time, 2) + $startValue;
-			break;
-			case 'InOutQuad':
-				//inOutQuad = function(t, b, c, d)
-				$time = $time / $duration * 2;
-				if ($time < 1)
-					return $endValue / 2 * pow($time, 2) + $startValue;
-				else
-					return -$endValue / 2 * (($time - 1) * ($time - 3) - 1) + $startValue;
-			break;
-			case 'InOutExpo':
-				//inOutExpo = function(t, b, c, d)
-				if ($time == 0 )
-					return $startValue 
-				if ($time == $duration)
-					return $startValue + $endValue
-				$time = $time / $duration * 2;
-				if ($time < 1)
-					return $endValue / 2 * pow(2, 10 * ($time - 1)) + $startValue - $endValue * 0.0005;
-				else{
-					$time = $time - 1;
-					return $endValue / 2 * 1.0005 * (-pow(2, -10 * $time) + 2) + $startValue;
-				}
-			break;
-			case 'OutInExpo':
-				//outInExpo = function(t, b, c, d)
-				if ($time < $duration / 2)
-					return self::equations('outExpo', $time * 2, $startValue, $endValue / 2, $duration);
-				else
-					return self::equations('inExpo', ($time * 2) - $duration, $startValue + $endValue / 2, $endValue / 2, $duration);
-			break;
-			case 'InExpo':
-				//inExpo = function(t, b, c, d)
-				if($time == 0)
-					return $startValue;
-				else
-					return $endValue * pow(2, 10 * ($time / $duration - 1)) + $startValue - $endValue * 0.001;	
-			break;
-			case 'OutExpo':
-				//outExpo = function(t, b, c, d)
-				if($time == $duration)
-					return $startValue + $endValue;
-				else
-					return $endValue * 1.001 * (-pow(2, -10 * $time / $duration) + 1) + $startValue;
-			break;
-		}
-	}
-
 }
 ?>
