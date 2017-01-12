@@ -41,7 +41,7 @@ function printEqLogic(_eqLogic) {
 	if (typeof(_eqLogic.configuration.Equipements) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Equipements) { 
 			if( (typeof _eqLogic.configuration.Equipements[index] === "object") && (_eqLogic.configuration.Equipements[index] !== null) )
-				addAction(_eqLogic.configuration.Equipements[index],  '{{Action}}',$('#tab_ouverture').find('.div_action'));
+				addAction(_eqLogic.configuration.Equipements[index],  '{{Action}}',$('#tab_equipement').find('.div_action'));
 		}
 	}	
 }
