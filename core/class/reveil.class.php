@@ -45,7 +45,7 @@ class reveil extends eqLogic {
 		//foreach(eqLogic::byType('reveil') as $reveil){
 		if(is_object($reveil)){
 			if($reveil->EvaluateCondition()){
-				switch($this->getConfiguration('ReveilType')){
+				switch($reveil->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
 						$simulationState=false;
 						while($simulationState){
