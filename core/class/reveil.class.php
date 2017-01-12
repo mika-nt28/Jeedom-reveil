@@ -45,7 +45,7 @@ class reveil extends eqLogic {
 		//foreach(eqLogic::byType('reveil') as $reveil){
 		if(is_object($reveil)){
 			if($reveil->EvaluateCondition()){
-				switch($this->getConfiguration('ReveilType')){
+				switch($reveil->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
 						$simulationState=false;
 						while($simulationState){
@@ -64,7 +64,7 @@ class reveil extends eqLogic {
 						}
 					break;
 					default:
-						$reveil->ExecuteAction($this->getConfiguration('Equipements'),'');
+						$reveil->ExecuteAction($reveil->getConfiguration('Equipements'),'');
 					break;
 				}
 			}
@@ -122,6 +122,8 @@ class reveil extends eqLogic {
 	public function ExecuteAction($Action,$options) {	
 		foreach($Action as $cmd){
 			$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
+			if($options=='')
+				$options=$cmd['options'];
 			if(is_object($Commande)){
 				log::add('reveil','debug','Execution de '.$Commande->getHumanName());
 				$Commande->execute($options);
