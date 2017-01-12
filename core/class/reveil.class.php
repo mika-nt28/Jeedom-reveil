@@ -7,7 +7,8 @@ class reveil extends eqLogic {
 		$return['launchable'] = 'ok';
 		$return['state'] = 'ok';
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
+			log::add('reveil','debug',json_encode($cron));
 			if (!is_object($cron)) 	{	
 				$return['state'] = 'nok';
 				return $return;
@@ -127,7 +128,7 @@ class reveil extends eqLogic {
 		}
 	}
 	public function CreateCron($Schedule, $logicalId) {
-		$cron =cron::byClassAndFunction('reveil', $logicalId/*,$this->getId()*/);
+		$cron =cron::byClassAndFunction('reveil', $logicalId,$this->getId());
 		if (!is_object($cron)) {
 			$cron = new cron();
 			$cron->setClass('reveil');
