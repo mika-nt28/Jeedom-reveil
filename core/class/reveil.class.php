@@ -130,7 +130,7 @@ class reveil extends eqLogic {
 		}
 	}
 	public function CreateCron($Schedule, $logicalId) {
-		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => intval($reveil->getId())));
+		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => intval($this->getId())));
 		if (!is_object($cron)) {
 			$cron = new cron();
 			$cron->setClass('reveil');
