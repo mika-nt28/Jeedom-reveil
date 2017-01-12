@@ -6,14 +6,14 @@ class reveil extends eqLogic {
 		$return['log'] = 'reveil';
 		$return['launchable'] = 'ok';
 		$return['state'] = 'ok';
-		foreach(eqLogic::byType('reveil') as $reveil){
+		/*foreach(eqLogic::byType('reveil') as $reveil){
 			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
 			log::add('reveil','debug',json_encode($cron));
 			if (!is_object($cron)) 	{	
 				$return['state'] = 'nok';
 				return $return;
 			}
-		}
+		}*/
 		return $return;
 	}
 	public static function deamon_start($_debug = false) {
@@ -30,7 +30,7 @@ class reveil extends eqLogic {
 	}
 	public static function deamon_stop() {	
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
+			$cron = cron::byClassAndFunction('reveil', 'pull');
 			if (is_object($cron)) 	
 				$cron->remove();
 		}
