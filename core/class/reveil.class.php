@@ -122,6 +122,8 @@ class reveil extends eqLogic {
 	public function ExecuteAction($Action,$options) {	
 		foreach($Action as $cmd){
 			$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
+			if($options=='')
+				$options=$cmd['options'];
 			if(is_object($Commande)){
 				log::add('reveil','debug','Execution de '.$Commande->getHumanName());
 				$Commande->execute($options);
