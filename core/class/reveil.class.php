@@ -7,7 +7,7 @@ class reveil extends eqLogic {
 		$return['launchable'] = 'ok';
 		$return['state'] = 'ok';
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
 			if (!is_object($cron)) 	{	
 				$return['state'] = 'nok';
 				return $return;
@@ -29,7 +29,7 @@ class reveil extends eqLogic {
 	}
 	public static function deamon_stop() {	
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
 			if (is_object($cron)) 	
 				$cron->remove();
 		}
@@ -41,7 +41,9 @@ class reveil extends eqLogic {
 	}
 	public function pull($_option){
 		$time = 0;
-		foreach(eqLogic::byType('reveil') as $reveil){
+		$reveil=eqLogic::byId($_option['id']);
+		//foreach(eqLogic::byType('reveil') as $reveil){
+		if(is_object($reveil)){
 			if($reveil->EvaluateCondition()){
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
@@ -127,7 +129,7 @@ class reveil extends eqLogic {
 		}
 	}
 	public function CreateCron($Schedule, $logicalId) {
-		$cron =cron::byClassAndFunction('reveil', $logicalId/*,$this->getId()*/);
+		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (!is_object($cron)) {
 			$cron = new cron();
 			$cron->setClass('reveil');
