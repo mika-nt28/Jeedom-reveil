@@ -30,7 +30,7 @@ class reveil extends eqLogic {
 	}
 	public static function deamon_stop() {	
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull'/*,$reveil->getId()*/);
+			$cron = cron::byClassAndFunction('reveil', 'pull',$reveil->getId());
 			if (is_object($cron)) 	
 				$cron->remove();
 		}
@@ -42,7 +42,9 @@ class reveil extends eqLogic {
 	}
 	public function pull($_option){
 		$time = 0;
-		foreach(eqLogic::byType('reveil') as $reveil){
+		$reveil=eqLogic::byId($_option['id']);
+		//foreach(eqLogic::byType('reveil') as $reveil){
+		if(is_object($reveil)){
 			if($reveil->EvaluateCondition()){
 				switch($this->getConfiguration('ReveilType')){
 					case 'DawnSimulatorEngine';
