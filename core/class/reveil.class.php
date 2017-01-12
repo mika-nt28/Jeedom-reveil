@@ -64,7 +64,7 @@ class reveil extends eqLogic {
 						}
 					break;
 					default:
-						$reveil->ExecuteAction($this->getConfiguration('Equipements'),'');
+						$reveil->ExecuteAction($reveil->getConfiguration('Equipements'),'');
 					break;
 				}
 			}
