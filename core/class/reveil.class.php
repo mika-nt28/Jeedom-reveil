@@ -42,32 +42,9 @@ class reveil extends eqLogic {
 	public function pull($_option){
 		$time = 0;
 		$reveil=eqLogic::byId($_option['id']);
-		//foreach(eqLogic::byType('reveil') as $reveil){
 		if(is_object($reveil)){
-			if($reveil->EvaluateCondition()){
-				switch($reveil->getConfiguration('ReveilType')){
-					case 'DawnSimulatorEngine';
-						$simulationState=false;
-						while($simulationState){
-							$options['slider'] = ceil($reveil->dawnSimulatorEngine(
-								$reveil->getConfiguration('DawnSimulatorEngineType'),
-								$time,
-								$reveil->getConfiguration('DawnSimulatorEngineStartValue'), 
-								$reveil->getConfiguration('DawnSimulatorEngineEndValue'), 
-								$reveil->getConfiguration('DawnSimulatorEngineDuration')
-							));
-							$reveil->ExecuteAction($this->getConfiguration('Equipements'),$options);
-							if($options['slider'] == $reveil->getConfiguration('DawnSimulatorEngineEndValue'))
-								$simulationState=true;
-							else
-								sleep(1000);
-						}
-					break;
-					default:
-						$reveil->ExecuteAction($reveil->getConfiguration('Equipements'),'');
-					break;
-				}
-			}
+			if($reveil->EvaluateCondition())
+				$reveil->ExecuteActions($reveil->getConfiguration('Equipements'),'');
 		}
 	}
 	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
@@ -119,16 +96,40 @@ class reveil extends eqLogic {
 			break;
 		}
 	}
-	public function ExecuteAction($Action,$options) {	
+	public function ExecuteActions($Action,$options) {	
 		foreach($Action as $cmd){
-			$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
-			if($options=='')
-				$options=$cmd['options'];
-			if(is_object($Commande)){
-				log::add('reveil','debug','Execution de '.$Commande->getHumanName());
-				$Commande->execute($options);
+			switch($cmd['configuration']['ReveilType']){
+				case 'DawnSimulatorEngine';
+					$simulationState=false;
+					while($simulationState){
+						$options['slider'] = ceil($this->dawnSimulatorEngine(
+							$cmd['configuration']['DawnSimulatorEngineType']
+							$time,
+							$cmd['configuration']['DawnSimulatorEngineStartValue'], 
+							$cmd['configuration']['DawnSimulatorEngineEndValue'], 
+							$cmd['configuration']['DawnSimulatorEngineDuration']
+						));
+						$reveil->ExecuteAction($cmd,$options);
+						if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'])
+							$simulationState=true;
+						else
+							sleep(1000);
+					}
+				break;
+				default:
+					$reveil->ExecuteAction($cmd,'');
+				break;
 			}
 		}
+	}
+	public function ExecuteAction($cmd,$options) {	
+		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
+		if($options=='')
+			$options=$cmd['options'];
+		if(is_object($Commande)){
+			log::add('reveil','debug','Execution de '.$Commande->getHumanName());
+			$Commande->execute($options);
+		}		
 	}
 	public function CreateCron($Schedule, $logicalId) {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
