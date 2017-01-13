@@ -1,4 +1,4 @@
-$('body').on('change','.eqLogicAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
+$('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
 	switch($(this).val()){
 		case 'DawnSimulatorEngine':
 			$('.DawnSimulatorEngine').show();
@@ -116,25 +116,25 @@ function addAction(_action, _name, _el) {
 						.append($('<option value="InExpo">')
 							.text('{{InExpo}}'))
 						.append($('<option value="OutExpo">')
-							.text('{{OutExpo}}')))))
+							.text('{{OutExpo}}'))))).hide()
 			.append($('<div class="form-group DawnSimulatorEngine">')
 				.append($('<label class="col-sm-2 control-label">{{Valeur de démarrage de la simulation}}')
 					.append($('<sup>')
 						.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur de départ de la simulation (0 par defaut)">'))))
 				.append($('<div class="col-sm-5">')
-					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineStartValue" placeholder="{{Valeur de départ de la simulation (0 par defaut)}}"/>'))))
+					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineStartValue" placeholder="{{Valeur de départ de la simulation (0 par defaut)}}"/>')))).hide()
 			.append($('<div class="form-group DawnSimulatorEngine">')
 				.append($('<label class="col-sm-2 control-label">{{Valeur d\'arret de la simulation}}')
 					.append($('<sup>')
 						.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur d\'arret de la simulation (100 par defaut)">'))))
 				.append($('<div class="col-sm-5">')
-					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))))
+					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>')))).hide()
 			.append($('<div class="form-group DawnSimulatorEngine">')
 				.append($('<label class="col-sm-2 control-label">{{Durée de la simulation}}')
 					.append($('<sup>')
 						.append($('<i class="fa fa-question-circle tooltips" title="Saisir la durée de la simulation">'))))
 				.append($('<div class="col-sm-5">')
-					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>'))))
+					.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')))).hide()
 			.append($('<div class="form-group">')
 				.append($('<div class="col-lg-1">')
 					.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
