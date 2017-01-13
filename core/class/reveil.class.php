@@ -103,7 +103,7 @@ class reveil extends eqLogic {
 					$simulationState=false;
 					while($simulationState){
 						$options['slider'] = ceil($this->dawnSimulatorEngine(
-							$cmd['configuration']['DawnSimulatorEngineType']
+							$cmd['configuration']['DawnSimulatorEngineType'],
 							$time,
 							$cmd['configuration']['DawnSimulatorEngineStartValue'], 
 							$cmd['configuration']['DawnSimulatorEngineEndValue'], 
