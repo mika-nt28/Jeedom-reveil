@@ -1,10 +1,10 @@
 $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
 	switch($(this).val()){
 		case 'DawnSimulatorEngine':
-			$('.DawnSimulatorEngine').show();
+			$(this).colsest('.ActionGroup').find('.DawnSimulatorEngine').show();
 		break;
 		default:
-			$('.DawnSimulatorEngine').hide();
+			$(this).colsest('.ActionGroup').find('.DawnSimulatorEngine').hide();
 		break;
 	}
 });
