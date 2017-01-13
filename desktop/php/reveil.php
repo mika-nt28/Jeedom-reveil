@@ -147,67 +147,6 @@ $eqLogics = eqLogic::byType('reveil');
 									</span>
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label">{{Choisir le type de reveil}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Séléctioner le type de réveil"></i>
-									</sup>
-								</label>
-								<div class="col-sm-5">
-									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="ReveilType">
-										<option value="default">Libre</option>
-										<option value="DawnSimulatorEngine">Simulateur d'aube</option>
-									</select>	
-								</div>
-							</div>								
-							<div class="form-group DawnSimulatorEngine">
-								<label class="col-sm-2 control-label">{{Type de simulateur d'aube}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Choisissez le type de simulation qui vous correspond"></i>
-									</sup>
-								</label>
-								<div class="col-sm-5">
-									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="DawnSimulatorEngineType">
-										<option value="Linear">Linear</option>
-										<option value="InQuad">InQuad</option>
-										<option value="InOutQuad">InOutQuad</option>
-										<option value="InOutExpo">InOutExpo</option>
-										<option value="OutInExpo">OutInExpo</option>
-										<option value="InExpo">InExpo</option>
-										<option value="OutExpo">OutExpo</option>
-									</select>	
-								</div>
-							</div>
-							<div class="form-group DawnSimulatorEngine">
-								<label class="col-sm-2 control-label">{{Valeur de démarrage de la simulation}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Saisir la valeur de départ de la simulation (0 par defaut)"></i>
-									</sup>
-								</label>
-								<div class="col-sm-5">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineStartValue" placeholder="{{Valeur de départ de la simulation (0 par defaut)}}"/>
-								</div>
-							</div>
-							<div class="form-group DawnSimulatorEngine">
-								<label class="col-sm-2 control-label">{{Valeur d'arret de la simulation}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Saisir la valeur d'arret de la simulation (100 par defaut)"></i>
-									</sup>
-								</label>
-								<div class="col-sm-5">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d'arret de la simulation (100 par defaut)}}"/>
-								</div>
-							</div>
-							<div class="form-group DawnSimulatorEngine">
-								<label class="col-sm-2 control-label">{{Durée de la simulation}}
-									<sup>
-										<i class="fa fa-question-circle tooltips" title="Saisir la durée de la simulation"></i>
-									</sup>
-								</label>
-								<div class="col-sm-5">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>
-								</div>
-							</div>
 						</fieldset>
 					</form>
 				</div>				
