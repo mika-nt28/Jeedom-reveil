@@ -84,7 +84,7 @@ $eqLogics = eqLogic::byType('reveil');
 							<div class="form-group">
 								<label class="col-sm-2 control-label" >{{Objet parent}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Indiquer l'objet dans lequel le widget de ce reveil apparaitera sur le dashboard" style="font-size : 1em;color:grey;"></i>
+										<i class="fa fa-question-circle tooltips" title="Indiquer l'objet dans lequel le widget de ce réveil apparaîtra sur le dashboard" style="font-size : 1em;color:grey;"></i>
 									</sup>
 								</label>
 								<div class="col-sm-5">
@@ -102,7 +102,7 @@ $eqLogics = eqLogic::byType('reveil');
 									{{Catégorie}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="Choisissez une catégorie
-									Cette information n'est pas obligatoire mais peut etre utile pour filtrer les widget" style="font-size : 1em;color:grey;"></i>
+									Cette information n'est pas obligatoire mais peut être utile pour filtrer les widgets" style="font-size : 1em;color:grey;"></i>
 									</sup>
 								</label>
 								<div class="col-md-8">
@@ -121,8 +121,8 @@ $eqLogics = eqLogic::byType('reveil');
 									{{Etat du widget}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="Choisissez les options de visibilité et d'activation
-									Si l'equipement n'est pas activé il ne sera pas utilisable dans jeedom, mais visible sur le dashboard
-									Si l'equipement n'est pas visible il ne sera caché sur le dashbord, mais utilisable dans jeedom" style="font-size : 1em;color:grey;"></i>
+									Si l'équipement n'est pas activé il ne sera pas utilisable dans jeedom, mais visible sur le dashboard
+									Si l'équipement n'est pas visible il sera caché sur le dashboard, mais utilisable dans jeedom" style="font-size : 1em;color:grey;"></i>
 									</sup>
 								</label>
 								<div class="col-sm-5">
@@ -135,11 +135,11 @@ $eqLogics = eqLogic::byType('reveil');
 							<div class="form-group">
 								<label class="col-sm-2 control-label">{{Configurer l'heure du reveil}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Configurer l'heure du reveil"></i>
+										<i class="fa fa-question-circle tooltips" title="Configurer l'heure du réveil"></i>
 									</sup>
 								</label>
 								<div class=" col-sm-5 input-group">
-									<input class="eqLogicAttr form-control input-sm" data-l1key="configuration"  data-l2key="ScheduleCron" placeholder="{{Choisir a l'aide de l'assistant, l'heure de depart de votre reveil}}">
+									<input class="eqLogicAttr form-control input-sm" data-l1key="configuration"  data-l2key="ScheduleCron" placeholder="{{Choisir à l'aide de l'assistant, l'heure de départ de votre réveil}}">
 									<span class="input-group-btn">
 										<a class="btn btn-success btn-sm ScheduleCron" >
 											<i class="fa fa-list-alt"></i>
@@ -155,7 +155,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<fieldset>
 							<legend>{{Les conditions d'execution :}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'execution de la gestion"></i>
+									<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'éxécution de la gestion"></i>
 								</sup>
 								<a class="btn btn-success btn-xs conditionAttr" data-action="add" style="margin-left: 5px;">
 									<i class="fa fa-plus-circle"></i>
@@ -171,7 +171,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<fieldset>
 							<legend>{{Liste des equipements a executé:}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Saisir toutes les equipements a executer"></i>
+									<i class="fa fa-question-circle tooltips" title="Saisir tous les equipements à éxécuter"></i>
 								</sup>
 								<a class="btn btn-success btn-xs ActionAttr" data-action="add" style="margin-left: 5px;">
 									<i class="fa fa-plus-circle"></i>

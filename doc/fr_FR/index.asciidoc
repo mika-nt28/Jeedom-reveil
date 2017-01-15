@@ -1,13 +1,13 @@
-= Gestions des reveil
+= Gestions des réveils
 
 == Description
-Ce plugin permet de cree des reveils. (Actuelement le plugin est limité a 1 seul reveil
-Ils est capable de reveiler / alerter :
-* Avec une simulation d'auble selon plusieur courbe
+Ce plugin permet de créer des réveils. (Actuellement le plugin est limité à un seul réveil.
+Il est capable de reveiller / alerter :
+* Avec une simulation d'aube selon plusieurs courbe.
 
 == Paramétrage
-Comme avec tous les plugins jeedom, nous allons commencer par créer un equipement de reveil.		
-Après l'avoir nommé, nous allons pouvoir le parametrer.		
+Comme avec tous les plugins jeedom, nous allons commencer par créer un equipement de réveil.		
+Après l'avoir nommé, nous allons pouvoir le paramétrer.		
 
 === Configuration générale Jeedom		
 		
@@ -17,31 +17,31 @@ image::../images/ConfigurationGeneral.jpg[]
 * Catégorie : déclare l'équipement dans une catégorie.		
 * Visible : permet de rendre l'équipement visible dans le Dashboard.		
 * Activer : permet d'activer l'équipement.		
-* Configurer l'heure du reveil : Heure de départ de votre reveil, c'est au format cron (si vous souhaité répéter pour sur plusieur jour 15 5 * * 0,1,2,3,4 =>du lundi au vendredit a 5h15)
-* Choisir le type de reveil : Choisir le type de simulation que vous souhaité
+* Configurer l'heure du réveil : Heure de départ de votre reveil, c'est au format cron (si vous souhaitez répéter sur plusieurs jours 15 5 * * 0,1,2,3,4 =>du lundi au vendredi à 5h15)
+* Choisir le type de réveil : Choisir le type de simulation que vous souhaitez
 
-==== Type de reveil  : Libre
+==== Type de réveil  : Libre
 
-Ce type de reveil vous permet de declancher toutes les actions que vous voulez, a l'heure defini.
+Ce type de réveil vous permet de declancher toutes les actions que vous voulez, à l'heure definie.
 
-==== Type de reveil  : Simulateur d'aube
+==== Type de réveil  : Simulateur d'aube
 
-* Type de simulateur d'aube : il existe plusieur type de simulateur d'aube, choisissez celle qui vous convient le mieu 
-* Valeur de démarrage de la simulation : A quel luminausité (%) voulez vous lancer la simulation
-* Valeur d'arret de la simulation :  A quel luminausité (%) voulez vous arreter la simulation
-* Durée de la simulation : Sur quel periode voulez vous activé la simulation
+* Type de simulateur d'aube : il existe plusieurs type de simulateur d'aube, choisissez celui qui vous convient le mieux 
+* Valeur de démarrage de la simulation : A quelle luminosité (%) voulez vous lancer la simulation
+* Valeur d'arrêt de la simulation :  A quelle luminosité (%) voulez vous arrêter la simulation
+* Durée de la simulation : Sur quelle periode voulez vous activer la simulation
 
 === Condition
-Vous pouvez configurer des conditions d'activation de votre reveil
+Vous pouvez configurer des conditions d'activation de votre réveil
 
 image::../images/ConfigurationCondition.jpg[]	
 
 Cliquer sur "Ajouter une condition" et configurer votre condition
-Chaque condition de la liste formé formeron un ET
+Chaque condition de la liste formera un ET
 
 === Equipements
-Vous pouvez configurer des conditions d'activation de votre reveil
+Vous pouvez configurer des conditions d'activation de votre réveil
 
 image::../images/ConfigurationAction.jpg[]	
 
-Choisissez tous les equipements qui doivent s'executer a l'heure du reveil
+Choisissez tous les equipements qui doivent s'éxécuter à l'heure du réveil
