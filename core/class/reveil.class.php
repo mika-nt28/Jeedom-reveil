@@ -162,7 +162,7 @@ class reveil extends eqLogic {
 			}
 			log::add('reveil','info',$message);
 			if(!$result){
-				log::add('reveil','debug','Les conditions ne sont pas remplie');
+				log::add('reveil','debug','Les conditions ne sont pas remplies');
 				return false;
 			}
 		}
