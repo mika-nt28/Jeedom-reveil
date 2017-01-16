@@ -39,6 +39,11 @@ class reveil extends eqLogic {
 			$cron = $this->CreateCron($this->getConfiguration('ScheduleCron'), 'pull');
 		}
 	}
+	public function postRemove() {
+		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
+		if (is_object($cron)) 	
+			$cron->remove();
+	}
 	public function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
