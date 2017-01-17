@@ -48,7 +48,7 @@ class reveil extends eqLogic {
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
 			if($reveil->EvaluateCondition())
-				$reveil->ExecuteActions($reveil->getConfiguration('Equipements'),'');
+				$reveil->ExecuteActions();
 		}
 	}
 	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
@@ -100,8 +100,8 @@ class reveil extends eqLogic {
 			break;
 		}
 	}
-	public function ExecuteActions($Action,$options) {	
-		foreach($Action as $cmd){
+	public function ExecuteActions() {	
+		foreach($this->getConfiguration('Equipements') as $cmd){
 			switch($cmd['configuration']['ReveilType']){
 				case 'DawnSimulatorEngine';
 					$time = 0;
@@ -115,7 +115,7 @@ class reveil extends eqLogic {
 							$cmd['configuration']['DawnSimulatorEngineDuration']
 						));
 						$time++;
-						$reveil->ExecuteAction($cmd,$options);
+						$this->ExecuteAction($cmd,$options);
 						if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'])
 							$simulationState=true;
 						else
@@ -123,7 +123,7 @@ class reveil extends eqLogic {
 					}
 				break;
 				default:
-					$reveil->ExecuteAction($cmd,'');
+					$this->ExecuteAction($cmd,'');
 				break;
 			}
 		}
