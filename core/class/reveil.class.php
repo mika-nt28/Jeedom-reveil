@@ -143,7 +143,6 @@ class reveil extends eqLogic {
 		}
 	}
 	public function ExecuteAction($cmd,$options='') {	
-		log::add('reveil','debug','Execution de '.$cmd['cmd']);
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
 		if($options=='')
 			$options=$cmd['options'];
