@@ -88,7 +88,7 @@ class reveil extends eqLogic {
 					log::add('reveil','debug','Fin de la simulationd d\'aube');
 					break;
 				}else
-					sleep(1000);
+					sleep(60);
 			}
 		}
 		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',array('id' => $_option['id']));
