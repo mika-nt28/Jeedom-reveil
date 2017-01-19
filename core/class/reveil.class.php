@@ -159,12 +159,12 @@ class reveil extends eqLogic {
 			$cron->setClass('reveil');
 			$cron->setFunction($logicalId);
 			$options['id']= $this->getId();
+			if($demon!= false){
+				$options['cmd']= $demon;
+				$cron->setDeamon(1);
+			}
 			$cron->setOption($options);
 			$cron->setEnable(1);
-		}
-		if($demon!= false){
-			$options['cmd']= $demon;
-			$cron->setDeamon(1);
 		}
 		$cron->setSchedule($Schedule);
 		$cron->save();
