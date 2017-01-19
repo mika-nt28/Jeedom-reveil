@@ -66,9 +66,10 @@ class reveil extends eqLogic {
 	}
 	
 	public static function SimulAubeDemon($_option){
+		log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube'. json_encode($_option));
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
-			log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube');
+			log::add('reveil','debug','Simulation d\'aube : '.$reveil->getHumanName());
 			$time = 0;
 			$cmd=$_option['cmd'];
 			while(true){
@@ -79,13 +80,14 @@ class reveil extends eqLogic {
 					$cmd['configuration']['DawnSimulatorEngineEndValue'], 
 					$cmd['configuration']['DawnSimulatorEngineDuration']
 				));
-				log::add('reveil','debug','Valeur de l\'intensité lumineuse' .$options['slider']);
+				log::add('reveil','debug','Valeur de l\'intensité lumineuse :' .$options['slider']. '%');
 				$time++;
 				$reveil->ExecuteAction($cmd,$options);
-				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'])
+				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue']){
+					log::add('reveil','debug','Fin de la simulationd d\'aube');
 					break;
-				else
-					sleep(1000);
+				}else
+					sleep(60);
 			}
 		}
 		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',array('id' => $_option['id']));
@@ -141,7 +143,7 @@ class reveil extends eqLogic {
 			break;
 		}
 	}
-	public function ExecuteAction($cmd,$options) {	
+	public function ExecuteAction($cmd,$options='') {	
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
 		if($options=='')
 			$options=$cmd['options'];
@@ -157,12 +159,12 @@ class reveil extends eqLogic {
 			$cron->setClass('reveil');
 			$cron->setFunction($logicalId);
 			$options['id']= $this->getId();
+			if($demon!= false){
+				$options['cmd']= $demon;
+				$cron->setDeamon(1);
+			}
 			$cron->setOption($options);
 			$cron->setEnable(1);
-		}
-		if($demon!= false){
-			$options['cmd']= $demon;
-			$cron->setDeamon(1);
 		}
 		$cron->setSchedule($Schedule);
 		$cron->save();
