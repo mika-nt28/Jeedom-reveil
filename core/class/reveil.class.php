@@ -66,9 +66,10 @@ class reveil extends eqLogic {
 	}
 	
 	public static function SimulAubeDemon($_option){
+		log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube'. json_encode($_option));
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
-			log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube');
+			log::add('reveil','debug','Simulation d\'aube : '.$reveil->getHumanName());
 			$time = 0;
 			$cmd=$_option['cmd'];
 			while(true){
