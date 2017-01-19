@@ -68,9 +68,8 @@ class reveil extends eqLogic {
 		if(is_object($reveil)){
 			log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube');
 			$time = 0;
-			$simulationState=false;
 			$cmd=$_option['cmd'];
-			while($simulationState){
+			while(true){
 				$options['slider'] = ceil($reveil->dawnSimulatorEngine(
 					$cmd['configuration']['DawnSimulatorEngineType'],
 					$time,
@@ -82,7 +81,7 @@ class reveil extends eqLogic {
 				$time++;
 				$reveil->ExecuteAction($cmd,$options);
 				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'])
-					$simulationState=true;
+					break;
 				else
 					sleep(1000);
 			}
