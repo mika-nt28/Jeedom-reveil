@@ -51,7 +51,9 @@ class reveil extends eqLogic {
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					switch($cmd['configuration']['ReveilType']){
 						case 'DawnSimulatorEngine';
-							$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
+							$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
+							$cron->start();
+							$cron->run();
 						break;
 						default:
 							log::add('reveil','debug','Execution de l\'action reveil libre');
