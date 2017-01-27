@@ -95,6 +95,12 @@ class reveil extends eqLogic {
 			$cron->remove();
 	}
 	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
+		if($startValue=='')
+			$startValue=0;
+		if($endValue=='')
+			$endValue=100;
+		if($duration=='')
+			$duration=30;
 		switch ($type){
 			case 'Linear':
 				return $endValue * $time / $duration + $startValue;
