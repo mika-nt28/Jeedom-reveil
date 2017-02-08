@@ -16,7 +16,7 @@ class reveil extends eqLogic {
 		return $return;
 	}
 	public static function deamon_start($_debug = false) {
-		log::remove('reveil');
+		//log::remove('reveil');
 		self::deamon_stop();
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['launchable'] != 'ok') 
@@ -32,17 +32,40 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
 			if (is_object($cron)) 	
 				$cron->remove();
+			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+			while(is_object($cron)) {
+				$cron->stop();
+				$cron->remove();						
+				$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+			}
+				
 		}
 	}
 	public function postSave() {
 		if($this->getIsEnable()){
 			$cron = $this->CreateCron($this->getConfiguration('ScheduleCron'), 'pull');
+		} else {
+			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
+			if (is_object($cron)) 	
+				$cron->remove();			
+		}
+		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+		while(is_object($cron)) {
+			$cron->stop();
+			$cron->remove();						
+			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
 		}
 	}
 	public function postRemove() {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
 			$cron->remove();
+		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+		while(is_object($cron)) {
+			$cron->stop();
+			$cron->remove();						
+			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+		}
 	}
 	public static function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
@@ -80,7 +103,7 @@ class reveil extends eqLogic {
 					$cmd['configuration']['DawnSimulatorEngineEndValue'], 
 					$cmd['configuration']['DawnSimulatorEngineDuration']
 				));
-				log::add('reveil','debug','Valeur de l\'intensité lumineuse :' .$options['slider']. '%');
+				log::add('reveil','debug','Valeur de l\'intensité lumineuse :' .$options['slider'].'/'.$cmd['configuration']['DawnSimulatorEngineEndValue']);
 				$time++;
 				$reveil->ExecuteAction($cmd,$options);
 				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue']){
@@ -95,6 +118,12 @@ class reveil extends eqLogic {
 			$cron->remove();
 	}
 	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
+		if($startValue=='')
+			$startValue=0;
+		if($endValue=='')
+			$endValue=100;
+		if($duration=='')
+			$duration=30;
 		switch ($type){
 			case 'Linear':
 				return $endValue * $time / $duration + $startValue;
