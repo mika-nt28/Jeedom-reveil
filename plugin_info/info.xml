@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <info>
 	<id>reveil</id>
-	<name>Reveil</name>
-	<description>Utiliser votre domotique pour vous reveiller</description>
+	<name>Réveil</name>
+	<description>Utiliser votre domotique pour vous réveiller</description>
 	<icon>fa fa fa-bolt</icon>
 	<licence>AGPL</licence>
 	<author>Halbout Michael</author>
