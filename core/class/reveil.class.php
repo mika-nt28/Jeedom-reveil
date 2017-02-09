@@ -79,7 +79,7 @@ class reveil extends eqLogic {
 							$cron->run();
 						break;
 						default:
-							log::add('reveil','debug','Execution de l\'action reveil libre');
+							log::add('reveil','debug','Exécution de l\'action réveil libre');
 							$reveil->ExecuteAction($cmd,'');
 						break;
 					}
@@ -89,7 +89,7 @@ class reveil extends eqLogic {
 	}
 	
 	public static function SimulAubeDemon($_option){
-		log::add('reveil','debug','Execution de l\'action reveil simulation d\'aube'. json_encode($_option));
+		log::add('reveil','debug','Exécution de l\'action réveil simulation d\'aube'. json_encode($_option));
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
 			log::add('reveil','debug','Simulation d\'aube : '.$reveil->getHumanName());
@@ -107,7 +107,7 @@ class reveil extends eqLogic {
 				$time++;
 				$reveil->ExecuteAction($cmd,$options);
 				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue']){
-					log::add('reveil','debug','Fin de la simulationd d\'aube');
+					log::add('reveil','debug','Fin de la simulation d\'aube');
 					break;
 				}else
 					sleep(60);
