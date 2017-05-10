@@ -115,6 +115,7 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Valeur de l\'intensité lumineuse : ' .$options['slider'].'/'.$cmd['configuration']['DawnSimulatorEngineEndValue']." - durée : ".$time."/".$cmd['configuration']['DawnSimulatorEngineDuration']);
 				$time++;
 				$reveil->ExecuteAction($cmd,$options);
+
 				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
 					log::add('reveil','debug','Fin de la simulation d\'aube');
 					break;

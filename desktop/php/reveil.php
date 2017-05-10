@@ -73,7 +73,7 @@ $eqLogics = eqLogic::byType('reveil');
 							<div class="form-group ">
 								<label class="col-sm-2 control-label">{{Nom du reveil}}
 									<sup>
-										<i class="fa fa-question-circle tooltips" title="Indiquer le nom de votre reveil" style="font-size : 1em;color:grey;"></i>
+										<i class="fa fa-question-circle tooltips" title="Indiquer le nom de votre réveil" style="font-size : 1em;color:grey;"></i>
 									</sup>
 								</label>
 								<div class="col-sm-5">
@@ -121,8 +121,8 @@ $eqLogics = eqLogic::byType('reveil');
 									{{Etat du widget}}
 									<sup>
 										<i class="fa fa-question-circle tooltips" title="Choisissez les options de visibilité et d'activation
-									Si l'équipement n'est pas activé il ne sera pas utilisable dans jeedom, mais visible sur le dashboard
-									Si l'équipement n'est pas visible il sera caché sur le dashboard, mais utilisable dans jeedom" style="font-size : 1em;color:grey;"></i>
+									Si l'équipement n'est pas activé il ne sera pas utilisable dans Jeedom, mais visible sur le dashboard
+									Si l'équipement n'est pas visible il sera caché sur le dashboard, mais utilisable dans Jeedom" style="font-size : 1em;color:grey;"></i>
 									</sup>
 								</label>
 								<div class="col-sm-5">
@@ -155,7 +155,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<fieldset>
 							<legend>{{Les conditions d'execution :}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'éxécution de la gestion"></i>
+									<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'exécution de la gestion"></i>
 								</sup>
 								<a class="btn btn-success btn-xs conditionAttr" data-action="add" style="margin-left: 5px;">
 									<i class="fa fa-plus-circle"></i>
@@ -171,7 +171,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<fieldset>
 							<legend>{{Liste des equipements a executé:}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Saisir tous les equipements à éxécuter"></i>
+									<i class="fa fa-question-circle tooltips" title="Saisir tous les équipements à exécuter"></i>
 								</sup>
 								<a class="btn btn-success btn-xs ActionAttr" data-action="add" style="margin-left: 5px;">
 									<i class="fa fa-plus-circle"></i>
