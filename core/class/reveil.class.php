@@ -70,14 +70,16 @@ class reveil extends eqLogic {
 	public static function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
-			//On verifie que l'on a toujours le cron associé
-			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-			if (!is_object($cron)) 	{
-				log::add('reveil','debug','Cron manquant on sort');
+      //On verifie que l'on a toujours le cron associé
+      $cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
+      if (!is_object($cron)) 	{
+        log::add('reveil','debug','Cron manquant on sort');
 				exit;
 			} else  {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
+			if($reveil->isHolidays() && $reveil->getConfiguration('isHolidays'))
+				break;
 			if($reveil->EvaluateCondition()){
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					switch($cmd['configuration']['ReveilType']){
@@ -188,7 +190,17 @@ class reveil extends eqLogic {
 			break;
 		}
 	}
-	public function ExecuteAction($cmd,$options='') {	
+	public function ExecuteAction($cmd,$options='') {
+		if (isset($cmd['enable']) && $cmd['enable'] == 0)
+			continue;
+		try {
+			$options = array();
+			if (isset($cmd['options'])) 
+				$options = $cmd['options'];
+			scenarioExpression::createAndExec('action', $cmd['cmd'], $options);
+		} catch (Exception $e) {
+			log::add('Volets', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+		}
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
 		if($options=='')
 			$options=$cmd['options'];
@@ -236,6 +248,37 @@ class reveil extends eqLogic {
 				return false;
 			}
 		}
+		return true;
+	}
+	private function isHolidays(){
+		$year = intval(date('Y'));
+		$easterDate  = easter_date($year);
+		$easterDay   = date('j', $easterDate);
+		$easterMonth = date('n', $easterDate);
+		$easterYear   = date('Y', $easterDate);
+
+		$holidays = array(
+		// Dates fixes
+		mktime(0, 0, 0, 1,  1,  $year),  // 1er janvier
+		mktime(0, 0, 0, 5,  1,  $year),  // Fête du travail
+		mktime(0, 0, 0, 5,  8,  $year),  // Victoire des alliés
+		mktime(0, 0, 0, 7,  14, $year),  // Fête nationale
+		mktime(0, 0, 0, 8,  15, $year),  // Assomption
+		mktime(0, 0, 0, 11, 1,  $year),  // Toussaint
+		mktime(0, 0, 0, 11, 11, $year),  // Armistice
+		mktime(0, 0, 0, 12, 25, $year),  // Noel
+
+		// Dates variables
+		mktime(0, 0, 0, $easterMonth, $easterDay + 1,  $easterYear),
+		mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
+		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
+		);
+
+		if(array_search(mktime(0, 0, 0),$holidays) === false){
+			log::add('reveil','debug','Aujourd\'huit, n\'est pas ferié');
+			return false;
+		}
+		log::add('reveil','debug','Aujourd\'huit, c\'est pas ferié');
 		return true;
 	}
 }

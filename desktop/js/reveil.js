@@ -47,12 +47,6 @@ function printEqLogic(_eqLogic) {
 	}	
 }
 function addCondition(_action, _name, _el) {
-	if (!isset(_action)) {
-		_action = {};
-	}
-	if (!isset(_action.options)) {
-		_action.options = {};
-	}
     	var div = $('<div class="form-group ConditionGroup">')
   		.append($('<label class="col-lg-1 control-label">')
 			.text(_name))
@@ -68,81 +62,83 @@ function addCondition(_action, _name, _el) {
   
 }
 function addAction(_action, _name, _el) {
-	if (!isset(_action)) {
-		_action = {};
-	}
-	if (!isset(_action.options)) {
-		_action.options = {};
-	}
-    	var div = $('<div class="form-group ActionGroup">')
-			.append($('<div class="form-group">')
-				.append($('<label class="col-lg-1 control-label">')
-					.text(_name))
-				.append($('<div class="col-lg-1">')
-						.append($('<a class="btn btn-warning btn-sm listCmdAction" >')
-						.append($('<i class="fa fa-list-alt">'))))
-				.append($('<div class="col-lg-3">')
-					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" />')))
-				.append($('<div class="col-lg-6 actionOptions">')
-						.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
-			.append($('<div class="form-group">')
-				.append($('<label class="col-sm-2 control-label">')
-					.text('{{Choisir le type de reveil}}')
-					.append($('<sup>')
-						.append($('<i class="fa fa-question-circle tooltips" title="Séléctioner le type de réveil">'))))
-				.append($('<div class="col-sm-5">')
-					.append($('<select class="expressionAttr" data-l1key="configuration" data-l2key="ReveilType">')
-						.append($('<option value="default">')
-							.text('{{Libre}}'))
-						.append($('<option value="DawnSimulatorEngine">')
-							.text('{{Simulateur d\'aube}}')))))						
-			.append($('<div class="form-group DawnSimulatorEngine">')
-				.append($('<label class="col-sm-2 control-label">')
-					.text('{{Type de simulateur d\'aube}}')
-					.append($('<sup>')
-						.append($('<i class="fa fa-question-circle tooltips" title="Choisissez le type de simulation qui vous correspond">'))))
-				.append($('<div class="col-sm-5">')
-					.append($('<select class="expressionAttr" data-l1key="configuration" data-l2key="DawnSimulatorEngineType">')
-							.append($('<option value="Linear">')
-								.text('{{Linear}}'))
-							.append($('<option value="InQuad">')
-								.text('{{InQuad}}'))
-							.append($('<option value="InOutQuad">')
-								.text('{{InOutQuad}}'))
-							.append($('<option value="InOutExpo">')
-								.text('{{InOutExpo}}'))
-							.append($('<option value="OutInExpo">')
-								.text('{{OutInExpo}}'))
-							.append($('<option value="InExpo">')
-								.text('{{InExpo}}'))
-							.append($('<option value="OutExpo">')
-								.text('{{OutExpo}}')))))
-				.append($('<div class="form-group DawnSimulatorEngine">')
-					.append($('<label class="col-sm-2 control-label">')
-						.text('{{Valeur de démarrage de la simulation}}')
-						.append($('<sup>')
-							.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur de départ de la simulation (0 par defaut)">'))))
-					.append($('<div class="col-sm-5">')
-						.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineStartValue" placeholder="{{Valeur de départ de la simulation (0 par defaut)}}"/>'))))
-				.append($('<div class="form-group DawnSimulatorEngine">')
-					.append($('<label class="col-sm-2 control-label">')
-						.text('{{Valeur d\'arret de la simulation}}')
-						.append($('<sup>')
-							.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur d\'arret de la simulation (100 par defaut)">'))))
-					.append($('<div class="col-sm-5">')
-						.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))))
-				.append($('<div class="form-group DawnSimulatorEngine">')
-					.append($('<label class="col-sm-2 control-label">')
-						.text('{{Durée de la simulation}}')
-						.append($('<sup>')
-							.append($('<i class="fa fa-question-circle tooltips" title="Saisir la durée de la simulation">'))))
-					.append($('<div class="col-sm-5">')
-						.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>'))))
-				.append($('<div class="form-group">')
-					.append($('<div class="col-lg-1">')
-						.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
-        _el.append(div);
-        _el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
+	var div = $('<div class="form-group ActionGroup">')
+		.append($('<label class="col-sm-1 control-label">')
+			.text(_name))
+		.append($('<div class="form-group">')
+			.append($('<div class="col-sm-4 has-success">')
+				.append($('<div class="input-group">')
+					.append($('<span class="input-group-btn">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>'))
+						.append($('<a class="btn btn-default bt_removeAction btn-sm" data-type="inAction">')
+							.append($('<i class="fa fa-minus-circle">'))))
+					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" data-type="inAction"/>'))
+					.append($('<span class="input-group-btn">')
+						.append($('<a class="btn btn-success btn-sm listAction" data-type="inAction" title="Sélectionner un mot-clé">')
+							.append($('<i class="fa fa-tasks">')))
+						.append($('<a class="btn btn-success btn-sm listCmdAction" data-type="inAction">')
+							.append($('<i class="fa fa-list-alt">'))))))
+			.append($('<div class="actionOptions">')
+			       .append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
+ 		.append($('<div class="form-group">')
+			.append($('<label class="col-sm-2 control-label">')
+				.text('{{Choisir le type de reveil}}')
+				.append($('<sup>')
+					.append($('<i class="fa fa-question-circle tooltips" title="Séléctioner le type de réveil">'))))
+			.append($('<div class="col-sm-5">')
+				.append($('<select class="expressionAttr" data-l1key="configuration" data-l2key="ReveilType">')
+					.append($('<option value="default">')
+						.text('{{Libre}}'))
+					.append($('<option value="DawnSimulatorEngine">')
+						.text('{{Simulateur d\'aube}}')))))						
+		.append($('<div class="form-group DawnSimulatorEngine">')
+			.append($('<label class="col-sm-2 control-label">')
+				.text('{{Type de simulateur d\'aube}}')
+				.append($('<sup>')
+					.append($('<i class="fa fa-question-circle tooltips" title="Choisissez le type de simulation qui vous correspond">'))))
+			.append($('<div class="col-sm-5">')
+				.append($('<select class="expressionAttr" data-l1key="configuration" data-l2key="DawnSimulatorEngineType">')
+						.append($('<option value="Linear">')
+							.text('{{Linear}}'))
+						.append($('<option value="InQuad">')
+							.text('{{InQuad}}'))
+						.append($('<option value="InOutQuad">')
+							.text('{{InOutQuad}}'))
+						.append($('<option value="InOutExpo">')
+							.text('{{InOutExpo}}'))
+						.append($('<option value="OutInExpo">')
+							.text('{{OutInExpo}}'))
+						.append($('<option value="InExpo">')
+							.text('{{InExpo}}'))
+						.append($('<option value="OutExpo">')
+							.text('{{OutExpo}}')))))
+		.append($('<div class="form-group DawnSimulatorEngine">')
+			.append($('<label class="col-sm-2 control-label">')
+				.text('{{Valeur de démarrage de la simulation}}')
+				.append($('<sup>')
+					.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur de départ de la simulation (0 par defaut)">'))))
+			.append($('<div class="col-sm-5">')
+				.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineStartValue" placeholder="{{Valeur de départ de la simulation (0 par defaut)}}"/>'))))
+		.append($('<div class="form-group DawnSimulatorEngine">')
+			.append($('<label class="col-sm-2 control-label">')
+				.text('{{Valeur d\'arret de la simulation}}')
+				.append($('<sup>')
+					.append($('<i class="fa fa-question-circle tooltips" title="Saisir la valeur d\'arret de la simulation (100 par defaut)">'))))
+			.append($('<div class="col-sm-5">')
+				.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))))
+		.append($('<div class="form-group DawnSimulatorEngine">')
+			.append($('<label class="col-sm-2 control-label">')
+				.text('{{Durée de la simulation}}')
+				.append($('<sup>')
+					.append($('<i class="fa fa-question-circle tooltips" title="Saisir la durée de la simulation">'))))
+			.append($('<div class="col-sm-5">')
+				.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>'))))
+		.append($('<div class="form-group">')
+			.append($('<div class="col-lg-1">')
+				.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
+	div.find('.DawnSimulatorEngine').hide();
+	_el.append(div);
+	_el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
   
 }
 $('#tab_zones a').click(function(e) {
@@ -298,14 +294,23 @@ $('body').on('click','.ActionAttr[data-action=add]',function(){
 $('body').on('click','.ActionAttr[data-action=remove]', function () {
 	$(this).closest('.ActionGroup').remove();
 });
-$("body").on('click', ".listCmdAction", function() {
-    	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
-    	jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function(result) {
+$("body").on('click', ".listAction", function() {
+	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
+	jeedom.getSelectActionModal({}, function (result) {
 		el.value(result.human);
-        	jeedom.cmd.displayActionOption(el.value(), '', function(html) {
+		jeedom.cmd.displayActionOption(el.value(), '', function (html) {
 			el.closest('.form-group').find('.actionOptions').html(html);
-        	});
-    	});
+		});
+	});
+}); 
+$("body").on('click', ".listCmdAction", function() {
+	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
+	jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
+		el.value(result.human);
+		jeedom.cmd.displayActionOption(el.value(), '', function (html) {
+			el.closest('.form-group').find('.actionOptions').html(html);
+		});
+	});
 });
 $('body').on( 'click','.bt_selectCmdExpression', function() {
 	var _this=this;
