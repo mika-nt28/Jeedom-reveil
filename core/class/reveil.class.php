@@ -78,7 +78,10 @@ class reveil extends eqLogic {
 		if ($version == 'mobile') {
 			$vcolor = 'mcmdColor';
 		}
-		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+		$Schedule=$this->getConfiguration('ScheduleCron');
+		$Schedule=str_replace('*',0,$Schedule);
+		$Schedule=explode(' ',$Schedule);
+		$Schedule=mktime ($Schedule[1], $Schedule[0], 0, $Schedule[3], $Schedule[2]);
 		$replace_eqLogic = array(
 			'#id#' => $this->getId(),
 			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
@@ -86,7 +89,7 @@ class reveil extends eqLogic {
 			'#name#' => $this->getName(),
 			'#height#' => $this->getDisplay('height', 'auto'),
 			'#width#' => $this->getDisplay('width', 'auto'),
-			'#cmdColor#' => $cmdColor,
+			'#shedule#'=>  date('d/m/Y H:i', $Schedule)
 		);
 		$action = '';
 		
