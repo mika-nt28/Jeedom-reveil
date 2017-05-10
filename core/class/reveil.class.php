@@ -42,19 +42,18 @@ class reveil extends eqLogic {
 		}
 	}
 	public function postSave() {
-		if($this->getIsEnable()){
-			$cron = $this->CreateCron($this->getConfiguration('ScheduleCron'), 'pull');
-		} else {
-			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-			if (is_object($cron)) 	
-				$cron->remove();			
-		}
-		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-		while(is_object($cron)) {
-			$cron->stop();
-			$cron->remove();						
-			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-		}
+		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
+		$isArmed->event(false);
+		$Armed=self::AddCommande($this,"Activer","armed","action","other",true,'lock');
+		$Armed->setValue($isArmed->getId());
+		$Armed->setConfiguration('state', '1');
+		$Armed->setConfiguration('armed', '1');
+		$Armed->save();
+		$Released=self::AddCommande($this,"Desactiver","released","action","other",true,'lock');
+		$Released->setValue($isArmed->getId());
+		$Released->save();
+		$Released->setConfiguration('state', '0');
+		$Released->setConfiguration('armed', '1');
 	}
 	public function postRemove() {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
@@ -67,13 +66,33 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
 		}
 	}
+	public static function AddCommande($eqLogic,$Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='') {
+		$Commande = $eqLogic->getCmd(null,$_logicalId);
+		if (!is_object($Commande))
+		{
+			$Commande = new reveilCmd();
+			$Commande->setId(null);
+			$Commande->setName($Name);
+			$Commande->setIsVisible($visible);
+			$Commande->setLogicalId($_logicalId);
+			$Commande->setEqLogic_id($eqLogic->getId());
+			$Commande->setType($Type);
+			$Commande->setSubType($SubType);
+		}
+     		$Commande->setTemplate('dashboard',$Template );
+		$Commande->setTemplate('mobile', $Template);
+		$Commande->save();
+		return $Commande;
+	}
 	public static function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
-      //On verifie que l'on a toujours le cron associé
-      $cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-      if (!is_object($cron)) 	{
-        log::add('reveil','debug','Cron manquant on sort');
+			if(!$this->getCmd(null,'isArmed')->execCmd())
+				exit;
+      			//On verifie que l'on a toujours le cron associé
+      			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
+     		 	if (!is_object($cron)) 	{
+        			log::add('reveil','debug','Cron manquant on sort');
 				exit;
 			} else  {
 				log::add('reveil','debug','Cron OK on continu');				
@@ -284,6 +303,30 @@ class reveil extends eqLogic {
 }
 class reveilCmd extends cmd {
     	public function execute($_options = null) {	
+		$Listener=cmd::byId(str_replace('#','',$this->getValue()));
+		if (is_object($Listener)) {	
+			switch($this->getLogicalId()){
+				case 'armed':
+					$Listener->event(true);
+					$Schedule=$this->getEqLogic()->getConfiguration('ScheduleCron');
+					$cron = $this->getEqLogic()->CreateCron($Schedule, 'pull');
+				break;
+				case 'released':
+					$Listener->event(false);
+					$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getEqLogic()->getId()));
+					if (is_object($cron)) 	
+						$cron->remove();
+					$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+					while(is_object($cron)) {
+						$cron->stop();
+						$cron->remove();						
+						$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
+					}
+				break;
+			}
+			$Listener->setCollectDate(date('Y-m-d H:i:s'));
+			$Listener->save();
+		}
 	}
 }
 ?>
