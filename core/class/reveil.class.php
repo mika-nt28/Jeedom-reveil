@@ -66,6 +66,59 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
 		}
 	}
+	public function toHtml($_version = 'dashboard') {
+		if ($this->getIsEnable() != 1) {
+			return '';
+		}
+		$version = jeedom::versionAlias($_version);
+		if ($this->getDisplay('hideOn' . $version) == 1) {
+			return '';
+		}
+		$vcolor = 'cmdColor';
+		if ($version == 'mobile') {
+			$vcolor = 'mcmdColor';
+		}
+		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+		$replace_eqLogic = array(
+			'#id#' => $this->getId(),
+			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
+			'#humanname#' => $this->getHumanName(),
+			'#name#' => $this->getName(),
+			'#height#' => $this->getDisplay('height', 'auto'),
+			'#width#' => $this->getDisplay('width', 'auto'),
+			'#cmdColor#' => $cmdColor,
+		);
+		$action = '';
+		
+		foreach ($this->getCmd() as $cmd) {
+			if ($cmd->getIsVisible() == 1) {
+				if ($cmd->getDisplay('hideOn' . $version) == 1) 
+					continue;
+				if ($cmd->getDisplay('forceReturnLineBefore', 0) == 1) 
+					$action .= '<br/>';
+				$action .= $cmd->toHtml($_version, $cmdColor);
+				if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) 
+					$action .= '<br/>';
+			}
+		}
+		$replace_eqLogic['#action#'] = $action;
+		if ($_version == 'dview' || $_version == 'mview') {
+			$object = $this->getObject();
+			$replace_eqLogic['#name#'] = (is_object($object)) ? $object->getName() . ' - ' . $replace_eqLogic['#name#'] : $replace['#name#'];
+		}
+		$parameters = $this->getDisplay('parameters');
+		if (is_array($parameters)) {
+			foreach ($parameters as $key => $value) {
+				$replace_eqLogic['#' . $key . '#'] = $value;
+			}
+		}
+		return template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'motion'));
+	}
+	public static $_widgetPossibility = array('custom' => array(
+	        'visibility' => true,
+	        'displayName' => false,
+	        'optionalParameters' => false,
+	));
 	public static function AddCommande($eqLogic,$Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='') {
 		$Commande = $eqLogic->getCmd(null,$_logicalId);
 		if (!is_object($Commande))
