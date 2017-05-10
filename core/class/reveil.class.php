@@ -66,6 +66,24 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
 		}
 	}
+	public static function AddCommande($eqLogic,$Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='') {
+		$Commande = $eqLogic->getCmd(null,$_logicalId);
+		if (!is_object($Commande))
+		{
+			$Commande = new reveilCmd();
+			$Commande->setId(null);
+			$Commande->setName($Name);
+			$Commande->setIsVisible($visible);
+			$Commande->setLogicalId($_logicalId);
+			$Commande->setEqLogic_id($eqLogic->getId());
+			$Commande->setType($Type);
+			$Commande->setSubType($SubType);
+		}
+     		$Commande->setTemplate('dashboard',$Template );
+		$Commande->setTemplate('mobile', $Template);
+		$Commande->save();
+		return $Commande;
+	}
 	public static function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
