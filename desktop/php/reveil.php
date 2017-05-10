@@ -63,8 +63,10 @@ $eqLogics = eqLogic::byType('reveil');
 		<div class="row" style="padding-left:25px;">
 			<ul class="nav nav-tabs" id="tab_zones">	
 				<li class="active"><a href="#tab_general"><i class="fa fa-cogs"></i> {{Général}}</a></li>
-				<li><a href="#tab_condition"><i class="fa fa-pencil"></i> {{Condition execution}}</a></li>
-				<li><a href="#tab_equipement"><i class="fa fa-pencil"></i> {{Equipements}}</a></li>
+				<li class="SelectMap"><a href="#tab_map"><i class="fa fa-map"></i> {{Afficher la carte}}</a></li>
+				<li><a href="#tab_condition"><i class="fa fa-pencil"></i> {{Conditions d'exécution}}</a></li>
+				<li><a href="#tab_action"><i class="fa fa-pencil"></i> {{Actions}}</a></li>
+				<li><a href="#tab_cmd"><i class="fa fa-pencil"></i> {{Commandes du plugin}}</a></li>
 			</ul>
 			<div class="tab-content TabCmdZone">
 				<div class="tab-pane active" id="tab_general">
@@ -160,7 +162,7 @@ $eqLogics = eqLogic::byType('reveil');
 							</div>
 						</fieldset>
 					</form>
-				</div>				
+				</div>	
 				<div class="tab-pane" id="tab_condition">
 					<form class="form-horizontal">
 						<fieldset>
@@ -177,7 +179,7 @@ $eqLogics = eqLogic::byType('reveil');
 						</fieldset>
 					</form>
 				</div>				
-				<div class="tab-pane" id="tab_equipement">
+				<div class="tab-pane" id="tab_action">
 					<form class="form-horizontal">
 						<fieldset>
 							<legend>{{Liste des equipements a executé:}}
@@ -193,16 +195,19 @@ $eqLogics = eqLogic::byType('reveil');
 						</fieldset>
 					</form>
 				</div>		
-				</div>
+				<div class="tab-pane " id="tab_cmd">	
+					<table id="table_cmd" class="table table-bordered table-condensed">
+					    <thead>
+						<tr>
+						    <th>Nom</th>
+						    <th>Paramètre</th>
+						</tr>
+					    </thead>
+					    <tbody></tbody>
+					</table>
+				</div>	
+			</div>
 		</div>
-		<form class="form-horizontal">
-			<fieldset>
-				<div class="form-actions">
-					<a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
-					<a class="btn btn-success eqLogicAction" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
-				</div>
-			</fieldset>
-		</form>
 	</div>
 </div>
 
