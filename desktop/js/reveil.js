@@ -294,14 +294,23 @@ $('body').on('click','.ActionAttr[data-action=add]',function(){
 $('body').on('click','.ActionAttr[data-action=remove]', function () {
 	$(this).closest('.ActionGroup').remove();
 });
-$("body").on('click', ".listCmdAction", function() {
-    	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
-    	jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function(result) {
+$("body").on('click', ".listAction", function() {
+	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
+	jeedom.getSelectActionModal({}, function (result) {
 		el.value(result.human);
-        	jeedom.cmd.displayActionOption(el.value(), '', function(html) {
+		jeedom.cmd.displayActionOption(el.value(), '', function (html) {
 			el.closest('.form-group').find('.actionOptions').html(html);
-        	});
-    	});
+		});
+	});
+}); 
+$("body").on('click', ".listCmdAction", function() {
+	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
+	jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
+		el.value(result.human);
+		jeedom.cmd.displayActionOption(el.value(), '', function (html) {
+			el.closest('.form-group').find('.actionOptions').html(html);
+		});
+	});
 });
 $('body').on( 'click','.bt_selectCmdExpression', function() {
 	var _this=this;
