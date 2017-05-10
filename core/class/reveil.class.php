@@ -66,6 +66,35 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
 		}
 	}
+	public function lastScheduleToText($Schedule) {
+		$Schedule=explode(' ',$Schedule);
+		for($loop=0; $loop>count($Schedule); $loop++){
+			if($Schedule[$loop] == '*'){
+				switch ($loop){
+					case 0://Minute
+						$Schedule[$loop] = date('i');
+						break;
+					case 1://heure
+						$Schedule[$loop] = date('H');
+						break;
+					case 2://jours
+						$Schedule[$loop] = date('d');
+						break;
+					case 3://moi
+						$Schedule[$loop] = date('m');
+						break;
+					case 4://Jours de la semaine
+						if(stripos(',',$Schedule[$loop])>-1){
+						}
+						break;
+					case 5://annee
+						$Schedule[$loop] = date('Y');
+						break;
+				}
+			}
+		}
+		return date('d/m/Y H:i', mktime ($Schedule[1], $Schedule[0], 0, $Schedule[3], $Schedule[2]));
+	}
 	public function toHtml($_version = 'dashboard') {
 		if ($this->getIsEnable() != 1) {
 			return '';
@@ -78,10 +107,6 @@ class reveil extends eqLogic {
 		if ($version == 'mobile') {
 			$vcolor = 'mcmdColor';
 		}
-		$Schedule=$this->getConfiguration('ScheduleCron');
-		$Schedule=str_replace('*',0,$Schedule);
-		$Schedule=explode(' ',$Schedule);
-		$Schedule=mktime ($Schedule[1], $Schedule[0], 0, $Schedule[3], $Schedule[2]);
 		$replace_eqLogic = array(
 			'#id#' => $this->getId(),
 			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
@@ -89,7 +114,7 @@ class reveil extends eqLogic {
 			'#name#' => $this->getName(),
 			'#height#' => $this->getDisplay('height', 'auto'),
 			'#width#' => $this->getDisplay('width', 'auto'),
-			'#shedule#'=>  date('d/m/Y H:i', $Schedule)
+			'#shedule#'=> $this->lastScheduleToText($this->getConfiguration('ScheduleCron'))
 		);
 		$action = '';
 		
