@@ -112,7 +112,7 @@ class reveil extends eqLogic {
 				$replace_eqLogic['#' . $key . '#'] = $value;
 			}
 		}
-		return template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'motion'));
+		return template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'reveil'));
 	}
 	public static $_widgetPossibility = array('custom' => array(
 	        'visibility' => true,
