@@ -47,12 +47,6 @@ function printEqLogic(_eqLogic) {
 	}	
 }
 function addCondition(_action, _name, _el) {
-	if (!isset(_action)) {
-		_action = {};
-	}
-	if (!isset(_action.options)) {
-		_action.options = {};
-	}
     	var div = $('<div class="form-group ConditionGroup">')
   		.append($('<label class="col-lg-1 control-label">')
 			.text(_name))
@@ -68,24 +62,24 @@ function addCondition(_action, _name, _el) {
   
 }
 function addAction(_action, _name, _el) {
-	if (!isset(_action)) {
-		_action = {};
-	}
-	if (!isset(_action.options)) {
-		_action.options = {};
-	}
-    	var div = $('<div class="form-group ActionGroup">')
-			.append($('<div class="form-group">')
-				.append($('<label class="col-lg-1 control-label">')
-					.text(_name))
-				.append($('<div class="col-lg-1">')
-						.append($('<a class="btn btn-warning btn-sm listCmdAction" >')
-						.append($('<i class="fa fa-list-alt">'))))
-				.append($('<div class="col-lg-3">')
-					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" />')))
-				.append($('<div class="col-lg-6 actionOptions">')
-						.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
-			.append($('<div class="form-group">')
+	var div = $('<div class="form-group ActionGroup">')
+		.append($('<label class="col-sm-1 control-label">')
+			.text(_name))
+		.append($('<div class="col-sm-4 has-success">')
+			.append($('<div class="input-group">')
+				.append($('<span class="input-group-btn">')
+					.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>'))
+					.append($('<a class="btn btn-default bt_removeAction btn-sm" data-type="inAction">')
+						.append($('<i class="fa fa-minus-circle">'))))
+				.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" data-type="inAction"/>'))
+				.append($('<span class="input-group-btn">')
+					.append($('<a class="btn btn-success btn-sm listAction" data-type="inAction" title="Sélectionner un mot-clé">')
+						.append($('<i class="fa fa-tasks">')))
+					.append($('<a class="btn btn-success btn-sm listCmdAction" data-type="inAction">')
+						.append($('<i class="fa fa-list-alt">'))))))
+		.append($('<div class="actionOptions">')
+		       .append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options))))
+ 		.append($('<div class="form-group">')
 				.append($('<label class="col-sm-2 control-label">')
 					.text('{{Choisir le type de reveil}}')
 					.append($('<sup>')
@@ -143,6 +137,21 @@ function addAction(_action, _name, _el) {
 						.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
         _el.append(div);
         _el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
+  
+}
+function addAction(_action, _name, _el) {
+    	var div = $('<div class="form-group ActionGroup">')
+			.append($('<div class="form-group">')
+				.append($('<label class="col-lg-1 control-label">')
+					.text(_name))
+				.append($('<div class="col-lg-1">')
+						.append($('<a class="btn btn-warning btn-sm listCmdAction" >')
+						.append($('<i class="fa fa-list-alt">'))))
+				.append($('<div class="col-lg-3">')
+					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" />')))
+				.append($('<div class="col-lg-6 actionOptions">')
+						.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
+			
   
 }
 $('#tab_zones a').click(function(e) {
