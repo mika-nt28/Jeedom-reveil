@@ -136,6 +136,7 @@ function addAction(_action, _name, _el) {
 		.append($('<div class="form-group">')
 			.append($('<div class="col-lg-1">')
 				.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
+	div.find('.DawnSimulatorEngine').hide();
 	_el.append(div);
 	_el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
   
