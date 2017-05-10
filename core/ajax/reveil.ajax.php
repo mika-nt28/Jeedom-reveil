@@ -8,11 +8,11 @@ try {
 	if (init('action') == 'updateShedule') {
 		$eqLogic=eqLogic::byId(init('id'));
 		if(is_object($eqLogic)){
-      $Schedule=init('Schedule');
-      $eqLogic->setConfiguration('ScheduleCron',$Schedule);
-      $eqLogic->save();
+     			$Schedule=init('Schedule');
+     			$eqLogic->setConfiguration('ScheduleCron',$Schedule);
+      			$eqLogic->save();
 			$cron = $eqLogic->CreateCron($Schedule, 'pull');
-      $eqLogic->refreshWidget();
+      			$eqLogic->refreshWidget();
 		}
 		ajax::success($result);
 	}
