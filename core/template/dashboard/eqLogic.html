@@ -1,0 +1,41 @@
+<div class="eqLogic eqLogic-widget allowResize" data-eqLogic_id="#id#" data-version="dashboard" style="background-color: #background_color#;height: #height#;width: #width#;#style#;min-height: 80px;min-weight:80px;">
+	<span class="statusCmd" style="position : absolute;left : 5px;bottom:0px; width : 30px;z-index: 1030;"></span>
+	<center class="widget-name">
+        	<span style="font-weight:bold;"><a href="#eqLink#">#name#</a></span>
+	</center>
+	<center>	
+        	#action#
+        	<span class="cmd cmd-widget" data-type="action" data-subtype="other">
+        	    #shedule#
+        	   	 <a class="shedule btn btn-default btn-sm" data-eqLogic_id="#id#">
+			    <i class="icon divers-circular114"></i>
+			</a>
+		</span>
+    	</center>
+	<script>
+		$('.shedule[data-eqLogic_id=#id#]').off().on('click', function () {
+			jeedom.getCronSelectModal({},function (result) {
+				$.ajax({// fonction permettant de faire de l'ajax
+					type: "POST", // methode de transmission des données au fichier php
+					url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
+					data: {
+						action: "updateShedule",
+						id: "#id#",
+						Schedule: result.value
+					},
+					dataType: 'json',
+					global: false,
+					error: function(request, status, error) {
+						handleAjaxError(request, status, error);
+					},
+					success: function(data) { // si l'appel a bien fonctionné
+						if (data.state != 'ok') {
+							$('#div_alert').showAlert({message: data.result, level: 'danger'});
+							return;
+						}
+					}
+				});
+			});
+		});	
+	</script>
+</div>
