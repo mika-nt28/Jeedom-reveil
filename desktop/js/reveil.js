@@ -139,21 +139,6 @@ function addAction(_action, _name, _el) {
         _el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
   
 }
-function addAction(_action, _name, _el) {
-    	var div = $('<div class="form-group ActionGroup">')
-			.append($('<div class="form-group">')
-				.append($('<label class="col-lg-1 control-label">')
-					.text(_name))
-				.append($('<div class="col-lg-1">')
-						.append($('<a class="btn btn-warning btn-sm listCmdAction" >')
-						.append($('<i class="fa fa-list-alt">'))))
-				.append($('<div class="col-lg-3">')
-					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" />')))
-				.append($('<div class="col-lg-6 actionOptions">')
-						.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
-			
-  
-}
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
     $(this).tab('show');
