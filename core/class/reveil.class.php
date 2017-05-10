@@ -172,7 +172,17 @@ class reveil extends eqLogic {
 			break;
 		}
 	}
-	public function ExecuteAction($cmd,$options='') {	
+	public function ExecuteAction($cmd,$options='') {
+		if (isset($cmd['enable']) && $cmd['enable'] == 0)
+			continue;
+		try {
+			$options = array();
+			if (isset($cmd['options'])) 
+				$options = $cmd['options'];
+			scenarioExpression::createAndExec('action', $cmd['cmd'], $options);
+		} catch (Exception $e) {
+			log::add('Volets', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+		}
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
 		if($options=='')
 			$options=$cmd['options'];
