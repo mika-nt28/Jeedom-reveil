@@ -7,10 +7,12 @@ class reveil extends eqLogic {
 		$return['launchable'] = 'ok';
 		$return['state'] = 'ok';
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-			if (!is_object($cron)) 	{	
-				$return['state'] = 'nok';
-				return $return;
+			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
+				$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
+				if (!is_object($cron)) 	{	
+					$return['state'] = 'nok';
+					return $return;
+				}
 			}
 		}
 		return $return;
@@ -24,7 +26,10 @@ class reveil extends eqLogic {
 		if ($deamon_info['state'] == 'ok') 
 			return;
 		foreach(eqLogic::byType('reveil') as $reveil){
-			$reveil->save();
+			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
+				$Schedule=$reveil->getConfiguration('ScheduleCron');
+				$cron = $reveil->CreateCron($Schedule, 'pull');
+			}
 		}
 	}
 	public static function deamon_stop() {	
