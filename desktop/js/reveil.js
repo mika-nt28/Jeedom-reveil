@@ -19,10 +19,10 @@ function saveEqLogic(_eqLogic) {
 			_eqLogic.configuration.Equipements=new Object();
 			var ConditionArray= new Array();
 			var EquipementArray= new Array();
-			$('#tab_condition .ConditionGroup').each(function( index ) {
+			$('#conditiontab .ConditionGroup').each(function( index ) {
 				ConditionArray.push($(this).getValues('.expressionAttr')[0])
 			});
-			$('#tab_equipement .ActionGroup').each(function( index ) {
+			$('#actiontab .ActionGroup').each(function( index ) {
 				EquipementArray.push($(this).getValues('.expressionAttr')[0])
 			});
 			_eqLogic.configuration.Conditions=ConditionArray;
@@ -36,13 +36,13 @@ function printEqLogic(_eqLogic) {
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Conditions) { 
 			if( (typeof _eqLogic.configuration.Conditions[index] === "object") && (_eqLogic.configuration.Conditions[index] !== null) )
-				addCondition(_eqLogic.configuration.Conditions[index],  '{{Condition}}',$('#tab_condition').find('.div_Condition'));
+				addCondition(_eqLogic.configuration.Conditions[index],  '{{Condition}}',$('#conditiontab').find('.div_Condition'));
 		}
 	}
 	if (typeof(_eqLogic.configuration.Equipements) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Equipements) { 
 			if( (typeof _eqLogic.configuration.Equipements[index] === "object") && (_eqLogic.configuration.Equipements[index] !== null) )
-				addAction(_eqLogic.configuration.Equipements[index],  '{{Action}}',$('#tab_equipement').find('.div_action'));
+				addAction(_eqLogic.configuration.Equipements[index],  '{{Action}}',$('#actiontab').find('.div_action'));
 		}
 	}	
 }
