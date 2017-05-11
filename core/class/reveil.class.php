@@ -43,7 +43,7 @@ class reveil extends eqLogic {
 	}
 	public function postSave() {
 		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
-		$isArmed->event(false);
+		$isArmed->event(true);
 		$Armed=self::AddCommande($this,"Activer","armed","action","other",true,'lock');
 		$Armed->setValue($isArmed->getId());
 		$Armed->setConfiguration('state', '1');
