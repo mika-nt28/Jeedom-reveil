@@ -150,7 +150,7 @@ $eqLogics = eqLogic::byType('reveil');
 							</label>
 							<div class="col-sm-5">
 								<label>{{Ignorer}}</label>
-								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Ignorer}}" data-l1key="isHolidays"/>
+								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Ignorer}}" data-l1key="configuration" data-l2key="isHolidays"/>
 								</div>
 						</div>
 						<div class="form-group">
