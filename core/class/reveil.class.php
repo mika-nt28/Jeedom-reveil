@@ -173,7 +173,14 @@ class reveil extends eqLogic {
 			}
 		}
 	}
-	
+	public function removeSimulAubeDemon(){
+		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',array('id' => $this->getId()));
+		if(is_object($cron)) {
+			log::add('reveil','debug','On termine le daemon de simualtion');
+			$cron->stop();
+			$cron->remove();
+		}
+	}
 	public static function SimulAubeDemon($_option){
 		log::add('reveil','debug','Exécution de l\'action réveil simulation d\'aube : '. json_encode($_option));
 		$reveil=eqLogic::byId($_option['id']);
@@ -195,20 +202,13 @@ class reveil extends eqLogic {
 
 				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
 					log::add('reveil','debug','Fin de la simulation d\'aube');
-					break;
+					$reveil->removeSimulAubeDemon();
+					exit;
 				}else
 					sleep(60);
 			}
 		}
-		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',$_option);
-		log::add('reveil','debug','Fin');
-		if(is_object($cron)) {
-			log::add('reveil','debug','On termine le daemon de simualtion');
-			$cron->stop();
-			$cron->remove();
-		} else  {
-			log::add('reveil','debug','Pas de daemon de simualtion!!!????!');			
-		}
+		
 	}
 	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
 		if($startValue=='')
