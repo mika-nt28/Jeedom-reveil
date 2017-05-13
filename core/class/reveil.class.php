@@ -148,7 +148,7 @@ class reveil extends eqLogic {
 	public static function pull($_option){
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
-			if(!$this->getCmd(null,'isArmed')->execCmd())
+			if(!$reveil->getCmd(null,'isArmed')->execCmd())
 				exit;
       			//On verifie que l'on a toujours le cron associé
       			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
