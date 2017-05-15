@@ -85,8 +85,8 @@ class reveil extends eqLogic {
 		}
 		$shedule='';
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-		if (is_object($cron)) 	
-			$shedule=$cron->getNextRunDate();
+		/*if (is_object($cron)) 	
+			$shedule=$cron->getNextRunDate();*/
 		$replace_eqLogic = array(
 			'#id#' => $this->getId(),
 			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
@@ -94,10 +94,11 @@ class reveil extends eqLogic {
 			'#name#' => $this->getName(),
 			'#height#' => $this->getDisplay('height', 'auto'),
 			'#width#' => $this->getDisplay('width', 'auto'),
+			'#cmdColor#' => $cmdColor,
 			'#shedule#'=> $shedule
 		);
 		$action = '';
-		
+		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
 		foreach ($this->getCmd() as $cmd) {
 			if ($cmd->getIsVisible() == 1) {
 				if ($cmd->getDisplay('hideOn' . $version) == 1) 
