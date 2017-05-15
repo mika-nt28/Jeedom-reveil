@@ -111,8 +111,8 @@ function addAction(_action, _name, _el) {
 							.append($('<i class="fa fa-minus-circle">'))))
 					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" data-type="inAction"/>'))
 					.append($('<span class="input-group-btn">')
-						.append($('<a class="btn btn-success btn-sm listAction" data-type="inAction" title="Sélectionner un mot-clé">')
-							.append($('<i class="fa fa-tasks">')))
+					/*	.append($('<a class="btn btn-success btn-sm listAction" data-type="inAction" title="Sélectionner un mot-clé">')
+							.append($('<i class="fa fa-tasks">')))*/
 						.append($('<a class="btn btn-success btn-sm listCmdAction" data-type="inAction">')
 							.append($('<i class="fa fa-list-alt">'))))))
 			.append($('<div class="actionOptions">')
