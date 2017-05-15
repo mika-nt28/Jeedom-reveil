@@ -18,7 +18,7 @@ class reveil extends eqLogic {
 		return $return;
 	}
 	public static function deamon_start($_debug = false) {
-		//log::remove('reveil');
+		log::remove('reveil');
 		self::deamon_stop();
 		$deamon_info = self::deamon_info();
 		if ($deamon_info['launchable'] != 'ok') 
@@ -85,8 +85,8 @@ class reveil extends eqLogic {
 		}
 		$shedule='';
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-		/*if (is_object($cron)) 	
-			$shedule=$cron->getNextRunDate();*/
+		if (is_object($cron)) 	
+			$shedule=$cron->getNextRunDate();
 		$replace_eqLogic = array(
 			'#id#' => $this->getId(),
 			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
@@ -111,17 +111,7 @@ class reveil extends eqLogic {
 			}
 		}
 		$replace_eqLogic['#action#'] = $action;
-		if ($_version == 'dview' || $_version == 'mview') {
-			$object = $this->getObject();
-			$replace_eqLogic['#name#'] = (is_object($object)) ? $object->getName() . ' - ' . $replace_eqLogic['#name#'] : $replace['#name#'];
-		}
-		$parameters = $this->getDisplay('parameters');
-		if (is_array($parameters)) {
-			foreach ($parameters as $key => $value) {
-				$replace_eqLogic['#' . $key . '#'] = $value;
-			}
-		}
-		return template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'reveil'));
+		return $this->postToHtml($_version, template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'reveil')));
 	}
 	public static $_widgetPossibility = array('custom' => array(
 	        'visibility' => true,
