@@ -1,0 +1,10 @@
+{
+	"id" : "reveil",
+	"name" : "Réveil",
+	"description" : "Utiliser votre domotique pour vous réveiller",
+	"licence" : "AGPL",
+	"author" : "Halbout Michael",
+	"require" : "3.0",
+	"category" : "organization",
+	"mobile" : "event"
+}
