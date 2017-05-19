@@ -283,18 +283,17 @@ class reveil extends eqLogic {
 	public function CreateCron($Schedule, $logicalId, $demon=false) {
 		log::add('reveil','debug','Création du cron "'.$logicalId.'" ID = '.$this->getId().' --> '.$Schedule);
 		$cron = cron::byClassAndFunction('reveil', $logicalId,array('id' => $this->getId()));
-		if (!is_object($cron)) {
+		if (!is_object($cron)) 
 			$cron = new cron();
-			$cron->setClass('reveil');
-			$cron->setFunction($logicalId);
-			$options['id']= $this->getId();
-			if($demon!= false){
-				$options['cmd']= $demon;
-				$cron->setDeamon(1);
-			}
-			$cron->setOption($options);
-			$cron->setEnable(1);
+		$cron->setClass('reveil');
+		$cron->setFunction($logicalId);
+		$options['id']= $this->getId();
+		if($demon!= false){
+			$options['cmd']= $demon;
+			$cron->setDeamon(1);
 		}
+		$cron->setOption($options);
+		$cron->setEnable(1);
 		$cron->setSchedule($Schedule);
 		$cron->save();
 		return $cron;
