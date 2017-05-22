@@ -4,7 +4,7 @@
 	"description" : "Utiliser votre domotique pour vous réveiller",
 	"licence" : "AGPL",
 	"author" : "Halbout Michael",
-	"require" : "3.0",
+	"require" : "2.4",
 	"category" : "organization",
 	"mobile" : "event"
 }
