@@ -191,7 +191,7 @@ $eqLogics = eqLogic::byType('reveil');
 								<label class="checkbox-inline">
 									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Heure" >
 										<?php
-											for($loop=0; $loop<24;$loop++)
+											for($loop=0; $loop<24; $loop++){
 												echo'<option value="'.$loop.'">'.$loop.'</option>';
 										?>
 									</select>
@@ -199,8 +199,9 @@ $eqLogics = eqLogic::byType('reveil');
 								<label class="checkbox-inline">
 									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Minute" >
 										<?php
-											for($loop=0; $loop<60;$loop+15)
+											for($loop=0; $loop<60;$loop++){
 												echo'<option value="'.$loop.'">'.$loop.'</option>';
+											}
 										?>
 									</select>
 								</label>
