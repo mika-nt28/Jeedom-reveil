@@ -161,31 +161,31 @@ $eqLogics = eqLogic::byType('reveil');
 							</label>
 							<div class="col-md-8 input-group">
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Lundi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="1" />
 									{{Lundi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Mardi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="2" />
 									{{Mardi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Mercredi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="3" />
 									{{Mercredi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Jeudi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="4" />
 									{{Jeudi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Vendredi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="5" />
 									{{Vendredi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Samedi" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="6" />
 									{{Samedi}}
 								</label>
 								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Dimanche" />
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="0" />
 									{{Dimanche}}
 								</label>
 							</div>
