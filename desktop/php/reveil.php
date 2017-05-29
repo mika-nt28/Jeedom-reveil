@@ -159,7 +159,7 @@ $eqLogics = eqLogic::byType('reveil');
 									<i class="fa fa-question-circle tooltips" title="Configurer l'heure du réveil"></i>
 								</sup>
 							</label>
-							<div class=" col-md-8 input-group">
+							<div class="col-md-8 input-group">
 								<label class="checkbox-inline">
 									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Lundi" />
 									{{Lundi}}
@@ -188,17 +188,20 @@ $eqLogics = eqLogic::byType('reveil');
 									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Dimanche" />
 									{{Dimanche}}
 								</label>
-								<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Heure" >
+							</div>
+							<div class="col-sm-0 input-group">
+								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Schedule" data-l3key="Heure" >
 									<?php
 										for($loop=0; $loop<24; $loop++){
-											echo'<option value="'.$loop.'">'.$loop.'</option>';
+											echo '<option value="'.$loop.'">'.$loop.'</option>';
+                                         }
 									?>
 								</select>
-								<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Minute" >
+								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Schedule" data-l3key="Minute" >
 									<?php
-										for($loop=0; $loop<60;$loop++){
-											echo'<option value="'.$loop.'">'.$loop.'</option>';
-										}
+										for($loop=0; $loop<60; $loop++){
+											echo '<option value="'.$loop.'">'.$loop.'</option>';
+                                         }
 									?>
 								</select>
 							</div>
