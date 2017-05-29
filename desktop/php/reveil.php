@@ -159,13 +159,51 @@ $eqLogics = eqLogic::byType('reveil');
 									<i class="fa fa-question-circle tooltips" title="Configurer l'heure du réveil"></i>
 								</sup>
 							</label>
-							<div class=" col-sm-5 input-group">
-								<input class="eqLogicAttr form-control input-sm" data-l1key="configuration"  data-l2key="ScheduleCron" placeholder="{{Choisir à l'aide de l'assistant, l'heure de départ de votre réveil}}">
-								<span class="input-group-btn">
-									<a class="btn btn-success btn-sm ScheduleCron" >
-										<i class="fa fa-list-alt"></i>
-									</a>
-								</span>
+							<div class=" col-md-8 input-group">
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Lundi" />
+									{{Lundi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Mardi" />
+									{{Mardi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Mercredi" />
+									{{Mercredi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Jeudi" />
+									{{Jeudi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Vendredi" />
+									{{Vendredi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Samedi" />
+									{{Samedi}}
+								</label>
+								<label class="checkbox-inline">
+									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Dimanche" />
+									{{Dimanche}}
+								</label>
+								<label class="checkbox-inline">
+									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Heure" >
+										<?php
+											for($loop=0; $loop<24;$loop++)
+												echo'<option value="'.$loop.'">'.$loop.'</option>';
+										?>
+									</select>
+								</label>
+								<label class="checkbox-inline">
+									<select class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="Minute" >
+										<?php
+											for($loop=0; $loop<60;$loop+15)
+												echo'<option value="'.$loop.'">'.$loop.'</option>';
+										?>
+									</select>
+								</label>
 							</div>
 						</div>
 					</fieldset>
