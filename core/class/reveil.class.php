@@ -27,7 +27,7 @@ class reveil extends eqLogic {
 			return;
 		foreach(eqLogic::byType('reveil') as $reveil){
 			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
-				$Schedule=$reveil->getConfiguration('ScheduleCron');
+				$Schedule=$reveil->NextStart();//getConfiguration('ScheduleCron');
 				$cron = $reveil->CreateCron($Schedule, 'pull');
 			}
 		}
@@ -149,8 +149,6 @@ class reveil extends eqLogic {
 			} else  {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
-			if($reveil->isHolidays() && $reveil->getConfiguration('isHolidays'))
-				break;
 			if($reveil->EvaluateCondition()){
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					switch($cmd['configuration']['ReveilType']){
@@ -320,6 +318,22 @@ class reveil extends eqLogic {
 		}
 		return true;
 	}
+	private function NextStart(){
+		$ConigSchedule=$this->getConfiguration('Schedule');
+		$offset=0;
+		for($day=0;$day<7;$day++){
+			if($ConigSchedule[date('w')+$day]){
+				if($this->getConfiguration('isHolidays')){
+					if($this->isHolidays())
+						continue;
+				}
+				$offset=$day;
+				break;
+			}
+		}
+		$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j")+$offset , date("Y"));
+		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
+	}
 	private function isHolidays(){
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
@@ -359,7 +373,7 @@ class reveilCmd extends cmd {
 			switch($this->getLogicalId()){
 				case 'armed':
 					$Listener->event(true);
-					$Schedule=$this->getEqLogic()->getConfiguration('ScheduleCron');
+					$Schedule=$this->getEqLogic()->NextStart();//getConfiguration('ScheduleCron');
 					$cron = $this->getEqLogic()->CreateCron($Schedule, 'pull');
 				break;
 				case 'released':
