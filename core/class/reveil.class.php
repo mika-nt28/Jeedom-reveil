@@ -84,9 +84,9 @@ class reveil extends eqLogic {
 			$vcolor = 'mcmdColor';
 		}
 		$shedule='';
-		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
+		/*$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
-			$shedule=$cron->getNextRunDate();
+			$shedule=$cron->getNextRunDate();*/
 		$replace_eqLogic = array(
 			'#id#' => $this->getId(),
 			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
