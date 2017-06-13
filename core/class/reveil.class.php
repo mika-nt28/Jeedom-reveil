@@ -204,7 +204,7 @@ class reveil extends eqLogic {
 		}
 		
 	}
-	private function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
+	public function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
 		if($startValue=='')
 			$startValue=0;
 		if($endValue=='')
@@ -318,7 +318,7 @@ class reveil extends eqLogic {
 		}
 		return true;
 	}
-	private function NextStart(){
+	public function NextStart(){
 		$ConigSchedule=$this->getConfiguration('Schedule');
 		$offset=0;
 		for($day=0;$day<7;$day++){
@@ -334,7 +334,7 @@ class reveil extends eqLogic {
 		$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j")+$offset , date("Y"));
 		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
-	private function isHolidays(){
+	public function isHolidays(){
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
 		$easterDay   = date('j', $easterDate);
