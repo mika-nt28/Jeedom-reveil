@@ -167,8 +167,8 @@ class reveil extends eqLogic {
 			}
 		}
 	}
-	public function removeSimulAubeDemon(){
-		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',array('id' => $this->getId()));
+	public function removeSimulAubeDemon($_option){
+		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',$_option);
 		if(is_object($cron)) {
 			log::add('reveil','debug','On termine le daemon de simualtion');
 			$cron->stop();
@@ -181,25 +181,27 @@ class reveil extends eqLogic {
 		if(is_object($reveil)){
 			log::add('reveil','debug','Simulation d\'aube : '.$reveil->getHumanName());
 			$time = 0;
-			$cmd=$_option['cmd'];
-			while(true){
-				$options['slider'] = ceil($reveil->dawnSimulatorEngine(
-					$cmd['configuration']['DawnSimulatorEngineType'],
-					$time,
-					$cmd['configuration']['DawnSimulatorEngineStartValue'], 
-					$cmd['configuration']['DawnSimulatorEngineEndValue'], 
-					$cmd['configuration']['DawnSimulatorEngineDuration']
-				));
-				log::add('reveil','debug','Valeur de l\'intensité lumineuse : ' .$options['slider'].'/'.$cmd['configuration']['DawnSimulatorEngineEndValue']." - durée : ".$time."/".$cmd['configuration']['DawnSimulatorEngineDuration']);
-				$time++;
-				$reveil->ExecuteAction($cmd,$options);
+			$cmd=cmd::byId($_option['cmd']);
+			if(is_object($cmd)){
+				while(true){
+					$options['slider'] = ceil($reveil->dawnSimulatorEngine(
+						$cmd['configuration']['DawnSimulatorEngineType'],
+						$time,
+						$cmd['configuration']['DawnSimulatorEngineStartValue'], 
+						$cmd['configuration']['DawnSimulatorEngineEndValue'], 
+						$cmd['configuration']['DawnSimulatorEngineDuration']
+					));
+					log::add('reveil','debug','Valeur de l\'intensité lumineuse : ' .$options['slider'].'/'.$cmd['configuration']['DawnSimulatorEngineEndValue']." - durée : ".$time."/".$cmd['configuration']['DawnSimulatorEngineDuration']);
+					$time++;
+					$reveil->ExecuteAction($cmd,$options);
 
-				if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
-					log::add('reveil','debug','Fin de la simulation d\'aube');
-					$reveil->removeSimulAubeDemon();
-					exit;
-				}else
-					sleep(60);
+					if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
+						log::add('reveil','debug','Fin de la simulation d\'aube');
+						$reveil->removeSimulAubeDemon($_option);
+						exit;
+					}else
+						sleep(60);
+				}
 			}
 		}
 		
@@ -287,7 +289,7 @@ class reveil extends eqLogic {
 		$cron->setFunction($logicalId);
 		$options['id']= $this->getId();
 		if($demon!= false){
-			$options['cmd']= $demon;
+			$options['cmd']= $demon->getId();
 			$cron->setDeamon(1);
 		}
 		$cron->setOption($options);
