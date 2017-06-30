@@ -6,5 +6,5 @@
 	"author" : "Halbout Michael",
 	"require" : "2.4",
 	"category" : "organization",
-	"mobile" : "event"
+	"hasOwnDeamon" : true
 }

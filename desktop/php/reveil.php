@@ -69,7 +69,7 @@ $eqLogics = eqLogic::byType('reveil');
 			</li>
 			<li role="presentation" class="">
 				<a href="#conditiontab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
-					<i class="fa fa-list-alt"></i> {{Conditions d'exécution}}</a>
+					<i class="fa fa-list-alt"></i> {{Conditions d'éxécution}}</a>
 			</li>
 			<li role="presentation" class="">
 				<a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
@@ -81,7 +81,7 @@ $eqLogics = eqLogic::byType('reveil');
 				<form class="form-horizontal">
 					<fieldset>
 						<div class="form-group ">
-							<label class="col-sm-2 control-label">{{Nom du reveil}}
+							<label class="col-sm-2 control-label">{{Nom du réveil}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Indiquer le nom de votre réveil" style="font-size : 1em;color:grey;"></i>
 								</sup>
@@ -143,9 +143,9 @@ $eqLogics = eqLogic::byType('reveil');
 							</div>
 						</div><div class="form-group">
 							<label class="col-sm-2 control-label" >
-								{{Jours Ferier}}
+								{{Jours fériés}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Si actif le reveil sera ignorer les jours feriés" style="font-size : 1em;color:grey;"></i>
+									<i class="fa fa-question-circle tooltips" title="Si actif le réveil sera ignoré les jours fériés" style="font-size : 1em;color:grey;"></i>
 								</sup>
 							</label>
 							<div class="col-sm-5">
@@ -154,7 +154,7 @@ $eqLogics = eqLogic::byType('reveil');
 								</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Configurer l'heure du reveil}}
+							<label class="col-sm-2 control-label">{{Configurer l'heure du réveil}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Configurer l'heure du réveil"></i>
 								</sup>
@@ -212,9 +212,9 @@ $eqLogics = eqLogic::byType('reveil');
 			<div role="tabpanel" class="tab-pane" id="conditiontab">
 				<form class="form-horizontal">
 					<fieldset>
-						<legend>{{Les conditions d'execution :}}
+						<legend>{{Les conditions d'éxécution :}}
 							<sup>
-								<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'exécution de la gestion"></i>
+								<i class="fa fa-question-circle tooltips" title="Saisir toutes les conditions d'éxécution de la gestion"></i>
 							</sup>
 							<a class="btn btn-success btn-xs conditionAttr" data-action="add" style="margin-left: 5px;">
 								<i class="fa fa-plus-circle"></i>
@@ -228,13 +228,13 @@ $eqLogics = eqLogic::byType('reveil');
 			<div role="tabpanel" class="tab-pane" id="actiontab">
 				<form class="form-horizontal">
 					<fieldset>
-						<legend>{{Liste des equipements a executé:}}
+						<legend>{{Liste des équipements à éxécuter:}}
 							<sup>
-								<i class="fa fa-question-circle tooltips" title="Saisir tous les équipements à exécuter"></i>
+								<i class="fa fa-question-circle tooltips" title="Saisir tous les équipements à éxécuter"></i>
 							</sup>
 							<a class="btn btn-success btn-xs ActionAttr" data-action="add" style="margin-left: 5px;">
 								<i class="fa fa-plus-circle"></i>
-								{{Ajouter un equipement}}
+								{{Ajouter un équipement}}
 							</a>
 						</legend>
 						<div class="div_action"></div>
