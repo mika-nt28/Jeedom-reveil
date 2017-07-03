@@ -27,8 +27,7 @@ class reveil extends eqLogic {
 			return;
 		foreach(eqLogic::byType('reveil') as $reveil){
 			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
-				$Schedule=$reveil->NextStart();//getConfiguration('ScheduleCron');
-				$cron = $reveil->CreateCron($Schedule, 'pull');
+				$Schedule=$reveil->NextStart();
 			}
 		}
 	}
@@ -375,8 +374,7 @@ class reveilCmd extends cmd {
 			switch($this->getLogicalId()){
 				case 'armed':
 					$Listener->event(true);
-					$Schedule=$this->getEqLogic()->NextStart();//getConfiguration('ScheduleCron');
-					$cron = $this->getEqLogic()->CreateCron($Schedule, 'pull');
+					$this->getEqLogic()->NextStart();
 				break;
 				case 'released':
 					$Listener->event(false);
