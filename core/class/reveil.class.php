@@ -61,6 +61,11 @@ class reveil extends eqLogic {
 		if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
 			$this->NextStart();
 		}
+		else {
+			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
+			if (is_object($cron)) 	
+				$cron->remove();
+		}
 	}
 	public function postRemove() {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
