@@ -157,18 +157,20 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
 			if($reveil->EvaluateCondition()){
-				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					switch($cmd['configuration']['ReveilType']){
-						case 'DawnSimulatorEngine';
-							log::add('reveil','debug','Lancement daemon simulation d\'aube');
-							$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
-							$cron->start();
-							$cron->run();
-						break;
-						default:
-							log::add('reveil','debug','Exécution de l\'action réveil libre');
-							$reveil->ExecuteAction($cmd,'');
-						break;
+				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays()){
+					foreach($reveil->getConfiguration('Equipements') as $cmd){
+						switch($cmd['configuration']['ReveilType']){
+							case 'DawnSimulatorEngine';
+								log::add('reveil','debug','Lancement daemon simulation d\'aube');
+								$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
+								$cron->start();
+								$cron->run();
+							break;
+							default:
+								log::add('reveil','debug','Exécution de l\'action réveil libre');
+								$reveil->ExecuteAction($cmd,'');
+							break;
+						}
 					}
 				}
 			}
@@ -333,7 +335,7 @@ class reveil extends eqLogic {
 		for($day=0;$day<7;$day++){
 			if($ConigSchedule[date('w')+$day]){
 				if($this->getConfiguration('isHolidays')){
-					if($this->isHolidays())
+					if($this->isHolidays($day))
 						continue;
 				}
 				$offset=$day;
@@ -343,7 +345,7 @@ class reveil extends eqLogic {
 		$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j")+$offset , date("Y"));
 		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
-	public function isHolidays(){
+	public function isHolidays($day=0){
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
 		$easterDay   = date('j', $easterDate);
@@ -367,11 +369,11 @@ class reveil extends eqLogic {
 		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
 		);
 
-		if(array_search(mktime(0, 0, 0),$holidays) === false){
-			log::add('reveil','debug','Aujourd\'huit, n\'est pas ferié');
+		if(array_search(mktime(0, 0, 0,date('j')+$day),$holidays) === false){
+			log::add('reveil','debug','Aujourd\'hui, est ferié');
 			return false;
 		}
-		log::add('reveil','debug','Aujourd\'huit, c\'est pas ferié');
+		log::add('reveil','debug','Aujourd\'hui, c\'est pas ferié');
 		return true;
 	}
 }
