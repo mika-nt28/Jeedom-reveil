@@ -157,20 +157,20 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
 			if($reveil->EvaluateCondition()){
-				if($reveil->getConfiguration('isHolidays') && !$reveil->isHolidays()){
-					foreach($reveil->getConfiguration('Equipements') as $cmd){
-						switch($cmd['configuration']['ReveilType']){
-							case 'DawnSimulatorEngine';
-								log::add('reveil','debug','Lancement daemon simulation d\'aube');
-								$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
-								$cron->start();
-								$cron->run();
-							break;
-							default:
-								log::add('reveil','debug','Exécution de l\'action réveil libre');
-								$reveil->ExecuteAction($cmd,'');
-							break;
-						}
+				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
+					exit;
+				foreach($reveil->getConfiguration('Equipements') as $cmd){
+					switch($cmd['configuration']['ReveilType']){
+						case 'DawnSimulatorEngine';
+							log::add('reveil','debug','Lancement daemon simulation d\'aube');
+							$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
+							$cron->start();
+							$cron->run();
+						break;
+						default:
+							log::add('reveil','debug','Exécution de l\'action réveil libre');
+							$reveil->ExecuteAction($cmd,'');
+						break;
 					}
 				}
 			}
@@ -334,10 +334,8 @@ class reveil extends eqLogic {
 		$offset=0;
 		for($day=0;$day<7;$day++){
 			if($ConigSchedule[date('w')+$day]){
-				if($this->getConfiguration('isHolidays')){
-					if($this->isHolidays($day))
-						continue;
-				}
+				if($this->getConfiguration('isHolidays') && $this->isHolidays($day))
+					continue;
 				$offset=$day;
 				break;
 			}
