@@ -157,7 +157,7 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
 			if($reveil->EvaluateCondition()){
-				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays()){
+				if($reveil->getConfiguration('isHolidays') && !$reveil->isHolidays()){
 					foreach($reveil->getConfiguration('Equipements') as $cmd){
 						switch($cmd['configuration']['ReveilType']){
 							case 'DawnSimulatorEngine';
@@ -370,10 +370,10 @@ class reveil extends eqLogic {
 		);
 
 		if(array_search(mktime(0, 0, 0,date('j')+$day),$holidays) === false){
-			log::add('reveil','debug','Aujourd\'hui, est ferié');
+			log::add('reveil','debug','Aujourd\'hui, c\'est pas ferié');
 			return false;
 		}
-		log::add('reveil','debug','Aujourd\'hui, c\'est pas ferié');
+		log::add('reveil','debug','Aujourd\'hui, est ferié');
 		return true;
 	}
 }
