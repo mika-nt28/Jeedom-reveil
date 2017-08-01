@@ -366,12 +366,12 @@ class reveil extends eqLogic {
 		mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
 		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
 		);
-
-		if(array_search(mktime(0, 0, 0,date('j')+$day),$holidays) === false){
-			log::add('reveil','debug','Aujourd\'hui, c\'est pas ferié');
+		$dateSearch=mktime(0, 0, 0,date('j')+$day);
+		if(array_search(,$holidays) === false){
+			log::add('reveil','debug',date("d/m/Y",$dateSearch).' n\'est pas ferié');
 			return false;
 		}
-		log::add('reveil','debug','Aujourd\'hui, est ferié');
+		log::add('reveil','debug',date("d/m/Y",$dateSearch).' est ferié');
 		return true;
 	}
 }
