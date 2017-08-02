@@ -347,7 +347,8 @@ class reveil extends eqLogic {
 		}
 		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
-	public function isHolidays($dateSearch){
+	public function isHolidays($timestamp){
+		$dateSearch=mktime(0, 0, 0, date("m",$timestamp), date("d",$timestamp), date("Y",$timestamp));	
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
 		$easterDay   = date('j', $easterDate);
