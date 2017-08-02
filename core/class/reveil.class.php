@@ -157,6 +157,8 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continu');				
 			}
 			if($reveil->EvaluateCondition()){
+				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
+					exit;
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					switch($cmd['configuration']['ReveilType']){
 						case 'DawnSimulatorEngine';
@@ -330,20 +332,23 @@ class reveil extends eqLogic {
 	public function NextStart(){
 		$ConigSchedule=$this->getConfiguration('Schedule');
 		$offset=0;
+		if(date('H') > $ConigSchedule["Heure"])
+			$offset++;
+		if(date('H') == $ConigSchedule["Heure"] && date('i') > $ConigSchedule["Minute"])	
+			$offset++;
 		for($day=0;$day<7;$day++){
 			if($ConigSchedule[date('w')+$day]){
-				if($this->getConfiguration('isHolidays')){
-					if($this->isHolidays())
-						continue;
-				}
-				$offset=$day;
+				$offset+=$day;
+				$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+				if($this->getConfiguration('isHolidays') && $this->isHolidays($timestamp))
+					continue;
 				break;
 			}
 		}
-		$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j")+$offset , date("Y"));
 		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
-	public function isHolidays(){
+	public function isHolidays($timestamp){
+		$dateSearch=mktime(0, 0, 0, date("m",$timestamp), date("d",$timestamp), date("Y",$timestamp));	
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
 		$easterDay   = date('j', $easterDate);
@@ -366,12 +371,11 @@ class reveil extends eqLogic {
 		mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
 		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
 		);
-
-		if(array_search(mktime(0, 0, 0),$holidays) === false){
-			log::add('reveil','debug','Aujourd\'huit, n\'est pas ferié');
+		if(array_search($dateSearch,$holidays) === false){
+			log::add('reveil','debug',date("d/m/Y",$dateSearch).' n\'est pas ferié');
 			return false;
 		}
-		log::add('reveil','debug','Aujourd\'huit, c\'est pas ferié');
+		log::add('reveil','debug',date("d/m/Y",$dateSearch).' est ferié');
 		return true;
 	}
 }
