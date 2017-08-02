@@ -338,16 +338,16 @@ class reveil extends eqLogic {
 			$offset++;
 		for($day=0;$day<7;$day++){
 			if($ConigSchedule[date('w')+$day]){
-				if($this->getConfiguration('isHolidays') && $this->isHolidays($day))
+				$offset+=$day;
+				$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+				if($this->getConfiguration('isHolidays') && $this->isHolidays($timestamp))
 					continue;
-				$offset=$day;
 				break;
 			}
 		}
-		$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j")+$offset , date("Y"));
 		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
-	public function isHolidays($day=0){
+	public function isHolidays($dateSearch){
 		$year = intval(date('Y'));
 		$easterDate  = easter_date($year);
 		$easterDay   = date('j', $easterDate);
@@ -370,7 +370,6 @@ class reveil extends eqLogic {
 		mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
 		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
 		);
-		$dateSearch=mktime(0, 0, 0,date('j')+$day);
 		if(array_search($dateSearch,$holidays) === false){
 			log::add('reveil','debug',date("d/m/Y",$dateSearch).' n\'est pas ferié');
 			return false;
