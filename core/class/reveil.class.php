@@ -367,7 +367,7 @@ class reveil extends eqLogic {
 		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
 		);
 		$dateSearch=mktime(0, 0, 0,date('j')+$day);
-		if(array_search(,$holidays) === false){
+		if(array_search($dateSearch,$holidays) === false){
 			log::add('reveil','debug',date("d/m/Y",$dateSearch).' n\'est pas ferié');
 			return false;
 		}
