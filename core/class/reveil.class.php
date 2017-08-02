@@ -332,6 +332,10 @@ class reveil extends eqLogic {
 	public function NextStart(){
 		$ConigSchedule=$this->getConfiguration('Schedule');
 		$offset=0;
+		if(date('H') > $ConigSchedule["Heure"])
+			$offset++;
+		if(date('H') == $ConigSchedule["Heure"] && date('i') > $ConigSchedule["Minute"])	
+			$offset++;
 		for($day=0;$day<7;$day++){
 			if($ConigSchedule[date('w')+$day]){
 				if($this->getConfiguration('isHolidays') && $this->isHolidays($day))
