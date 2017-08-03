@@ -1,3 +1,6 @@
+$("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+$("#table_condition").sortable({axis: "y", cursor: "move", items: ".ConditionGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+$("#table_action").sortable({axis: "y", cursor: "move", items: ".ActionGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
 	switch($(this).val()){
 		case 'DawnSimulatorEngine':
@@ -10,24 +13,18 @@ $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=Reve
 	}
 });
 function saveEqLogic(_eqLogic) {
-	var state_order = '';
-    if (!isset(_eqLogic.configuration)) {
-        _eqLogic.configuration = {};
-    }	
-	if (typeof( _eqLogic.cmd) !== 'undefined') {
-			_eqLogic.configuration.Conditions=new Object();
-			_eqLogic.configuration.Equipements=new Object();
-			var ConditionArray= new Array();
-			var EquipementArray= new Array();
-			$('#conditiontab .ConditionGroup').each(function( index ) {
-				ConditionArray.push($(this).getValues('.expressionAttr')[0])
-			});
-			$('#actiontab .ActionGroup').each(function( index ) {
-				EquipementArray.push($(this).getValues('.expressionAttr')[0])
-			});
-			_eqLogic.configuration.Conditions=ConditionArray;
-			_eqLogic.configuration.Equipements=EquipementArray;
-	}
+	_eqLogic.configuration.Conditions=new Object();
+	_eqLogic.configuration.Equipements=new Object();
+	var ConditionArray= new Array();
+	var EquipementArray= new Array();
+	$('#conditiontab .ConditionGroup').each(function( index ) {
+		ConditionArray.push($(this).getValues('.expressionAttr')[0])
+	});
+	$('#actiontab .ActionGroup').each(function( index ) {
+		EquipementArray.push($(this).getValues('.expressionAttr')[0])
+	});
+	_eqLogic.configuration.Conditions=ConditionArray;
+	_eqLogic.configuration.Equipements=EquipementArray;
    	return _eqLogic;
 }
 function printEqLogic(_eqLogic) {
@@ -36,13 +33,13 @@ function printEqLogic(_eqLogic) {
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Conditions) { 
 			if( (typeof _eqLogic.configuration.Conditions[index] === "object") && (_eqLogic.configuration.Conditions[index] !== null) )
-				addCondition(_eqLogic.configuration.Conditions[index],  '{{Condition}}',$('#conditiontab').find('.div_Condition'));
+				addCondition(_eqLogic.configuration.Conditions[index],$('#conditiontab').find('.div_Condition'));
 		}
 	}
 	if (typeof(_eqLogic.configuration.Equipements) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Equipements) { 
 			if( (typeof _eqLogic.configuration.Equipements[index] === "object") && (_eqLogic.configuration.Equipements[index] !== null) )
-				addAction(_eqLogic.configuration.Equipements[index],  '{{Action}}',$('#actiontab').find('.div_action'));
+				addAction(_eqLogic.configuration.Equipements[index],$('#actiontab').find('.div_action'));
 		}
 	}	
 }
@@ -83,22 +80,51 @@ function addCmdToTable(_cmd) {
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
-function addCondition(_action, _name, _el) {
-    	var div = $('<div class="form-group ConditionGroup">')
-  		.append($('<label class="col-lg-1 control-label">')
-			.text(_name))
-   		.append($('<div class="col-lg-1">')
-    			.append($('<a class="btn btn-warning btn-sm listCmdCondition" >')
-				.append($('<i class="fa fa-list-alt">'))))
-		.append($('<div class="col-lg-3">')
-			.append($('<input class="expressionAttr form-control input-sm cmdCondition" data-l1key="expression" />')))
- 		.append($('<div class="col-lg-1">')
-  			.append($('<i class="fa fa-minus-circle pull-left cursor conditionAttr" data-action="remove">')));
-        _el.append(div);
-        _el.find('.ConditionGroup:last').setValues(_action, '.expressionAttr');
+function addCondition(_condition,_el) {
+	var tr = $('<tr class="ConditionGroup">')
+		.append($('<td>')
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>')))
+		.append($('<td>')
+			.append($('<div class="input-group">')
+				.append($('<span class="input-group-btn">')
+					.append($('<a class="btn btn-default conditionAttr btn-sm" data-action="remove">')
+						.append($('<i class="fa fa-minus-circle">'))))
+				.append($('<input class="expressionAttr form-control input-sm cmdCondition" data-l1key="expression"/>'))
+				.append($('<span class="input-group-btn">')
+					.append($('<a class="btn btn-warning btn-sm listCmdCondition">')
+						.append($('<i class="fa fa-list-alt">')))))
+			.append($('<div class="col-sm-5">')
+		       		.append($('<label>')
+			       		.text('{{Inverser l\'etat si faux}}'))
+				.append($('<input type="checkbox" class="expressionAttr" data-l1key="Inverse">'))));
+
+        _el.append(tr);
+        _el.find('tr:last').setValues(_condition, '.expressionAttr');
   
 }
-function addAction(_action, _name, _el) {
+function addAction(_action,  _el) {
+	var tr = $('<tr class="ActionGroup">');
+	tr.append($('<td>')
+		.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>')));		
+	tr.append($('<td>')
+		.append($('<div class="input-group">')
+			.append($('<span class="input-group-btn">')
+				.append($('<a class="btn btn-default ActionAttr btn-sm" data-action="remove">')
+					.append($('<i class="fa fa-minus-circle">'))))
+			.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>'))
+			.append($('<span class="input-group-btn">')
+				.append($('<a class="btn btn-success btn-sm listAction" title="Sélectionner un mot-clé">')
+					.append($('<i class="fa fa-tasks">')))
+				.append($('<a class="btn btn-success btn-sm listCmdAction data-type="action"">')
+					.append($('<i class="fa fa-list-alt">')))))
+	       .append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options))));
+	tr.append(addParameters());
+        _el.append(tr);
+        _el.find('tr:last').setValues(_action, '.expressionAttr');
+  
+}
+
+/*function addAction(_action, _name, _el) {
 	var div = $('<div class="form-group ActionGroup">')
 		.append($('<label class="col-sm-1 control-label">')
 			.text(_name))
@@ -177,7 +203,7 @@ function addAction(_action, _name, _el) {
 	_el.append(div);
 	_el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
   
-}
+}*/
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
     $(this).tab('show');
@@ -190,7 +216,7 @@ $('body').on('focusout','.expressionAttr[data-l1key=cmd]', function (event) {
     })
 });
 $('body').on('click','.conditionAttr[data-action=add]',function(){
-	addCondition({},  '{{Condition}}',$(this).closest('.form-horizontal').find('.div_Condition'));
+	addCondition({},$(this).closest('.form-horizontal').find('.div_Condition'));
 });
 $('body').on('click','.conditionAttr[data-action=remove]',function(){
 	$(this).closest('.ConditionGroup').remove();
@@ -326,7 +352,7 @@ $('body').on('click','.listCmdCondition',function(){
 	});
 });
 $('body').on('click','.ActionAttr[data-action=add]',function(){
-	addAction({},  '{{Action}}',$(this).closest('.form-horizontal').find('.div_action'));
+	addAction({},$(this).closest('.form-horizontal').find('.div_action'));
 });
 $('body').on('click','.ActionAttr[data-action=remove]', function () {
 	$(this).closest('.ActionGroup').remove();
