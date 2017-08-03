@@ -33,15 +33,15 @@ function printEqLogic(_eqLogic) {
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Conditions) { 
 			if( (typeof _eqLogic.configuration.Conditions[index] === "object") && (_eqLogic.configuration.Conditions[index] !== null) )
-				addCondition(_eqLogic.configuration.Conditions[index],$('#conditiontab').find('.div_Condition'));
+				addCondition(_eqLogic.configuration.Conditions[index],$('#conditiontab').find('table tbody'));
 		}
 	}
 	if (typeof(_eqLogic.configuration.Equipements) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Equipements) { 
 			if( (typeof _eqLogic.configuration.Equipements[index] === "object") && (_eqLogic.configuration.Equipements[index] !== null) )
-				addAction(_eqLogic.configuration.Equipements[index],$('#actiontab').find('.div_action'));
+				addAction(_eqLogic.configuration.Equipements[index],$('#actiontab').find('table tbody'));
 		}
-	}	
+	}		
 }
 function addCmdToTable(_cmd) {
 	var tr =$('<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">');
