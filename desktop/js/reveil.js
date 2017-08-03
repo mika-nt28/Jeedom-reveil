@@ -140,7 +140,6 @@ function addAction(_action,  _el) {
 		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')));
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
-  
 }
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
