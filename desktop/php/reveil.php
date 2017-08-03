@@ -226,9 +226,6 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>Condition</th>
-							<th>Type de gestion</th>
-							<th>Mode</th>
-							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -253,9 +250,8 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>Action</th>
-							<th>Type de gestion</th>
-							<th>Mode</th>
-							<th>Action</th>
+							<th>Type de reveil</th>
+							<th>Parametre</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
