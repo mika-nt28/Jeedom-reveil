@@ -92,11 +92,7 @@ function addCondition(_condition,_el) {
 				.append($('<input class="expressionAttr form-control input-sm cmdCondition" data-l1key="expression"/>'))
 				.append($('<span class="input-group-btn">')
 					.append($('<a class="btn btn-warning btn-sm listCmdCondition">')
-						.append($('<i class="fa fa-list-alt">')))))
-			.append($('<div class="col-sm-5">')
-		       		.append($('<label>')
-			       		.text('{{Inverser l\'etat si faux}}'))
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="Inverse">'))));
+						.append($('<i class="fa fa-list-alt">'))))));
 
         _el.append(tr);
         _el.find('tr:last').setValues(_condition, '.expressionAttr');
@@ -118,31 +114,8 @@ function addAction(_action,  _el) {
 				.append($('<a class="btn btn-success btn-sm listCmdAction data-type="action"">')
 					.append($('<i class="fa fa-list-alt">')))))
 	       .append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options))));
-        _el.append(tr);
-        _el.find('tr:last').setValues(_action, '.expressionAttr');
-  
-}
-
-/*function addAction(_action, _name, _el) {
-	var div = $('<div class="form-group ActionGroup">')
-		.append($('<label class="col-sm-1 control-label">')
-			.text(_name))
-		.append($('<div class="form-group">')
-			.append($('<div class="col-sm-4 has-success">')
-				.append($('<div class="input-group">')
-					.append($('<span class="input-group-btn">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>'))
-						.append($('<a class="btn btn-default bt_removeAction btn-sm" data-type="inAction">')
-							.append($('<i class="fa fa-minus-circle">'))))
-					.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd" data-type="inAction"/>'))
-					.append($('<span class="input-group-btn">')
-						.append($('<a class="btn btn-success btn-sm listAction" data-type="inAction" title="Sélectionner un mot-clé">')
-							.append($('<i class="fa fa-tasks">')))
-						.append($('<a class="btn btn-success btn-sm listCmdAction" data-type="inAction">')
-							.append($('<i class="fa fa-list-alt">'))))))
-			.append($('<div class="actionOptions">')
-			       .append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))))
- 		.append($('<div class="form-group">')
+	tr.append($('<td>')
+	 	.append($('<div class="form-group">')
 			.append($('<label class="col-sm-2 control-label">')
 				.text('{{Choisir le type de reveil}}')
 				.append($('<sup>')
@@ -152,7 +125,8 @@ function addAction(_action,  _el) {
 					.append($('<option value="default">')
 						.text('{{Libre}}'))
 					.append($('<option value="DawnSimulatorEngine">')
-						.text('{{Simulateur d\'aube}}')))))						
+						.text('{{Simulateur d\'aube}}'))))));	
+	tr.append($('<td>')
 		.append($('<div class="form-group DawnSimulatorEngine">')
 			.append($('<label class="col-sm-2 control-label">')
 				.text('{{Type de simulateur d\'aube}}')
@@ -194,15 +168,11 @@ function addAction(_action,  _el) {
 				.append($('<sup>')
 					.append($('<i class="fa fa-question-circle tooltips" title="Saisir la durée de la simulation">'))))
 			.append($('<div class="col-sm-5">')
-				.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>'))))
-		.append($('<div class="form-group">')
-			.append($('<div class="col-lg-1">')
-				.append($('<i class="fa fa-minus-circle pull-left cursor ActionAttr" data-action="remove">'))));
-	div.find('.DawnSimulatorEngine').hide();
-	_el.append(div);
-	_el.find('.ActionGroup:last').setValues(_action, '.expressionAttr');
+				.append($('<input type="text" class="expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')))));
+	_el.append(tr);
+        _el.find('tr:last').setValues(_action, '.expressionAttr');
   
-}*/
+}
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
     $(this).tab('show');
