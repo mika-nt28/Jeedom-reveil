@@ -174,6 +174,7 @@ class reveil extends eqLogic {
 					}
 				}
 			}
+			$reveil->NextStart();
 		}
 	}
 	public function removeSimulAubeDemon($_option){
