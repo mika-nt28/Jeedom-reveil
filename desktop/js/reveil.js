@@ -136,10 +136,10 @@ $('body').on('focusout','.expressionAttr[data-l1key=cmd]', function (event) {
     })
 });
 $('body').on('click','.conditionAttr[data-action=add]',function(){
-	addCondition({},$(this).closest('.form-horizontal').find('.div_Condition'));
+	addCondition({},$(this).closest('.tab-pane').find('table'));
 });
 $('body').on('click','.conditionAttr[data-action=remove]',function(){
-	$(this).closest('.ConditionGroup').remove();
+	$(this).closest('tr').remove();
 });
 $('body').on('click','.listCmdCondition',function(){
 	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=expression]');	
@@ -272,10 +272,10 @@ $('body').on('click','.listCmdCondition',function(){
 	});
 });
 $('body').on('click','.ActionAttr[data-action=add]',function(){
-	addAction({},$(this).closest('.form-horizontal').find('.div_action'));
+	addCondition({},$(this).closest('.tab-pane').find('table'));
 });
-$('body').on('click','.ActionAttr[data-action=remove]', function () {
-	$(this).closest('.ActionGroup').remove();
+$('body').on('click','.ActionAttr[data-action=remove]',function(){
+	$(this).closest('tr').remove();
 });
 $("body").on('click', ".listAction", function() {
 	var el = $(this).closest('.form-group').find('.expressionAttr[data-l1key=cmd]');
