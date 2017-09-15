@@ -272,7 +272,7 @@ $('body').on('click','.listCmdCondition',function(){
 	});
 });
 $('body').on('click','.ActionAttr[data-action=add]',function(){
-	addCondition({},$(this).closest('.tab-pane').find('table'));
+	addAction({},$(this).closest('.tab-pane').find('table'));
 });
 $('body').on('click','.ActionAttr[data-action=remove]',function(){
 	$(this).closest('tr').remove();
