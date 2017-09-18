@@ -42,7 +42,6 @@ function printEqLogic(_eqLogic) {
 				addAction(_eqLogic.configuration.Equipements[index],$('#actiontab').find('table tbody'));
 		}
 	}	
-	$('.DawnSimulatorEngine').hide();
 }
 function addCmdToTable(_cmd) {
 	var tr =$('<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">');
@@ -119,9 +118,9 @@ function addAction(_action,  _el) {
 			.append($('<option value="InExpo">')
 				.text('{{InExpo}}'))
 			.append($('<option value="OutExpo">')
-				.text('{{OutExpo}}')))
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')));
+				.text('{{OutExpo}}'))).hide()
+		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>')).hide()
+		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')).hide());
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
 }
