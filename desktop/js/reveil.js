@@ -118,11 +118,12 @@ function addAction(_action,  _el) {
 			.append($('<option value="InExpo">')
 				.text('{{InExpo}}'))
 			.append($('<option value="OutExpo">')
-				.text('{{OutExpo}}'))).hide()
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>')).hide()
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')).hide());
+				.text('{{OutExpo}}')))
+		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))
+		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')));
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
+	_el.find('tr:last .DawnSimulatorEngine').hide();
 }
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
