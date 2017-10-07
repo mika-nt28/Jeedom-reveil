@@ -146,18 +146,18 @@ class reveil extends eqLogic {
 		$reveil=eqLogic::byId($_option['id']);
 		if(is_object($reveil)){
 			if(!$reveil->getCmd(null,'isArmed')->execCmd())
-				exit;
+				return;
       			//On verifie que l'on a toujours le cron associé
       			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
      		 	if (!is_object($cron)) 	{
         			log::add('reveil','debug','Cron manquant on sort');
-				exit;
+				return;
 			} else  {
 				log::add('reveil','debug','Cron OK on continue');				
 			}
 			if($reveil->EvaluateCondition()){
 				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
-					exit;
+					return;
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					switch($cmd['configuration']['ReveilType']){
 						case 'DawnSimulatorEngine';
@@ -207,7 +207,7 @@ class reveil extends eqLogic {
 					if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
 						log::add('reveil','debug','Fin de la simulation d\'aube');
 						$reveil->removeSimulAubeDemon($_option);
-						exit;
+						return;
 					}else
 						sleep(60);
 				}
@@ -272,7 +272,7 @@ class reveil extends eqLogic {
 	}
 	public function ExecuteAction($cmd,$options='') {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
-			continue;
+			return;
 		try {
 			$options = array();
 			if (isset($cmd['options'])) 
@@ -310,7 +310,7 @@ class reveil extends eqLogic {
 	public function EvaluateCondition(){
 		foreach($this->getConfiguration('Conditions') as $condition){			
 			if (isset($condition['enable']) && $condition['enable'] == 0)
-				continue;
+				return;
 			$expression = scenarioExpression::setTags($condition['expression']);
 			$message = __('Evaluation de la condition : [', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
