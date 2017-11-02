@@ -216,22 +216,23 @@ class reveil extends eqLogic {
 			return $value;
 	}
 	public function NextStart(){
-		$ConigSchedule=$this->getConfiguration('Schedule');
-		$offset=0;
-		if(date('H') > $ConigSchedule["Heure"])
-			$offset++;
-		if(date('H') == $ConigSchedule["Heure"] && date('i') >= $ConigSchedule["Minute"])	
-			$offset++;
-		for($day=0;$day<7;$day++){
-			if($ConigSchedule[date('w')+$day+$offset]){
-				$offset+=$day;
-				$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
-				if($this->getConfiguration('isHolidays') && $this->isHolidays($timestamp))
-					continue;
-				break;
+		$nextTime=null;
+		foreach($this->getConfiguration('programation') as $ConigSchedule){
+			$offset=0;
+			if(date('H') > $ConigSchedule["Heure"])
+				$offset++;
+			if(date('H') == $ConigSchedule["Heure"] && date('i') >= $ConigSchedule["Minute"])	
+				$offset++;
+			for($day=0;$day<7;$day++){
+				if($ConigSchedule[date('w')+$day+$offset]){
+					$offset+=$day;
+					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+					if($this->getConfiguration('isHolidays') && $this->isHolidays($timestamp))
+						continue;
+					break;
+				}
 			}
-		}
-		$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
+			$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 	}
 	public function isHolidays($timestamp){
 		$dateSearch=mktime(0, 0, 0, date("m",$timestamp), date("d",$timestamp), date("Y",$timestamp));	
