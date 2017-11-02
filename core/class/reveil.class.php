@@ -36,12 +36,6 @@ class reveil extends eqLogic {
 			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
 			if (is_object($cron)) 	
 				$cron->remove();
-			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-			while(is_object($cron)) {
-				$cron->stop();
-				$cron->remove();						
-				$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-			}
 		}
 	}
 	public function postSave() {
@@ -70,12 +64,6 @@ class reveil extends eqLogic {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
 			$cron->remove();
-		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-		while(is_object($cron)) {
-			$cron->stop();
-			$cron->remove();						
-			$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-		}
 	}
 	public function toHtml($_version = 'dashboard') {
 		if ($this->getIsEnable() != 1) {
@@ -158,118 +146,13 @@ class reveil extends eqLogic {
 			if($reveil->EvaluateCondition()){
 				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
 					return;
-				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					switch($cmd['configuration']['ReveilType']){
-						case 'DawnSimulatorEngine';
-							log::add('reveil','debug','Lancement daemon simulation d\'aube');
-							$cron=$reveil->CreateCron('* * * * *', 'SimulAubeDemon',$cmd);
-							$cron->start();
-							$cron->run();
-						break;
-						default:
-							log::add('reveil','debug','Exécution de l\'action réveil libre');
-							$reveil->ExecuteAction($cmd,'');
-						break;
-					}
-				}
+				foreach($reveil->getConfiguration('Equipements') as $cmd)
+					$reveil->ExecuteAction($cmd,'');
 			}
 			$reveil->NextStart();
 		}
 	}
-	public function removeSimulAubeDemon($_option){
-		$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon',$_option);
-		if(is_object($cron)) {
-			log::add('reveil','debug','On termine le daemon de simulation');
-			$cron->stop();
-			$cron->remove();
-		}
-	}
-	public static function SimulAubeDemon($_option){
-		log::add('reveil','debug','Exécution de l\'action réveil simulation d\'aube : '. json_encode($_option));
-		$reveil=eqLogic::byId($_option['id']);
-		if(is_object($reveil)){
-			log::add('reveil','debug','Simulation d\'aube : '.$reveil->getHumanName());
-			$time = 0;
-			$cmd=cmd::byId($_option['cmd']);
-			if(is_object($cmd)){
-				while(true){
-					$options['slider'] = ceil($reveil->dawnSimulatorEngine(
-						$cmd['configuration']['DawnSimulatorEngineType'],
-						$time,
-						$cmd['configuration']['DawnSimulatorEngineStartValue'], 
-						$cmd['configuration']['DawnSimulatorEngineEndValue'], 
-						$cmd['configuration']['DawnSimulatorEngineDuration']
-					));
-					log::add('reveil','debug','Valeur de l\'intensité lumineuse : ' .$options['slider'].'/'.$cmd['configuration']['DawnSimulatorEngineEndValue']." - durée : ".$time."/".$cmd['configuration']['DawnSimulatorEngineDuration']);
-					$time++;
-					$reveil->ExecuteAction($cmd,$options);
-
-					if($options['slider'] == $cmd['configuration']['DawnSimulatorEngineEndValue'] || ($time - 1) == $cmd['configuration']['DawnSimulatorEngineDuration']){
-						log::add('reveil','debug','Fin de la simulation d\'aube');
-						$reveil->removeSimulAubeDemon($_option);
-						return;
-					}else
-						sleep(60);
-				}
-			}
-		}
-		
-	}
-	public function dawnSimulatorEngine($type, $time, $startValue, $endValue, $duration) {
-		if($startValue=='')
-			$startValue=0;
-		if($endValue=='')
-			$endValue=100;
-		if($duration=='')
-			$duration=30;
-		switch ($type){
-			case 'Linear':
-				return $endValue * $time / $duration + $startValue;
-			break;
-			case 'InQuad':
-				$time = $time / $duration;
-				return $endValue * pow($time, 2) + $startValue;
-			break;
-			case 'InOutQuad':
-				$time = $time / $duration * 2;
-				if ($time < 1)
-					return $endValue / 2 * pow($time, 2) + $startValue;
-				else
-					return -$endValue / 2 * (($time - 1) * ($time - 3) - 1) + $startValue;
-			break;
-			case 'InOutExpo':
-				if ($time == 0)
-					return $startValue ;
-				if ($time == $duration)
-					return $startValue + $endValue;
-				$time = $time / $duration * 2;
-				if ($time < 1)
-					return $endValue / 2 * pow(2, 10 * ($time - 1)) + $startValue - $endValue * 0.0005;
-				else{
-					$time = $time - 1;
-					return $endValue / 2 * 1.0005 * (-pow(2, -10 * $time) + 2) + $startValue;
-				}
-			break;
-			case 'OutInExpo':
-				if ($time < $duration / 2)
-					return self::equations('OutExpo', $time * 2, $startValue, $endValue / 2, $duration);
-				else
-					return self::equations('InExpo', ($time * 2) - $duration, $startValue + $endValue / 2, $endValue / 2, $duration);
-			break;
-			case 'InExpo':
-				if($time == 0)
-					return $startValue;
-				else
-					return $endValue * pow(2, 10 * ($time / $duration - 1)) + $startValue - $endValue * 0.001;	
-			break;
-			case 'OutExpo':
-				if($time == $duration)
-					return $startValue + $endValue;
-				else
-					return $endValue * 1.001 * (-pow(2, -10 * $time / $duration) + 1) + $startValue;
-			break;
-		}
-	}
+	
 	public function ExecuteAction($cmd,$options='') {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
 			return;
@@ -308,28 +191,29 @@ class reveil extends eqLogic {
 		return $cron;
 	}
 	public function EvaluateCondition(){
-		foreach($this->getConfiguration('Conditions') as $condition){			
+		foreach($this->getConfiguration('Conditions') as $condition){	
 			if (isset($condition['enable']) && $condition['enable'] == 0)
 				return;
-			$expression = scenarioExpression::setTags($condition['expression']);
+			$_scenario = null;
+			$expression = scenarioExpression::setTags($condition['expression'], $_scenario, true);
 			$message = __('Evaluation de la condition : [', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
-			if (is_bool($result)) {
-				if ($result) {
-					$message .= __('Vrai', __FILE__);
-				} else {
-					$message .= __('Faux', __FILE__);
-				}
-			} else {
-				$message .= $result;
-			}
-			log::add('reveil','info',$message);
-			if(!$result){
-				log::add('reveil','debug','Les conditions ne sont pas remplies');
-				return false;
-			}
+			$message .=$this->boolToText($result);
+			log::add('reveil','info',$this->getHumanName().' '.$message);
+			if(!$result)
+				return false;	
+			log::add('reveil','debug','Les conditions ne sont pas remplies');
 		}
 		return true;
+	}
+	public function boolToText($value){
+		if (is_bool($value)) {
+			if ($value) 
+				return __('Vrai', __FILE__);
+			else 
+				return __('Faux', __FILE__);
+		} else 
+			return $value;
 	}
 	public function NextStart(){
 		$ConigSchedule=$this->getConfiguration('Schedule');
