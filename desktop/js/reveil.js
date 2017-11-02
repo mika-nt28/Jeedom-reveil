@@ -1,4 +1,5 @@
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
+$("#table_Prorgamationtab").sortable({axis: "y", cursor: "move", items: ".ProgramationGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_condition").sortable({axis: "y", cursor: "move", items: ".ConditionGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_action").sortable({axis: "y", cursor: "move", items: ".ActionGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
@@ -17,19 +18,31 @@ function saveEqLogic(_eqLogic) {
 	_eqLogic.configuration.Equipements=new Object();
 	var ConditionArray= new Array();
 	var EquipementArray= new Array();
+	var ProgramationArray= new Array();
+	$('#programationtab .ProgramationGroup').each(function( index ) {
+		ProgramationArray.push($(this).getValues('.expressionAttr')[0])
+	});
 	$('#conditiontab .ConditionGroup').each(function( index ) {
 		ConditionArray.push($(this).getValues('.expressionAttr')[0])
 	});
 	$('#actiontab .ActionGroup').each(function( index ) {
 		EquipementArray.push($(this).getValues('.expressionAttr')[0])
 	});
+	_eqLogic.configuration.programation=ProgramationArray;
 	_eqLogic.configuration.Conditions=ConditionArray;
 	_eqLogic.configuration.Equipements=EquipementArray;
    	return _eqLogic;
 }
 function printEqLogic(_eqLogic) {
+	$('.ProgramationGroup').remove();
 	$('.ConditionGroup').remove();
 	$('.ActionGroup').remove();
+	if (typeof(_eqLogic.configuration.programation) !== 'undefined') {
+		for(var index in _eqLogic.configuration.programation) {
+			if( (typeof _eqLogic.configuration.programation[index] === "object") && (_eqLogic.configuration.programation[index] !== null) )
+				addProgramation(_eqLogic.configuration.programation[index],$('#programationtab').find('table tbody'));
+		}
+	}
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Conditions) { 
 			if( (typeof _eqLogic.configuration.Conditions[index] === "object") && (_eqLogic.configuration.Conditions[index] !== null) )
@@ -62,6 +75,55 @@ function addCmdToTable(_cmd) {
 	$('#table_cmd tbody').append(tr);
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+}
+function addProgramation(_programation,  _el) {
+	var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
+    var Minute=$('<select class="expressionAttr form-control" data-l1key="Minute" >');
+	var number = 0;
+    while (number < 24) {
+		Heure.append($('<option value="'+number+'">')
+			.text(number));
+    	number++;
+	}
+  	number = 0;
+    while (number < 60) {
+		Minute.append($('<option value="'+number+'">')
+			.text(number));
+    	number++;
+	}
+	var tr = $('<tr class="ProgramationGroup">')
+		.append($('<td>')
+			.append($('<span class="input-group-btn">')
+				.append($('<a class="btn btn-default ProgramationAttr btn-sm" data-action="remove">')
+					.append($('<i class="fa fa-minus-circle">')))))
+		.append($('<td>')
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="1" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Lundi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="2" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Mardi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="3" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Mercredi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="4" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Jeudi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="5" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Vendredi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="6" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Samedi}}'))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
+			.append($('<label class="checkbox-inline">')
+				.text('{{Dimanche}}')))
+		.append($('<td>')
+			.append(Heure)
+			.append(Minute));
+        _el.append(tr);
+        _el.find('tr:last').setValues(_programation, '.expressionAttr');
+
 }
 function addCondition(_condition,_el) {
 	var tr = $('<tr class="ConditionGroup">')
@@ -98,30 +160,6 @@ function addAction(_action,  _el) {
 					.append($('<i class="fa fa-list-alt">')))))	
 		.append($('<div class="actionOptions">')
 	       		.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))));
-	tr.append($('<td>')
-	 	.append($('<select class="expressionAttr" data-l1key="configuration" data-l2key="ReveilType">')
-			.append($('<option value="default">')
-				.text('{{Libre}}'))
-			.append($('<option value="DawnSimulatorEngine">')
-				.text('{{Simulateur d\'aube}}'))));	
-	tr.append($('<td>')
-		.append($('<select class="DawnSimulatorEngine expressionAttr" data-l1key="configuration" data-l2key="DawnSimulatorEngineType">')
-			.append($('<option value="Linear">')
-				.text('{{Linear}}'))
-			.append($('<option value="InQuad">')
-				.text('{{InQuad}}'))
-			.append($('<option value="InOutQuad">')
-				.text('{{InOutQuad}}'))
-			.append($('<option value="InOutExpo">')
-				.text('{{InOutExpo}}'))
-			.append($('<option value="OutInExpo">')
-				.text('{{OutInExpo}}'))
-			.append($('<option value="InExpo">')
-				.text('{{InExpo}}'))
-			.append($('<option value="OutExpo">')
-				.text('{{OutExpo}}')))
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineEndValue" placeholder="{{Valeur d\'arret de la simulation (100 par defaut)}}"/>'))
-		.append($('<input type="text" class="DawnSimulatorEngine expressionAttr form-control" data-l1key="configuration" data-l2key="DawnSimulatorEngineDuration" placeholder="{{Durée de la simulation}}"/>')));
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
 	_el.find('tr:last .DawnSimulatorEngine').hide();
@@ -136,6 +174,12 @@ $('body').on('focusout','.expressionAttr[data-l1key=cmd]', function (event) {
     jeedom.cmd.displayActionOption($(this).value(), init(expression[0].options), function (html) {
         el.closest('.ActionGroup').find('.actionOptions').html(html);
     })
+});
+$('body').on('click','.ProgramationAttr[data-action=add]',function(){
+	addProgramation({},$(this).closest('.tab-pane').find('table'));
+});
+$('body').on('click','.ProgramationAttr[data-action=remove]',function(){
+	$(this).closest('tr').remove();
 });
 $('body').on('click','.conditionAttr[data-action=add]',function(){
 	addCondition({},$(this).closest('.tab-pane').find('table'));
@@ -309,3 +353,4 @@ $('body').on('click','.ScheduleCron',function(){
     el.value(result.value);
   });
 });
+
