@@ -40,7 +40,7 @@ $eqLogics = eqLogic::byType('reveil');
 					}
 					echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
 					echo "<center>";
-					echo '<img src="plugins/reveil/doc/images/reveil_icon.png" height="105" width="95" />';
+					echo '<img src="plugins/reveil/plugin_info/reveil_icon.png" height="105" width="95" />';
 					echo "</center>";
 					echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 					echo '</div>';
@@ -66,6 +66,10 @@ $eqLogics = eqLogic::byType('reveil');
 			<li role="presentation" class="">
 				<a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
 					<i class="fa fa-list-alt"></i> Commandes</a>
+			</li>
+			<li role="presentation" class="">
+				<a href="#programationtab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
+					<i class="fa fa-map"></i> {{Programation}}</a>
 			</li>
 			<li role="presentation" class="">
 				<a href="#conditiontab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
@@ -153,62 +157,34 @@ $eqLogics = eqLogic::byType('reveil');
 								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Ignorer}}" data-l1key="configuration" data-l2key="isHolidays"/>
 								</div>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">{{Configurer l'heure du réveil}}
-								<sup>
-									<i class="fa fa-question-circle tooltips" title="Configurer l'heure du réveil"></i>
-								</sup>
-							</label>
-							<div class="col-md-8 input-group">
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="1" />
-									{{Lundi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="2" />
-									{{Mardi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="3" />
-									{{Mercredi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="4" />
-									{{Jeudi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="5" />
-									{{Vendredi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="6" />
-									{{Samedi}}
-								</label>
-								<label class="checkbox-inline">
-									<input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="Schedule" data-l3key="0" />
-									{{Dimanche}}
-								</label>
-							</div>
-							<div class="col-sm-1">
-								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Schedule" data-l3key="Heure" >
-									<?php
-										for($loop=0; $loop<24; $loop++)
-											echo '<option value="'.$loop.'">'.$loop.'</option>';
-									?>
-								</select>
-							</div>	
-							<div class="col-sm-1">
-								<select class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="Schedule" data-l3key="Minute" >
-									<?php
-										for($loop=0; $loop<60; $loop++)
-											echo '<option value="'.$loop.'">'.$loop.'</option>';
-									?>
-								</select>
-							</div>
-						</div>
 					</fieldset>
 				</form>
 			</div>		
+			<div role="tabpanel" class="tab-pane" id="programationtab">
+				<form class="form-horizontal">
+					<fieldset>
+						<legend>{{Les programmations de la zone :}}
+							<sup>
+								<i class="fa fa-question-circle tooltips" title="Saisir toutes les programmations pour la zone"></i>
+							</sup>
+							<a class="btn btn-success btn-xs ProgramationAttr" data-action="add" style="margin-left: 5px;">
+								<i class="fa fa-plus-circle"></i>
+								{{Ajouter une programmation}}
+							</a>
+						</legend>
+					</fieldset>
+				</form>
+				<table id="table_programation" class="table table-bordered table-condensed">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Jour actif</th>
+							<th>Heure</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
 			<div role="tabpanel" class="tab-pane" id="conditiontab">
 				<form class="form-horizontal">
 					<fieldset>
