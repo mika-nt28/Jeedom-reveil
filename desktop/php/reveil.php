@@ -228,11 +228,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>Action</th>
-							<th>Type
-								<sup>
-									<i class="fa fa-question-circle tooltips" title="Sélectioner le type de réveil"></i>
-								</sup
-							</th>
+							<th>Delais</th>
 							<th>Parametre</th>
 						</tr>
 					</thead>
