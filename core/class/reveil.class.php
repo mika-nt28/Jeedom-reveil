@@ -66,33 +66,20 @@ class reveil extends eqLogic {
 			$cron->remove();
 	}
 	public function toHtml($_version = 'dashboard') {
-		if ($this->getIsEnable() != 1) {
-			return '';
-		}
+		$replace = $this->preToHtml($_version);
+		if (!is_array($replace)) 
+			return $replace;
 		$version = jeedom::versionAlias($_version);
-		if ($this->getDisplay('hideOn' . $version) == 1) {
+		if ($this->getDisplay('hideOn' . $version) == 1)
 			return '';
-		}
-		$vcolor = 'cmdColor';
-		if ($version == 'mobile') {
-			$vcolor = 'mcmdColor';
-		}
+		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+		$replace['#cmdColor#'] = $cmdColor;
+		
 		$shedule='';
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
 			$shedule=$cron->getNextRunDate();
-		$replace_eqLogic = array(
-			'#id#' => $this->getId(),
-			'#background_color#' => $this->getBackgroundColor(jeedom::versionAlias($_version)),
-			'#humanname#' => $this->getHumanName(),
-			'#name#' => $this->getName(),
-			'#height#' => $this->getDisplay('height', 'auto'),
-			'#width#' => $this->getDisplay('width', 'auto'),
-			'#cmdColor#' => $cmdColor,
-			'#shedule#'=> $shedule
-		);
-		$action = '';
-		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
+		$replace['#shedule#'] = $shedule;
 		foreach ($this->getCmd() as $cmd) {
 			if ($cmd->getIsVisible() == 1) {
 				if ($cmd->getDisplay('hideOn' . $version) == 1) 
@@ -104,9 +91,9 @@ class reveil extends eqLogic {
 					$action .= '<br/>';
 			}
 		}
-		$replace_eqLogic['#action#'] = $action;
-		return $this->postToHtml($_version, template_replace($replace_eqLogic, getTemplate('core', jeedom::versionAlias($version), 'eqLogic', 'reveil')));
-	}
+		$replace['#action#'] = $action;
+      		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'eqLogic', 'reveil')));
+  	}
 	public static $_widgetPossibility = array('custom' => array(
 	        'visibility' => true,
 	        'displayName' => false,
