@@ -178,13 +178,13 @@ $('body').on('focusout','.expressionAttr[data-l1key=cmd]', function (event) {
         el.closest('.ActionGroup').find('.actionOptions').html(html);
     })
 });
-$('body').on('click','.ProgramationAttr[data-action=add]',function(){
+$('body').off().on('click','.ProgramationAttr[data-action=add]',function(){
 	addProgramation({},$(this).closest('.tab-pane').find('table'));
 });
 $('body').on('click','.ProgramationAttr[data-action=remove]',function(){
 	$(this).closest('tr').remove();
 });
-$('body').on('click','.conditionAttr[data-action=add]',function(){
+$('body').off().on('click','.conditionAttr[data-action=add]',function(){
 	addCondition({},$(this).closest('.tab-pane').find('table'));
 });
 $('body').on('click','.conditionAttr[data-action=remove]',function(){
@@ -320,7 +320,7 @@ $('body').on('click','.listCmdCondition',function(){
 		});
 	});
 });
-$('body').on('click','.ActionAttr[data-action=add]',function(){
+$('body').off().on('click','.ActionAttr[data-action=add]',function(){
 	addAction({},$(this).closest('.tab-pane').find('table'));
 });
 $('body').on('click','.ActionAttr[data-action=remove]',function(){
@@ -350,10 +350,3 @@ $('body').on( 'click','.bt_selectCmdExpression', function() {
 		$(_this).closest('.input-group').find('.cmdAttr').val(result.human);
 	});
 });  
-$('body').on('click','.ScheduleCron',function(){
-  var el = $(this).closest('.input-group').find('.eqLogicAttr');
-  jeedom.getCronSelectModal({},function (result) {
-    el.value(result.value);
-  });
-});
-
