@@ -228,8 +228,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>Action</th>
-							<th>Delais</th>
-							<th>Parametre</th>
+							<th>Délais</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
