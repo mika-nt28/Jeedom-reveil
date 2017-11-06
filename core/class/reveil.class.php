@@ -146,8 +146,10 @@ class reveil extends eqLogic {
 			if($reveil->EvaluateCondition()){
 				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
 					return;
-				foreach($reveil->getConfiguration('Equipements') as $cmd)
+				foreach($reveil->getConfiguration('Equipements') as $cmd){
+					sleep($cmd['delais']);
 					$reveil->ExecuteAction($cmd,'');
+				}
 			}
 			$reveil->NextStart();
 		}
