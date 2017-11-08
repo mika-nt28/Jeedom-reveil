@@ -134,15 +134,16 @@ class reveil extends eqLogic {
 				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
 					return;
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					sleep($cmd['delais']);
-					$reveil->ExecuteAction($cmd,'');
+					if($cmd['delais']!='' && $cmd['delais']!=0)
+						sleep($cmd['delais']);
+					$reveil->ExecuteAction($cmd);
 				}
 			}
 			$reveil->NextStart();
 		}
 	}
 	
-	public function ExecuteAction($cmd,$options='') {
+	public function ExecuteAction($cmd) {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
 			return;
 		try {
@@ -154,8 +155,6 @@ class reveil extends eqLogic {
 			log::add('Volets', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
-		if($options=='')
-			$options=$cmd['options'];
 		if(is_object($Commande)){
 			log::add('reveil','debug','Exécution de '.$Commande->getHumanName());
 			$Commande->execute($options);
@@ -223,37 +222,6 @@ class reveil extends eqLogic {
 			}
 			$this->CreateCron(date('i H d m w Y',$timestamp), 'pull');
 		}
-	}
-	public function isHolidays($timestamp){
-		$dateSearch=mktime(0, 0, 0, date("m",$timestamp), date("d",$timestamp), date("Y",$timestamp));	
-		$year = intval(date('Y'));
-		$easterDate  = easter_date($year);
-		$easterDay   = date('j', $easterDate);
-		$easterMonth = date('n', $easterDate);
-		$easterYear   = date('Y', $easterDate);
-
-		$holidays = array(
-		// Dates fixes
-		mktime(0, 0, 0, 1,  1,  $year),  // 1er janvier
-		mktime(0, 0, 0, 5,  1,  $year),  // Fête du travail
-		mktime(0, 0, 0, 5,  8,  $year),  // Victoire des alliés
-		mktime(0, 0, 0, 7,  14, $year),  // Fête nationale
-		mktime(0, 0, 0, 8,  15, $year),  // Assomption
-		mktime(0, 0, 0, 11, 1,  $year),  // Toussaint
-		mktime(0, 0, 0, 11, 11, $year),  // Armistice
-		mktime(0, 0, 0, 12, 25, $year),  // Noel
-
-		// Dates variables
-		mktime(0, 0, 0, $easterMonth, $easterDay + 1,  $easterYear),
-		mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
-		mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
-		);
-		if(array_search($dateSearch,$holidays) === false){
-			log::add('reveil','debug',date("d/m/Y",$dateSearch).' n\'est pas ferié');
-			return false;
-		}
-		log::add('reveil','debug',date("d/m/Y",$dateSearch).' est ferié');
-		return true;
 	}
 }
 class reveilCmd extends cmd {
