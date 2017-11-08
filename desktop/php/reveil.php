@@ -145,17 +145,6 @@ $eqLogics = eqLogic::byType('reveil');
 								<label>{{Visible}}</label>
 								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Visible}}" data-l1key="isVisible"/>
 							</div>
-						</div><div class="form-group">
-							<label class="col-sm-2 control-label" >
-								{{Jours fériés}}
-								<sup>
-									<i class="fa fa-question-circle tooltips" title="Si actif le réveil sera ignoré les jours fériés" style="font-size : 1em;color:grey;"></i>
-								</sup>
-							</label>
-							<div class="col-sm-5">
-								<label>{{Ignorer}}</label>
-								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Ignorer}}" data-l1key="configuration" data-l2key="isHolidays"/>
-								</div>
 						</div>
 					</fieldset>
 				</form>
