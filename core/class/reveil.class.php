@@ -131,8 +131,6 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continue');				
 			}
 			if($reveil->EvaluateCondition()){
-				if($reveil->getConfiguration('isHolidays') && $reveil->isHolidays())
-					return;
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
 					if($cmd['delais']!='' && $cmd['delais']!=0)
 						sleep($cmd['delais']);
@@ -215,8 +213,6 @@ class reveil extends eqLogic {
 				if($ConigSchedule[date('w')+$day+$offset]){
 					$offset+=$day;
 					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
-					if($this->getConfiguration('isHolidays') && $this->isHolidays($timestamp))
-						continue;
 					break;
 				}
 			}
