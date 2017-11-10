@@ -14,6 +14,7 @@ $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=Reve
 	}
 });
 function saveEqLogic(_eqLogic) {
+	_eqLogic.configuration=new Object();
 	_eqLogic.configuration.Programation=new Object();
 	_eqLogic.configuration.Conditions=new Object();
 	_eqLogic.configuration.Equipements=new Object();
