@@ -14,6 +14,7 @@ $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=Reve
 	}
 });
 function saveEqLogic(_eqLogic) {
+	_eqLogic.configuration.Programation=new Object();
 	_eqLogic.configuration.Conditions=new Object();
 	_eqLogic.configuration.Equipements=new Object();
 	var ConditionArray= new Array();
@@ -28,7 +29,7 @@ function saveEqLogic(_eqLogic) {
 	$('#actiontab .ActionGroup').each(function( index ) {
 		EquipementArray.push($(this).getValues('.expressionAttr')[0])
 	});
-	_eqLogic.configuration.programation=ProgramationArray;
+	_eqLogic.configuration.Programation=ProgramationArray;
 	_eqLogic.configuration.Conditions=ConditionArray;
 	_eqLogic.configuration.Equipements=EquipementArray;
    	return _eqLogic;
@@ -37,10 +38,10 @@ function printEqLogic(_eqLogic) {
 	$('.ProgramationGroup').remove();
 	$('.ConditionGroup').remove();
 	$('.ActionGroup').remove();
-	if (typeof(_eqLogic.configuration.programation) !== 'undefined') {
-		for(var index in _eqLogic.configuration.programation) {
-			if( (typeof _eqLogic.configuration.programation[index] === "object") && (_eqLogic.configuration.programation[index] !== null) )
-				addProgramation(_eqLogic.configuration.programation[index],$('#programationtab').find('table tbody'));
+	if (typeof(_eqLogic.configuration.Programation) !== 'undefined') {
+		for(var index in _eqLogic.configuration.Programation) {
+			if( (typeof _eqLogic.configuration.Programation[index] === "object") && (_eqLogic.configuration.Programation[index] !== null) )
+				addProgramation(_eqLogic.configuration.Programation[index],$('#programationtab').find('table tbody'));
 		}
 	}
 	if (typeof(_eqLogic.configuration.Conditions) !== 'undefined') {
