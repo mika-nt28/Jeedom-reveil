@@ -201,7 +201,7 @@ class reveil extends eqLogic {
 	}
 	public function NextStart(){
 		$nextTime=null;
-		foreach($this->getConfiguration('programation') as $ConigSchedule){
+		foreach($this->getConfiguration('Programation') as $ConigSchedule){
 			$offset=0;
 			if(date('H') > $ConigSchedule["Heure"])
 				$offset++;
