@@ -132,8 +132,6 @@ class reveil extends eqLogic {
 			}
 			if($reveil->EvaluateCondition()){
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					if($cmd['delais']!='' && $cmd['delais']!=0)
-						sleep($cmd['delais']);
 					$reveil->ExecuteAction($cmd);
 				}
 			}
