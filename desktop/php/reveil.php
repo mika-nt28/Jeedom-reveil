@@ -91,6 +91,7 @@ $eqLogics = eqLogic::byType('reveil');
 								</sup>
 							</label>
 							<div class="col-sm-5">
+								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" style="display : none;" />
 								<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
 								<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom du groupe de zones}}"/>
 							</div>
