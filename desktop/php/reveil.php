@@ -217,7 +217,6 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>Action</th>
-							<th>Délais</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
