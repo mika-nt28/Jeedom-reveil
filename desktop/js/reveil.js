@@ -125,12 +125,14 @@ function addProgramation(_programation,  _el) {
 			.append(Minute));
         _el.append(tr);
         _el.find('tr:last').setValues(_programation, '.expressionAttr');
-
+	$('.ProgramationAttr[data-action=remove]').off().on('click',function(){
+		$(this).closest('tr').remove();
+	});
 }
 function addCondition(_condition,_el) {
 	var tr = $('<tr class="ConditionGroup">')
 		.append($('<td>')
-			.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>')))
+			.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable" checked/>')))
 		.append($('<td>')
 			.append($('<div class="input-group">')
 				.append($('<span class="input-group-btn">')
@@ -143,12 +145,14 @@ function addCondition(_condition,_el) {
 
         _el.append(tr);
         _el.find('tr:last').setValues(_condition, '.expressionAttr');
-  
+	$('.conditionAttr[data-action=remove]').off().on('click',function(){
+		$(this).closest('tr').remove();
+	});  
 }
 function addAction(_action,  _el) {
 	var tr = $('<tr class="ActionGroup">');
 	tr.append($('<td>')
-		.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable"/>')));		
+		.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable" checked/>')));		
 	tr.append($('<td>')
 		.append($('<div class="input-group">')
 			.append($('<span class="input-group-btn">')
@@ -165,6 +169,9 @@ function addAction(_action,  _el) {
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
 	_el.find('tr:last .DawnSimulatorEngine').hide();
+	$('.ActionAttr[data-action=remove]').off().on('click',function(){
+		$(this).closest('tr').remove();
+	});
 }
 $('#tab_zones a').click(function(e) {
     e.preventDefault();
@@ -179,15 +186,9 @@ $('body').on('focusout','.expressionAttr[data-l1key=cmd]', function (event) {
 });
 $('.ProgramationAttr[data-action=add]').off().on('click',function(){
 	addProgramation({},$(this).closest('.tab-pane').find('table'));
-	$('.ProgramationAttr[data-action=remove]').off().on('click',function(){
-		$(this).closest('tr').remove();
-	});
 });
 $('.conditionAttr[data-action=add]').off().on('click',function(){
 	addCondition({},$(this).closest('.tab-pane').find('table'));
-	$('.conditionAttr[data-action=remove]').off().on('click',function(){
-		$(this).closest('tr').remove();
-	});
 });
 $('body').on('click','.listCmdCondition',function(){
 	var el = $(this).closest('tr').find('.expressionAttr[data-l1key=expression]');	
@@ -321,9 +322,6 @@ $('body').on('click','.listCmdCondition',function(){
 });
 $('.ActionAttr[data-action=add]').off().on('click',function(){
 	addAction({},$(this).closest('.tab-pane').find('table'));
-	$('.ActionAttr[data-action=remove]').off().on('click',function(){
-		$(this).closest('tr').remove();
-	});
 });
 $("body").on('click', ".listAction", function() {
 	var el = $(this).closest('tr').find('.expressionAttr[data-l1key=cmd]');
