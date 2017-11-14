@@ -214,7 +214,7 @@ class reveil extends eqLogic {
 					break;
 				}
 			}
-			if($nextTime == null || $nextTime < $timestamp)
+			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
 		$this->CreateCron(date('i H d m w Y',$nextTime), 'pull');
