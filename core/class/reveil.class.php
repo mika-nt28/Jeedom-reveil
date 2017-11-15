@@ -184,9 +184,10 @@ class reveil extends eqLogic {
 			$result = evaluate($expression);
 			$message .=$this->boolToText($result);
 			log::add('reveil','info',$this->getHumanName().' '.$message);
-			if(!$result)
+			if(!$result){
+				log::add('reveil','debug','Les conditions ne sont pas remplies');
 				return false;	
-			log::add('reveil','debug','Les conditions ne sont pas remplies');
+			}
 		}
 		return true;
 	}
