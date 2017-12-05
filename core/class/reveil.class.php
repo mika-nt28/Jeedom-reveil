@@ -40,7 +40,7 @@ class reveil extends eqLogic {
 	}
 	public function postSave() {
 		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
-		$isArmed->event(true);
+		$isArmed->execCmd(true);
 		$Armed=self::AddCommande($this,"Activer","armed","action","other",true,'lock');
 		$Armed->setValue($isArmed->getId());
 		$Armed->setConfiguration('state', '1');
@@ -153,7 +153,7 @@ class reveil extends eqLogic {
 		$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
 		if(is_object($Commande)){
 			log::add('reveil','debug','Exécution de '.$Commande->getHumanName());
-			$Commande->execute($options);
+			$Commande->execCmd($options);
 		}		
 	}
 	public function CreateCron($Schedule, $logicalId, $demon=false) {
@@ -227,11 +227,11 @@ class reveilCmd extends cmd {
 		if (is_object($Listener)) {	
 			switch($this->getLogicalId()){
 				case 'armed':
-					$Listener->event(true);
+					$Listener->execCmd(true);
 					$this->getEqLogic()->NextStart();
 				break;
 				case 'released':
-					$Listener->event(false);
+					$Listener->execCmd(false);
 					$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getEqLogic()->getId()));
 					if (is_object($cron)) 	
 						$cron->remove();
