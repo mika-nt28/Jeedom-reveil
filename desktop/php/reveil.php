@@ -161,6 +161,16 @@ $eqLogics = eqLogic::byType('reveil');
 								{{Ajouter une programmation}}
 							</a>
 						</legend>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">{{URL à utiliser}}
+								<sup>
+									<i class="fa fa-question-circle tooltips" title="Cette url permet de programmer l'heure de votre reveil en dehor de jeedom"></i>
+								</sup>
+							</label>
+							<div class="col-sm-10">
+								<span class="eqLogicAttr" data-l1key="configuration" data-l2key="url"></span>
+							</div>
+						</div>
 					</fieldset>
 				</form>
 				<table id="table_programation" class="table table-bordered table-condensed">
