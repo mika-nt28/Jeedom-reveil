@@ -38,6 +38,10 @@ class reveil extends eqLogic {
 				$cron->remove();
 		}
 	}
+	public function preSave() {
+		$url = network::getNetworkAccess('external') . '/plugins/geotrav/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&value=%LOCN';
+		$this->setConfiguration('url', $url);
+	}
 	public function postSave() {
 		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
 		$isArmed->execCmd(true);
