@@ -39,7 +39,7 @@ class reveil extends eqLogic {
 		}
 	}
 	public function preSave() {
-		$url = network::getNetworkAccess('external') . '/plugins/geotrav/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&value=%LOCN';
+		$url = network::getNetworkAccess('external') . '/plugins/geotrav/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&heure=%H&minute=M';
 		$this->setConfiguration('url', $url);
 	}
 	public function postSave() {
