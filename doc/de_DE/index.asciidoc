@@ -9,7 +9,7 @@ Il est capable de réveiller / alerter :
 Comme avec tous les plugins Jeedom, nous allons commencer par créer un équipement de réveil.		
 Après l'avoir nommé, nous allons pouvoir le paramétrer.		
 
-=== Configuration générale Jeedom		
+=== Allgemeine Jeedom Konfiguration		
 		
 image::../images/ConfigurationGeneral.jpg[]		
 * Nom  : le nom a déjà été paramétré, mais vous avez la possibilité de le changer.		
