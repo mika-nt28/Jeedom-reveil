@@ -231,20 +231,14 @@ class reveilCmd extends cmd {
 		if (is_object($Listener)) {	
 			switch($this->getLogicalId()){
 				case 'armed':
-					$Listener->execCmd(true);
+					$Listener->event(true);
 					$this->getEqLogic()->NextStart();
 				break;
 				case 'released':
-					$Listener->execCmd(false);
+					$Listener->event(false);
 					$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getEqLogic()->getId()));
 					if (is_object($cron)) 	
 						$cron->remove();
-					$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-					while(is_object($cron)) {
-						$cron->stop();
-						$cron->remove();						
-						$cron = cron::byClassAndFunction('reveil', 'SimulAubeDemon');
-					}
 				break;
 			}
 			$Listener->setCollectDate(date('Y-m-d H:i:s'));
