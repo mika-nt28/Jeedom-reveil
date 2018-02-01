@@ -21,6 +21,28 @@
 		</center>
 		<center>	
 			#action#
+			<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" >
+				<defs>
+					<line x1="100" y1="100" x2="100" y2="45" style="stroke-width: 6px; stroke: black;" id="oHeure"/>
+					<line x1="100" y1="100" x2="100" y2="15" style="stroke-width: 4px; stroke: black;" id="oMinute"/>
+					<line x1="100" y1="100" x2="100" y2="5"  style="stroke-width: 2px; stroke: red;" id="oSeconde"/>
+				</defs>
+				<g>
+					<circle id="circle" style="stroke: black; fill: #d6d3ce;" cx="100" cy="100" r="100"/>
+					<line style="stroke: black;" id="hour0" x1="100" y1="10"  x2="100" y2="0"/>
+					<line style="stroke: black;" id="heure1" x1="150" y1="13"  x2="145" y2="22"/>
+					<line style="stroke: black;" id="heure2" x1="187" y1="50"  x2="178" y2="55"/>
+					<line style="stroke: black;" id="heure3" x1="190" y1="100" x2="200" y2="100"/>
+					<line style="stroke: black;" id="heure4" x1="187" y1="150" x2="178" y2="145"/>
+					<line style="stroke: black;" id="heure5" x1="150" y1="187" x2="145" y2="178"/>
+					<line style="stroke: black;" id="heure6" x1="100" y1="190" x2="100" y2="200"/>
+					<line style="stroke: black;" id="heure7" x1="50"  y1="187" x2="55"  y2="178"/>
+					<line style="stroke: black;" id="heure8" x1="13"  y1="150" x2="22"  y2="145"/>
+					<line style="stroke: black;" id="heure9" x1="0"   y1="100" x2="10"  y2="100"/>
+					<line style="stroke: black;" id="heure10" x1="13"  y1="50"  x2="22"  y2="55" />
+					<line style="stroke: black;" id="heure11" x1="50"  y1="13"  x2="55"  y2="22" />
+				</g>
+			</svg>
 			<span class="cmd cmd-widget" data-type="action" data-subtype="other">
 				#shedule#
 			</span>
@@ -35,30 +57,15 @@
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"-200px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel");
 		}
-		$('.shedule[data-eqLogic_id=#id#]').off().on('click', function () {			
-			$.ajax({// fonction permettant de faire de l'ajax
-				type: "POST", // methode de transmission des données au fichier php
-				url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
-				data: {
-					action: "setProgramation",
-					id: "#id#",
-					prog: '',
-					day: '',
-					heure: '',
-					minute: ''
-				},
-				dataType: 'json',
-				global: false,
-				error: function(request, status, error) {
-					handleAjaxError(request, status, error);
-				},
-				success: function(data) { // si l'appel a bien fonctionné
-					if (data.state != 'ok') {
-						$('#div_alert').showAlert({message: data.result, level: 'danger'});
-						return;
-					}
-				}
-			});
+		var d = new Date("#shedule#");
+		var s = d.getSeconds();
+		var m = d.getMinutes() + s / 60;
+		var h = d.getHours() + m / 60;
+		var svg = e.target.ownerDocument;
+		svg.getElementById("oSeconde").setAttribute("transform", "rotate(" + (s * 6) + ", 100, 100)");
+		svg.getElementById("oMinute").setAttribute("transform", "rotate(" + (m * 6) + ", 100, 100)");
+		svg.getElementById("oHeure").setAttribute("transform", "rotate(" + (h * 30) + ", 100, 100)");
+		$('.shedule[data-eqLogic_id=#id#]').off().on('click', function () {		
 		});	
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
@@ -83,6 +90,31 @@
 				}
 			}
 		});
+		function sendProgramation(){				
+			$.ajax({// fonction permettant de faire de l'ajax
+				type: "POST", // methode de transmission des données au fichier php
+				url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
+				data: {
+					action: "setProgramation",
+					id: "#id#",
+					prog: '',
+					day: '',
+					heure: '',
+					minute: ''
+				},
+				dataType: 'json',
+				global: false,
+				error: function(request, status, error) {
+					handleAjaxError(request, status, error);
+				},
+				success: function(data) { // si l'appel a bien fonctionné
+					if (data.state != 'ok') {
+						$('#div_alert').showAlert({message: data.result, level: 'danger'});
+						return;
+					}
+				}
+			});
+		}
 		function addProgramation(_programation,  _el) {
 			var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
 		    	var Minute=$('<select class="expressionAttr form-control" data-l1key="Minute" >');
