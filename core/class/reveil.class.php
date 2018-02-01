@@ -40,7 +40,7 @@ class reveil extends eqLogic {
 	}
 	public function preSave() {
 		foreach($this->getConfiguration('Programation') as $ConigSchedule){
-			if($ConigSchedule["id"] = ''){
+			if($ConigSchedule["id"] == ''){
 				$id=rand(0,32767);
 				while(array_search($id, array_column($this->getConfiguration('Programation'), 'id')) !== FALSE)
 					$id=rand(0,32767);
