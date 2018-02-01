@@ -42,8 +42,8 @@ class reveil extends eqLogic {
 		foreach($this->getConfiguration('Programation') as $ConigSchedule){
 			if($ConigSchedule["id"] == ''){
 				$id=rand(0,32767);
-				while(array_search($id, array_column($this->getConfiguration('Programation'), 'id')) !== FALSE)
-					$id=rand(0,32767);
+				//while(array_search($id, array_column($this->getConfiguration('Programation'), 'id')) !== FALSE)
+				//	$id=rand(0,32767);
 				$ConigSchedule["id"]=$id;
 			}
 			$ConigSchedule["url"] = network::getNetworkAccess('external') . '/plugins/reveil/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&prog=' . $ConigSchedule["id"] . '&day=%0123456&heure=%H&minute=%M';
