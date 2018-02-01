@@ -77,10 +77,9 @@
 					$('#div_alert').showAlert({message: data.result, level: 'danger'});
 					return;
 				}
-					for(var index indata.result) {
-						if( (typeof data.result[index] === "object") && (data.result[index] !== null) )
-							addProgramation(data.result[index],$('#table_programation'));
-					}
+				for(var index in data.result) {
+					if( (typeof data.result[index] === "object") && (data.result[index] !== null) )
+						addProgramation(data.result[index],$('#table_programation'));
 				}
 			}
 		});
