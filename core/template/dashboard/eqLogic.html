@@ -2,7 +2,15 @@
 	<link rel="stylesheet" href="plugins/reveil/core/template/dashboard/css/style.css" />
 	<span class="statusCmd" style="position : absolute;bottom : 3px;left : 3px;width : 30px;color: #404040 ;z-index: 1030;"></span>
 	<div class="progr_panel">
-		#progr_tab#
+		<table id="table_programation" class="table table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th style="width:100px;">Jour actif</th>
+					<th>Heure</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 		<img class="sections_droite_liste tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Listes" onClick="listefermer()"/>
 	</div>
 	<div class="haut_widget">
@@ -32,7 +40,7 @@
 				type: "POST", // methode de transmission des données au fichier php
 				url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
 				data: {
-					action: "updateShedule",
+					action: "setProgramation",
 					id: "#id#",
 					prog: '',
 					day: '',
@@ -52,5 +60,69 @@
 				}
 			});
 		});	
+		$.ajax({// fonction permettant de faire de l'ajax
+			type: "POST", // methode de transmission des données au fichier php
+			url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
+			data: {
+				action: "getProgramation",
+				id: "#id#"
+			},
+			dataType: 'json',
+			global: false,
+			error: function(request, status, error) {
+				handleAjaxError(request, status, error);
+			},
+			success: function(data) { // si l'appel a bien fonctionné
+				if (data.state != 'ok') {
+					$('#div_alert').showAlert({message: data.result, level: 'danger'});
+					return;
+				}
+				addProgramation(data.result,  $('#table_programation'));
+			}
+		});
+		function addProgramation(_programation,  _el) {
+			var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
+		    	var Minute=$('<select class="expressionAttr form-control" data-l1key="Minute" >');
+			var number = 0;
+			while (number < 24) {
+				Heure.append($('<option value="'+number+'">')
+					.text(number));
+				number++;
+			}
+			number = 0;
+			while (number < 60) {
+				Minute.append($('<option value="'+number+'">')
+					.text(number));
+				number++;
+			}
+			var tr = $('<tr class="ProgramationGroup">')
+				.append($('<td>')
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
+						.append('{{Lundi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
+						.append('{{Mardi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
+						.append('{{Mercredi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
+						.append('{{Jeudi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
+						.append('{{Vendredi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
+						.append('{{Samedi}}'))
+					.append($('<label class="checkbox-inline">')
+						.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
+						.append('{{Dimanche}}')))
+				.append($('<td>')
+					.append(Heure)
+					.append(Minute));
+			_el.append(tr);
+			_el.find('tr:last').setValues(_programation, '.expressionAttr');
+		}
 	</script>
 </div>
