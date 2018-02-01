@@ -39,7 +39,7 @@ class reveil extends eqLogic {
 		}
 	}
 	public function preSave() {
-		$Programation=$this->getConfiguration('Programation')
+		$Programation=$this->getConfiguration('Programation');
 		foreach($Programation as $key => $ConigSchedule){
 			if($ConigSchedule["id"] == ''){
 				$id=rand(0,32767);
@@ -80,16 +80,16 @@ class reveil extends eqLogic {
 			$cron->remove();
 	}
 	public function UpdateDynamic($id,$days,$heure,$minute){
-		$ConigSchedule=$this->getConfiguration('Programation');
-		$key=array_search($id, array_column($ConigSchedule, 'id'));
+		$Programation=$this->getConfiguration('Programation');
+		$key=array_search($id, array_column($Programation, 'id'));
 		if($key !== FALSE){		
 			for($day=0;$day<7;$day++)
-				$ConigSchedule[$key][$day]=false;
+				$Programation[$key][$day]=false;
 			foreach(str_split($days) as $day)
-				$ConigSchedule[$key][$day]=true;
-			$ConigSchedule[$key]["Heure"]=$heure;
-			$ConigSchedule[$key]["Minute"]=$minute;
-			$this->setConfiguration('Programation',$ConigSchedule);
+				$Programation[$key][$day]=true;
+			$Programation[$key]["Heure"]=$heure;
+			$Programation[$key]["Minute"]=$minute;
+			$this->setConfiguration('Programation',$Programation);
 			$this->save();
 			$this->NextStart();
       			$this->refreshWidget();
