@@ -90,6 +90,7 @@ class reveil extends eqLogic {
 			$this->setConfiguration('Programation',$ConigSchedule);
 			$this->save();
 			$this->NextStart();
+      			$this->refreshWidget();
 		}
 	}
 	public function toHtml($_version = 'dashboard') {
