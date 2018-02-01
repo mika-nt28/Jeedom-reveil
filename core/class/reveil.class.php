@@ -47,7 +47,7 @@ class reveil extends eqLogic {
 				$ConigSchedule["id"]=$id;
 			}
 			$ConigSchedule["url"] = network::getNetworkAccess('external') . '/plugins/reveil/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&prog=' . $ConigSchedule["id"] . '&day=%0123456&heure=%H&minute=%M';
-			$this->setConfiguration('Programation', $url);
+			$this->setConfiguration('Programation', $ConigSchedule);
 		}
 	}
 	public function postSave() {
@@ -76,6 +76,21 @@ class reveil extends eqLogic {
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
 			$cron->remove();
+	}
+	public function UpdateDynamic($id,$days,$heure,$minute){
+		$ConigSchedule=$this->getConfiguration('Programation');
+		$key=array_search($id, array_column($ConigSchedule, 'id'));
+		if($key !== FALSE){		
+			for($day=0;$day<7;$day++)
+				$ConigSchedule[$key][$day]=false;
+			foreach(str_split($days) as $day)
+				$ConigSchedule[$key][$day]=true;
+			$ConigSchedule[$key]["Heure"]=$heure;
+			$ConigSchedule[$key]["Minute"]=$minute;
+			$this->setConfiguration('Programation',$ConigSchedule);
+			$this->save();
+			$this->NextStart();
+		}
 	}
 	public function toHtml($_version = 'dashboard') {
 		$replace = $this->preToHtml($_version);
