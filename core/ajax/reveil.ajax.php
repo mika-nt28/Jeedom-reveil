@@ -5,12 +5,19 @@ try {
 	if (!isConnect('admin')) {
 		throw new Exception(__('401 - Accès non autorisé', __FILE__));
 	}
-	if (init('action') == 'updateShedule') {
+	if (init('action') == 'getProgramation') {
+		$eqLogic=eqLogic::byId(init('id'));
+		if(is_object($eqLogic)){
+			ajax::success($eqLogic->getConfiguration('Programation'));
+		}
+		ajax::success(false);
+	}
+	if (init('action') == 'setProgramation') {
 		$eqLogic=eqLogic::byId(init('id'));
 		if(is_object($eqLogic)){
 			$eqlogic->UpdateDynamic(init('prog'),init('day'),init('heure'),init('minute'));
 		}
-		ajax::success($result);
+		ajax::success(true);
 	}
 	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
 	/*     * *********Catch exeption*************** */
