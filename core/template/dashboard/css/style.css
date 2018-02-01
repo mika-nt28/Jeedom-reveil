@@ -1,0 +1,62 @@
+.progr_panel{
+	width: 200px;
+	height: 327px;
+	
+	float: left;
+	
+	position: absolute;
+	
+	z-index: 10;
+	
+	left: -200px;
+	
+	background-color: #4a89dc;
+}
+.haut_widget{
+	height: 257px;
+	width: 250px;
+	
+	background-color: #4a89dc;
+	
+	z-index: 2;
+}
+.sections_gauche{
+	width: 15px;
+	height: 40px;
+	
+	position: absolute;
+	
+	top: 143.5px;
+	left: 5px;
+	
+	cursor:pointer;
+	
+	-ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+	
+	z-index: 4;
+	
+	opacity: 0.1;
+}
+.sections_gauche:hover{
+	opacity: 1;
+}
+.sections_droite_liste{
+	width: 15px;
+	height: 40px;
+	
+	position: absolute;
+	
+	top: 143.5px;
+	right: 5px;
+	
+	cursor:pointer;
+	
+	z-index: 4;
+	
+	opacity: 0.1;
+}
+.sections_droite_liste:hover{
+	opacity: 1;
+}
