@@ -39,8 +39,16 @@ class reveil extends eqLogic {
 		}
 	}
 	public function preSave() {
-		$url = network::getNetworkAccess('external') . '/plugins/reveil/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&heure=%H&minute=%M';
-		$this->setConfiguration('url', $url);
+		foreach($this->getConfiguration('Programation') as $ConigSchedule){
+			if($ConigSchedule["id"] = ''){
+				$id=rand(0,32767);
+				while(array_search($id, array_column($this->getConfiguration('Programation'), 'id')) !== FALSE)
+					$id=rand(0,32767);
+				$ConigSchedule["id"]=$id;
+			}
+			$ConigSchedule["url"] = network::getNetworkAccess('external') . '/plugins/reveil/core/api/jeeReveil.php?apikey=' . jeedom::getApiKey('reveil') . '&id=' . $this->getId() . '&prog=' . $ConigSchedule["id"] . '&day=%0123456&heure=%H&minute=%M';
+			$this->setConfiguration('Programation', $url);
+		}
 	}
 	public function postSave() {
 		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
