@@ -14,11 +14,6 @@ if (!is_object($eqlogic)) {
 if ($eqlogic->getEqType_name() != 'reveil') {
 	throw new Exception(__('Cette commande n\'est pas de type reveil : ', __FILE__) . init('id'));
 }
-$ConigSchedule=$eqlogic->getConfiguration('Programation');
-$ConigSchedule[0]["Heure"]=init('heure');
-$ConigSchedule[0]["Minute"]=init('minute');
-$eqlogic->setConfiguration('Programation',$ConigSchedule);
-$eqlogic->save();
-$eqlogic->NextStart();
+$eqlogic->UpdateDynamic(init('prog'),init('day'),init('heure'),init('minute'));
 return true;
 ?>
