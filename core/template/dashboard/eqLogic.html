@@ -263,6 +263,9 @@
 				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});	
+			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=4]').off().on('change', function () {
+				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
+				var day='';	
 				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').checked)
 					day=day+'1';
 				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').checked)
