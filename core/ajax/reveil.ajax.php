@@ -14,9 +14,8 @@ try {
 	}
 	if (init('action') == 'setProgramation') {
 		$eqLogic=eqLogic::byId(init('id'));
-		if(is_object($eqLogic)){
-			$eqlogic->UpdateDynamic(init('prog'),init('day'),init('heure'),init('minute'));
-		}
+		if(is_object($eqLogic))
+			$eqLogic->UpdateDynamic(init('prog'),init('day'),init('heure'),init('minute'));
 		ajax::success(true);
 	}
 	throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
