@@ -1,4 +1,4 @@
-<div class="eqLogic eqLogic-widget noResize " data-version="dashboard" style="overflow:hidden; height:320px; width: 220px; #background#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#">
+<div class="eqLogic eqLogic-widget noResize " data-version="dashboard" style="overflow:hidden; height:320px; width: 250px; #background#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#">
 	<link rel="stylesheet" href="plugins/reveil/core/template/dashboard/css/style.css" />
 	<span class="statusCmd" style="position : absolute;bottom : 3px;left : 3px;width : 30px;color: #404040 ;z-index: 1030;"></span>
 	<div class="progr_panel">
@@ -57,13 +57,15 @@
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"-200px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel");
 		}
-		var d = new Date("#shedule#");
-		var s = d.getSeconds();
-		var m = d.getMinutes() + s / 60;
-		var h = d.getHours() + m / 60;
-		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oSeconde").attr("transform", "rotate(" + (s * 6) + ", 100, 100)");
-		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oMinute").attr("transform", "rotate(" + (m * 6) + ", 100, 100)");
-		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oHeure").attr("transform", "rotate(" + (h * 30) + ", 100, 100)");
+		if("#shedule#" != ""){
+			var d = new Date("#shedule#");
+			var s = d.getSeconds();
+			var m = d.getMinutes() + s / 60;
+			var h = d.getHours() + m / 60;
+			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oSeconde").attr("transform", "rotate(" + (s * 6) + ", 100, 100)");
+			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oMinute").attr("transform", "rotate(" + (m * 6) + ", 100, 100)");
+			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oHeure").attr("transform", "rotate(" + (h * 30) + ", 100, 100)");
+		}
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
 			url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
