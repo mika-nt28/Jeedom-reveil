@@ -52,11 +52,11 @@
 		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_gauche').on('click',function(){
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"0px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel shadow_fenetre_reveil");
-		)};
+		});
 		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_droite_liste').on('click',function(){
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"-200px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel");
-		)};
+		});
 		if("#shedule#" != ""){
 			var d = new Date("#shedule#");
 			var s = d.getSeconds();
