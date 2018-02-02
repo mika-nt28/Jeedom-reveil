@@ -11,10 +11,10 @@
 			</thead>
 			<tbody></tbody>
 		</table>
-		<img class="sections_droite_liste tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Listes" onClick="listefermer()"/>
+		<img class="sections_droite_liste tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Etat du reveil"/>
 	</div>
 	<div class="haut_widget">
-		<img class="sections_gauche tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" onclick="liste()" title="Informations"/>
+		<img class="sections_gauche tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Vos programations"/>
 		<span class="statusCmd" style="position : absolute;left : 5px;bottom:0px; width : 30px;z-index: 1030;"></span>
 		<center class="widget-name">
 			<span style="font-weight:bold;"><a href="#eqLink#">#name#</a></span>
@@ -49,14 +49,14 @@
 		</center>
 	</div>
 	<script type="text/javascript">
-		function liste(){
+		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_gauche').on('click',function(){
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"0px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel shadow_fenetre_reveil");
-		}
-		function listefermer(){
+		});
+		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_droite_liste').on('click',function(){
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"-200px"});
 			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel");
-		}
+		});
 		if("#shedule#" != ""){
 			var d = new Date("#shedule#");
 			var s = d.getSeconds();
@@ -160,191 +160,191 @@
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=Heure]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'.';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);
 			});	
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=Minute]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);
 				
 			});	
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=1]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});	
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=2]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});	
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=3]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});	
-			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=4]').off().on('change', function () {	
+			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=4]').off().on('change', function () {
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
-				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var day='';	
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=5]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=6]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});
 			$('.eqLogic[data-eqLogic_id=#id#] .expressionAttr[data-l1key=0]').off().on('change', function () {	
 				var prog=$(this).closest('.ProgramationGroup').attr('data-id');
 				var day='';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').attr(':checked'))
-					day+='1';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').attr(':checked'))
-					day+='22';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').attr(':checked'))
-					day+='3';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').attr(':checked'))
-					day+='4';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').attr(':checked'))
-					day+='5';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').attr(':checked'))
-					day+='6';
-				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').attr(':checked'))
-					day+='0';
-				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
-				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=1]').is(':checked'))
+					day=day+'1';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=2]').is(':checked'))
+					day=day+'2';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=3]').is(':checked'))
+					day=day+'3';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=4]').is(':checked'))
+					day=day+'4';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=5]').is(':checked'))
+					day=day+'5';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=6]').is(':checked'))
+					day=day+'6';
+				if($(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=0]').is(':checked'))
+					day=day+'0';
+				var heure=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Heure]').val();
+				var minute=$(this).closest('.ProgramationGroup').find('.expressionAttr[data-l1key=Minute]').val();
 				sendProgramation(prog,day,heure,minute);	
 			});	
 		}
