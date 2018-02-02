@@ -61,9 +61,9 @@
 		var s = d.getSeconds();
 		var m = d.getMinutes() + s / 60;
 		var h = d.getHours() + m / 60;
-		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oSeconde").setAttribute("transform", "rotate(" + (s * 6) + ", 100, 100)");
-		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oMinute").setAttribute("transform", "rotate(" + (m * 6) + ", 100, 100)");
-		$(".[data-eqLogic_uid=#uid#] svg #oHeure").setAttribute("transform", "rotate(" + (h * 30) + ", 100, 100)");
+		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oSeconde").attr("transform", "rotate(" + (s * 6) + ", 100, 100)");
+		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oMinute").attr("transform", "rotate(" + (m * 6) + ", 100, 100)");
+		$(".eqLogic[data-eqLogic_uid=#uid#] svg #oHeure").attr("transform", "rotate(" + (h * 30) + ", 100, 100)");
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
 			url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
