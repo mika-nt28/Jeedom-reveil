@@ -176,9 +176,9 @@ $eqLogics = eqLogic::byType('reveil');
 					<thead>
 						<tr>
 							<th style="width:30px;"></th>
-							<th style="width:800px;">Jour actif</th>
-							<th>Heure</th>
-							<th>Reprogrammation</th>
+							<th style="width:600px;">{{Jour actif}}</th>
+							<th style="width:100px;">{{Heure}}</th>
+							<th>{{Reprogrammation}}</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
