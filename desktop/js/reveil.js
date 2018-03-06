@@ -120,11 +120,12 @@ function addProgramation(_programation,  _el) {
 				.append('{{Samedi}}'))
 			.append($('<label class="checkbox-inline">')
 				.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
-				.append('{{Dimanche}}'))
-		       	.append($('<span class="expressionAttr" data-l1key="url">')))
+				.append('{{Dimanche}}')))
 		.append($('<td>')
 			.append(Heure)
-			.append(Minute));
+			.append(Minute))	
+		.append($('<td>')
+		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
         _el.find('tr:last').setValues(_programation, '.expressionAttr');
 	$('.ProgramationAttr[data-action=remove]').off().on('click',function(){
