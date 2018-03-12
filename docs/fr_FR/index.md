@@ -1,8 +1,6 @@
 Description
 ==========
-Ce plugin permet de créer des réveils. (Actuellement le plugin est limité à un seul réveil.
-Il est capable de réveiller / alerter :
-* Avec une simulation d'aube selon plusieurs courbes.
+Ce plugin permet de créer des réveils.
 
 Création d'un reveil
 ==========	
