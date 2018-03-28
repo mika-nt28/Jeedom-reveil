@@ -44,6 +44,6 @@ Chaque condition de la liste formera un ET
 Action
 ---
 Vous pouvez configurer le séquencement de votre réveil.
-Chaque action configurer sera exécutée dans l'ordre choisi
+Chaque action configurée sera exécutée dans l'ordre choisi
 
 ![introduction01](../images/ConfigurationAction.jpg)
