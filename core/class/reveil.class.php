@@ -177,14 +177,10 @@ class reveil extends eqLogic {
 			if (isset($cmd['options'])) 
 				$options = $cmd['options'];
 			scenarioExpression::createAndExec('action', $cmd['cmd'], $options);
-			log::add('reveil','debug','Exécution de '.$Commande->getHumanName());
+			log::add('reveil','debug','Exécution de '.$cmd['cmd']);
 		} catch (Exception $e) {
-			log::add('reveil', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
-		}
-		/*$Commande=cmd::byId(str_replace('#','',$cmd['cmd']));
-		if(is_object($Commande)){
-			$Commande->execCmd($options);
-		}	*/	
+			log::add('reveil', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+		}	
 	}
 	public function CreateCron($Schedule, $logicalId, $demon=false) {
 		log::add('reveil','debug','Création du cron "'.$logicalId.'" ID = '.$this->getId().' --> '.$Schedule);
