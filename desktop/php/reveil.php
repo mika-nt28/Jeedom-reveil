@@ -41,6 +41,7 @@ $eqLogics = eqLogic::byType('reveil');
 			</div>
 		</div>
 		<legend>{{Mes reveils}}</legend>
+		<input class="form-control" placeholder="{{Rechercher}}" style="margin-bottom:4px;" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
 			<?php
 				foreach ($eqLogics as $eqLogic) {
