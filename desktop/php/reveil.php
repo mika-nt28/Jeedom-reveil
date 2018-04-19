@@ -45,20 +45,12 @@ $eqLogics = eqLogic::byType('reveil');
 		<div class="eqLogicThumbnailContainer">
 			<?php
 				foreach ($eqLogics as $eqLogic) {
-					$opacity = '';
-					if ($eqLogic->getIsEnable() != 1) {
-						$opacity = '
-						-webkit-filter: grayscale(100%);
-						-moz-filter: grayscale(100);
-						-o-filter: grayscale(100%);
-						-ms-filter: grayscale(100%);
-						filter: grayscale(100%); opacity: 0.35;';
-					}
+					$opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
 					echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
 					echo "<center>";
 					echo '<img src="plugins/reveil/plugin_info/reveil_icon.png" height="105" width="95" />';
 					echo "</center>";
-					echo '<span style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
+					echo '<span class="name" style="font-size : 1.1em;position:relative; top : 15px;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;"><center>' . $eqLogic->getHumanName(true, true) . '</center></span>';
 					echo '</div>';
 				}
 			?>
@@ -85,11 +77,11 @@ $eqLogics = eqLogic::byType('reveil');
 			</li>
 			<li role="presentation" class="">
 				<a href="#programationtab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
-					<i class="fa fa-map"></i> {{Programation}}</a>
+					<i class="fa fa-calendar"></i> {{Programation}}</a>
 			</li>
 			<li role="presentation" class="">
 				<a href="#conditiontab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
-					<i class="fa fa-list-alt"></i> {{Conditions d'éxécution}}</a>
+					<i class="fa fa-asterisk"></i> {{Conditions d'éxécution}}</a>
 			</li>
 			<li role="presentation" class="">
 				<a href="#actiontab" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="false">
