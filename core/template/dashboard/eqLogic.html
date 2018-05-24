@@ -1,7 +1,15 @@
 <div class="eqLogic eqLogic-widget noResize" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" style="min-width : 50px;min-height : 80px ;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;width: #width#;height: #height#;#style#" >
-	<link rel="stylesheet" href="plugins/reveil/core/template/dashboard/css/style.css" />
 	<span class="statusCmd" style="position : absolute;bottom : 3px;left : 3px;width : 30px;color: #404040 ;z-index: 1030;"></span>
-	<div class="progr_panel">
+	<center class="widget-name">
+		<span style="font-weight:bold;"><a href="#eqLink#">#name#</a></span>
+	</center>
+	<center>	
+		#shedule#
+	</center>
+	<center>	
+		#action#
+	</center>
+	<div style="height:80%;overflow:scroll;">
 		<table id="table_programation" class="table table-bordered table-condensed">
 			<thead>
 				<tr>
@@ -11,59 +19,8 @@
 			</thead>
 			<tbody></tbody>
 		</table>
-		<img class="sections_droite_liste tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Etat du reveil"/>
-	</div>
-	<div class="haut_widget">
-		<img class="sections_gauche tooltips noRefresh" src="plugins/reveil/core/template/dashboard/images/chevron.png" title="Vos programations"/>
-		<span class="statusCmd" style="position : absolute;left : 5px;bottom:0px; width : 30px;z-index: 1030;"></span>
-		<center class="widget-name">
-			<span style="font-weight:bold;"><a href="#eqLink#">#name#</a></span>
-		</center>
-		<center>	
-			#action#
-			<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" >
-				<g>
-					<circle id="circle" style="stroke: black; fill: #d6d3ce;" cx="100" cy="100" r="100"/>
-					<line style="stroke: black;" id="hour0" x1="100" y1="10"  x2="100" y2="0"/>
-					<line style="stroke: black;" id="heure1" x1="150" y1="13"  x2="145" y2="22"/>
-					<line style="stroke: black;" id="heure2" x1="187" y1="50"  x2="178" y2="55"/>
-					<line style="stroke: black;" id="heure3" x1="190" y1="100" x2="200" y2="100"/>
-					<line style="stroke: black;" id="heure4" x1="187" y1="150" x2="178" y2="145"/>
-					<line style="stroke: black;" id="heure5" x1="150" y1="187" x2="145" y2="178"/>
-					<line style="stroke: black;" id="heure6" x1="100" y1="190" x2="100" y2="200"/>
-					<line style="stroke: black;" id="heure7" x1="50"  y1="187" x2="55"  y2="178"/>
-					<line style="stroke: black;" id="heure8" x1="13"  y1="150" x2="22"  y2="145"/>
-					<line style="stroke: black;" id="heure9" x1="0"   y1="100" x2="10"  y2="100"/>
-					<line style="stroke: black;" id="heure10" x1="13"  y1="50"  x2="22"  y2="55" />
-					<line style="stroke: black;" id="heure11" x1="50"  y1="13"  x2="55"  y2="22" />
-					<line x1="100" y1="100" x2="100" y2="45" style="stroke-width: 6px; stroke: black;" id="oHeure"/>
-					<line x1="100" y1="100" x2="100" y2="15" style="stroke-width: 4px; stroke: black;" id="oMinute"/>
-					<line x1="100" y1="100" x2="100" y2="5"  style="stroke-width: 2px; stroke: red;" id="oSeconde"/>
-				</g>
-			</svg>
-			<span class="cmd cmd-widget" data-type="action" data-subtype="other">
-				#shedule#
-			</span>
-		</center>
 	</div>
 	<script type="text/javascript">
-		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_gauche').on('click',function(){
-			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"0px"});
-			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel shadow_fenetre_reveil");
-		});
-		$('.eqLogic[data-eqLogic_uid=#uid#] .sections_droite_liste').on('click',function(){
-			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").animate({left:"-200px"});
-			$(".eqLogic[data-eqLogic_uid=#uid#] .progr_panel").attr("class","progr_panel");
-		});
-		if("#shedule#" != ""){
-			var d = new Date("#shedule#");
-			var s = d.getSeconds();
-			var m = d.getMinutes() + s / 60;
-			var h = d.getHours() + m / 60;
-			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oSeconde").attr("transform", "rotate(" + (s * 6) + ", 100, 100)");
-			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oMinute").attr("transform", "rotate(" + (m * 6) + ", 100, 100)");
-			$(".eqLogic[data-eqLogic_uid=#uid#] svg #oHeure").attr("transform", "rotate(" + (h * 30) + ", 100, 100)");
-		}
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
 			url: "plugins/reveil/core/ajax/reveil.ajax.php", // url du fichier php
