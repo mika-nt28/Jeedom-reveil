@@ -103,7 +103,6 @@ class reveil extends eqLogic {
 		$version = jeedom::versionAlias($_version);
 		if ($this->getDisplay('hideOn' . $version) == 1)
 			return '';
-		$replace['#url#']= urlencode($this->getUrl());
 		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
 		$replace['#cmdColor#'] = $cmdColor;
 		$shedule='';
