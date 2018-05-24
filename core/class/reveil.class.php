@@ -95,6 +95,7 @@ class reveil extends eqLogic {
       			$this->refreshWidget();
 		}
 	}
+	
 	public function toHtml($_version = 'dashboard') {
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) 
@@ -102,9 +103,9 @@ class reveil extends eqLogic {
 		$version = jeedom::versionAlias($_version);
 		if ($this->getDisplay('hideOn' . $version) == 1)
 			return '';
+		$replace['#url#']= urlencode($this->getUrl());
 		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
 		$replace['#cmdColor#'] = $cmdColor;
-		
 		$shedule='';
 		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
 		if (is_object($cron)) 	
@@ -124,6 +125,7 @@ class reveil extends eqLogic {
 		$replace['#action#'] = $action;
       		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'eqLogic', 'reveil')));
   	}
+
 	public static $_widgetPossibility = array('custom' => array(
 	        'visibility' => true,
 	        'displayName' => true,
