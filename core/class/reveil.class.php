@@ -212,7 +212,7 @@ class reveil extends eqLogic {
 				return;
 			$_scenario = null;
 			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
-			$message = __('Evaluation de la condition : ['.jeedom::toHumanReadable($Condition).'][', __FILE__) . trim($expression) . '] = ';
+			$message = __('Evaluation de la condition : ['.jeedom::toHumanReadable($Condition['expression']).'][', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
 			$message .=$this->boolToText($result);
 			log::add('reveil','info',$this->getHumanName().' '.$message);
