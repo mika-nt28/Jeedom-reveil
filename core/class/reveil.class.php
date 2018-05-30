@@ -207,12 +207,12 @@ class reveil extends eqLogic {
 		return $cron;
 	}
 	public function EvaluateCondition(){
-		foreach($this->getConfiguration('Conditions') as $condition){	
-			if (isset($condition['enable']) && $condition['enable'] == 0)
+		foreach($this->getConfiguration('Conditions') as $Condition){	
+			if (isset($Condition['enable']) && $Condition['enable'] == 0)
 				return;
 			$_scenario = null;
-			$expression = scenarioExpression::setTags($condition['expression'], $_scenario, true);
-			$message = __('Evaluation de la condition : [', __FILE__) . trim($expression) . '] = ';
+			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
+			$message = __('Evaluation de la condition : ['.jeedom::toHumanReadable($Condition).'][', __FILE__) . trim($expression) . '] = ';
 			$result = evaluate($expression);
 			$message .=$this->boolToText($result);
 			log::add('reveil','info',$this->getHumanName().' '.$message);
