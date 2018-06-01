@@ -6,6 +6,7 @@
 	"author" : "Halbout Michael",
 	"require" : "3.0",
 	"category" : "organization",
+	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"],
 	"hasOwnDeamon" : true,
 	"issue" : "https://github.com/mika-nt28/Jeedom-reveil/issues",
  	"changelog" : "https://github.com/mika-nt28/Jeedom-reveil/commits/master",
