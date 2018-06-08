@@ -53,14 +53,14 @@ class reveil extends eqLogic {
 		$this->setConfiguration('Programation', $Programation);
 	}
 	public function postSave() {
-		$isArmed=self::AddCommande($this,"Etat activation","isArmed","info","binary",false,'lock');
+		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'lock','LOCK_STATE');
 		$isArmed->execCmd(true);
-		$Armed=self::AddCommande($this,"Activer","armed","action","other",true,'lock');
+		$Armed=$this->AddCommande("Activer","armed","action","other",true,'lock','LOCK_CLOSE');
 		$Armed->setValue($isArmed->getId());
 		$Armed->setConfiguration('state', '1');
 		$Armed->setConfiguration('armed', '1');
 		$Armed->save();
-		$Released=self::AddCommande($this,"Desactiver","released","action","other",true,'lock');
+		$Released=$this->AddCommande("Desactiver","released","action","other",true,'lock','LOCK_OPEN');
 		$Released->setValue($isArmed->getId());
 		$Released->save();
 		$Released->setConfiguration('state', '0');
@@ -135,8 +135,8 @@ class reveil extends eqLogic {
 	        'border' => true,
 	        'border-radius' => true
 	));
-	public static function AddCommande($eqLogic,$Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='') {
-		$Commande = $eqLogic->getCmd(null,$_logicalId);
+	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='',$GenericType='') {
+		$Commande = $this->getCmd(null,$_logicalId);
 		if (!is_object($Commande))
 		{
 			$Commande = new reveilCmd();
@@ -144,12 +144,13 @@ class reveil extends eqLogic {
 			$Commande->setName($Name);
 			$Commande->setIsVisible($visible);
 			$Commande->setLogicalId($_logicalId);
-			$Commande->setEqLogic_id($eqLogic->getId());
+			$Commande->setEqLogic_id($this->getId());
 			$Commande->setType($Type);
 			$Commande->setSubType($SubType);
 		}
      		$Commande->setTemplate('dashboard',$Template );
 		$Commande->setTemplate('mobile', $Template);
+		$Commande->setGeneric_type($GenericType);
 		$Commande->save();
 		return $Commande;
 	}
