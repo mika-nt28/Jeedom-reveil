@@ -244,7 +244,7 @@ class reveil extends eqLogic {
 			for($day=0;$day<7;$day++){
 				$jour=date('w')+$day+$offset;
 				if($jour > 6)
-					$jour= 7-$jour;
+					$jour= $jour-7;
 				if($ConigSchedule[$jour]){
 					$offset+=$day;
 					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
