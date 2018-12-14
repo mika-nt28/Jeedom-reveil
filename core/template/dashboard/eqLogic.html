@@ -40,7 +40,7 @@
 				}
 				for(var index in data.result) {
 					if( (typeof data.result[index] === "object") && (data.result[index] !== null) )
-						addProgramation(data.result[index],$('#table_programation'));
+						addProgramation(data.result[index],$('.eqLogic[data-eqLogic_id=#id#] #table_programation'));
 				}
 			}
 		});
