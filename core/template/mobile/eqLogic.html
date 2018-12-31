@@ -9,11 +9,11 @@
 	<center>	
 		#action#
 	</center>
-	<div style="height:50%;overflow:scroll;">
-		<table id="table_programation" class="table table-bordered table-condensed">
+	<div style="height:75%;overflow:scroll;">
+		<table class="table table-bordered table-condensed table_programation">
 			<thead>
 				<tr>
-					<th style="width:100px;">Jour actif</th>
+					<th style="width:50%;">Jour actif</th>
 					<th>Heure</th>
 				</tr>
 			</thead>
@@ -40,7 +40,7 @@
 				}
 				for(var index in data.result) {
 					if( (typeof data.result[index] === "object") && (data.result[index] !== null) )
-						addProgramation(data.result[index],$('.eqLogic[data-eqLogic_id=#id#] #table_programation'));
+						addProgramation(data.result[index],$('.eqLogic[data-eqLogic_id=#id#] .table_programation'));
 				}
 			}
 		});
