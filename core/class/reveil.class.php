@@ -169,12 +169,7 @@ class reveil extends eqLogic {
 			} else  {
 				log::add('reveil','debug','Cron OK on continue');				
 			}
-			if($reveil->EvaluateCondition()){
-				cache::set('reveil::Snooze::'.$this->getId(),true, 0);
-				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					$reveil->ExecuteAction($cmd,'on');
-				}
-			}
+			$reveil->StartReveil();
 			$reveil->NextStart();
 		}
 	}
@@ -269,6 +264,18 @@ class reveil extends eqLogic {
 		}
 		$this->CreateCron(date('i H d m w Y',time() + $this->getConfiguration('snooze')*60), 'pull')
 	}
+	public function StartReveil(){
+		if($this->EvaluateCondition()){
+			foreach($this->getConfiguration('Equipements') as $cmd){
+				$this->ExecuteAction($cmd,'on');
+			}
+		}
+	}
+	public function StopReveil(){
+		foreach($this->getConfiguration('Equipements') as $cmd){
+			$this->ExecuteAction($cmd,'off');
+		}
+	}
 }
 class reveilCmd extends cmd {
     	public function execute($_options = null) {	
@@ -277,6 +284,7 @@ class reveilCmd extends cmd {
 			switch($this->getLogicalId()){
 				case 'stop':	
 					cache::set('reveil::Snooze::'.$this->getEqLogic()->getId(),false, 0);
+					$this->getEqLogic()->StopReveil();
 				break;
 				case 'snooze':	
 					if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
