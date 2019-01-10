@@ -212,7 +212,7 @@ $eqLogics = eqLogic::byType('reveil');
 					<thead>
 						<tr>
 							<th></th>
-							<th>Condition</th>
+							<th>{{Condition}}</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -236,7 +236,8 @@ $eqLogics = eqLogic::byType('reveil');
 					<thead>
 						<tr>
 							<th></th>
-							<th>Action</th>
+							<th>{{Action}}</th>
+							<th>{{Déclancheur}}</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -246,8 +247,8 @@ $eqLogics = eqLogic::byType('reveil');
 				<table id="table_cmd" class="table table-bordered table-condensed">
 				    <thead>
 					<tr>
-					    <th>Nom</th>
-					    <th>Paramètre</th>
+					    <th>{{Nom}}</th>
+					    <th>{{Paramètre}}</th>
 					</tr>
 				    </thead>
 				    <tbody></tbody>
