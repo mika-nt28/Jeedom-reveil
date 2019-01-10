@@ -99,8 +99,8 @@ $eqLogics = eqLogic::byType('reveil');
 								</sup>
 							</label>
 							<div class="col-sm-5">
-							<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-								<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom du groupe de zones}}"/>
+								<input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
+								<input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom du reveil}}"/>
 							</div>
 						</div>
 						<div class="form-group">
@@ -152,6 +152,17 @@ $eqLogics = eqLogic::byType('reveil');
 								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Activer}}" data-l1key="isEnable"/>
 								<label>{{Visible}}</label>
 								<input type="checkbox" class="eqLogicAttr" data-label-text="{{Visible}}" data-l1key="isVisible"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" >
+								{{Temps de snooez}}
+								<sup>
+									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze" style="font-size : 1em;color:grey;"></i>
+								</sup>
+							</label>
+							<div class="col-sm-5">
+								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="snooze" placeholder="{{Temps snooze (min)}}"/>
 							</div>
 						</div>
 					</fieldset>
