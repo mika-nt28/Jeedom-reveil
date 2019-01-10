@@ -262,7 +262,7 @@ class reveil extends eqLogic {
 				$this->ExecuteAction($cmd,'off');
 			}
 		}
-		$this->CreateCron(date('i H d m w Y',time() + $this->getConfiguration('snooze')*60), 'pull')
+		$this->CreateCron(date('i H d m w Y',time() + $this->getConfiguration('snooze')*60), 'pull');
 	}
 	public function StartReveil(){
 		if($this->EvaluateCondition()){
