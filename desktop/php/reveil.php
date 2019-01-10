@@ -156,7 +156,7 @@ $eqLogics = eqLogic::byType('reveil');
 						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label" >
-								{{Temps de snooez}}
+								{{Temps après un snooze}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze" style="font-size : 1em;color:grey;"></i>
 								</sup>
@@ -237,7 +237,7 @@ $eqLogics = eqLogic::byType('reveil');
 						<tr>
 							<th></th>
 							<th>{{Action}}</th>
-							<th>{{Déclancheur}}</th>
+							<th>{{Déclencheur}}</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
