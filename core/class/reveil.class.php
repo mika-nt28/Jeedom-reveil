@@ -53,6 +53,7 @@ class reveil extends eqLogic {
 		$this->setConfiguration('Programation', $Programation);
 	}
 	public function postSave() {
+		$this->AddCommande("Snooze ","snooze","action","other",true);
 		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'lock','LOCK_STATE');
 		$isArmed->execCmd(true);
 		$Armed=$this->AddCommande("Activer","armed","action","other",true,'lock','LOCK_CLOSE');
@@ -262,6 +263,9 @@ class reveilCmd extends cmd {
 		$Listener=cmd::byId(str_replace('#','',$this->getValue()));
 		if (is_object($Listener)) {	
 			switch($this->getLogicalId()){
+				case 'snooze':
+					$this->getEqLogic()->CreateCron(date('i H d m w Y',time() + $this->getEqLogic()->getConfiguration('snooze')*60), 'pull');
+				break;
 				case 'armed':
 					$Listener->event(true);
 					$this->getEqLogic()->NextStart();
