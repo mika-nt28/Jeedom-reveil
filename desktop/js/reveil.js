@@ -173,6 +173,12 @@ function addAction(_action,  _el) {
 					.append($('<i class="fa fa-list-alt">')))))	
 		.append($('<div class="actionOptions">')
 	       		.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))));
+	tr.append($('<td>')
+		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="declencheur">')
+			.append($('<option value="on">')
+				.text('{{Allumage}}'))
+			.append($('<option value="off">')
+				.text('{{Extinction}}'))));	
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
 	_el.find('tr:last .DawnSimulatorEngine').hide();

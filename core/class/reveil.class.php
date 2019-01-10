@@ -53,6 +53,7 @@ class reveil extends eqLogic {
 		$this->setConfiguration('Programation', $Programation);
 	}
 	public function postSave() {
+		$this->AddCommande("Arret ","stop","action","other",true);
 		$this->AddCommande("Snooze ","snooze","action","other",true);
 		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'lock','LOCK_STATE');
 		$isArmed->execCmd(true);
@@ -169,16 +170,19 @@ class reveil extends eqLogic {
 				log::add('reveil','debug','Cron OK on continue');				
 			}
 			if($reveil->EvaluateCondition()){
+				cache::set('reveil::Snooze::'.$this->getId(),true, 0);
 				foreach($reveil->getConfiguration('Equipements') as $cmd){
-					$reveil->ExecuteAction($cmd);
+					$reveil->ExecuteAction($cmd,'on');
 				}
 			}
 			$reveil->NextStart();
 		}
 	}
 	
-	public function ExecuteAction($cmd) {
+	public function ExecuteAction($cmd,$Declancheur) {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
+			return;
+		if (isset($cmd['declencheur']) && $cmd['declencheur'] != $Declancheur)
 			return;
 		try {
 			$options = array();
@@ -257,14 +261,26 @@ class reveil extends eqLogic {
 		}
 		$this->CreateCron(date('i H d m w Y',$nextTime), 'pull');
 	}
+	public function Snooze(){
+		if($this->EvaluateCondition()){
+			foreach($this->getConfiguration('Equipements') as $cmd){
+				$this->ExecuteAction($cmd,'off');
+			}
+		}
+		$this->CreateCron(date('i H d m w Y',time() + $this->getConfiguration('snooze')*60), 'pull')
+	}
 }
 class reveilCmd extends cmd {
     	public function execute($_options = null) {	
 		$Listener=cmd::byId(str_replace('#','',$this->getValue()));
 		if (is_object($Listener)) {	
 			switch($this->getLogicalId()){
-				case 'snooze':
-					$this->getEqLogic()->CreateCron(date('i H d m w Y',time() + $this->getEqLogic()->getConfiguration('snooze')*60), 'pull');
+				case 'stop':	
+					cache::set('reveil::Snooze::'.$this->getEqLogic()->getId(),false, 0);
+				break;
+				case 'snooze':	
+					if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
+						$this->getEqLogic()->Snooze();
 				break;
 				case 'armed':
 					$Listener->event(true);
