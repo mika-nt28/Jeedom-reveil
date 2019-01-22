@@ -9,17 +9,15 @@
 	<center>	
 		#action#
 	</center>
-	<div style="height:75%;overflow:scroll;">
-		<table class="table table-bordered table-condensed table_programation">
-			<thead>
-				<tr>
-					<th style="width:50%;">Jour actif</th>
-					<th>Heure</th>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-	</div>
+	<table class="table table-bordered table-condensed table_programation" style="width: 100%;display:block;">
+		<thead style="display: inline-block;width: 100%;height: 10%;">
+			<tr>
+				<th style="width:50%;">Jour actif</th>
+				<th>Heure</th>
+			</tr>
+		</thead>
+		<tbody style="height: 50%;display: inline-block;width: 100%;overflow: auto;"></tbody>
+	</table>
 	<script type="text/javascript">
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
