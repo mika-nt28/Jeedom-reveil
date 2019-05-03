@@ -158,7 +158,6 @@ function addAction(_action,  _el) {
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-default ActionAttr btn-sm" data-action="remove">')
 					.append($('<i class="fa fa-minus-circle">'))))
-			.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="delais">'))
 			.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>'))
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-success btn-sm listAction" title="Sélectionner un mot-clé">')
@@ -167,6 +166,8 @@ function addAction(_action,  _el) {
 					.append($('<i class="fa fa-list-alt">')))))	
 		.append($('<div class="actionOptions">')
 	       		.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))));
+	tr.append($('<td>')
+		.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="delais">')));
 	tr.append($('<td>')
 		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="declencheur">')
 			.append($('<option value="on">')
