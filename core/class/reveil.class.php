@@ -114,14 +114,21 @@ class reveil extends eqLogic {
 	public static function cron() {	
 		foreach(eqLogic::byType('reveil') as $Reveil){	
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
-				$NextStart = $Reveil->NextStart();
+				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $this->getCmd(null,'NextStart')->execCmd())->getTimestamp();
+				$allActionIsExecute = true;
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
-					$StartTimeCmd =$NextStart - jeedom::evaluateExpression($cmd['delais']) * 60;
-					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 60){
-						if($Reveil->EvaluateCondition())
-							$Reveil->ExecuteAction($cmd,'on');
+					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
+					if($StartTimeCmd >= time()){
+						if($StartTimeCmd < time() + 60){
+							if($Reveil->EvaluateCondition())
+								$Reveil->ExecuteAction($cmd,'on');
+						}
+					}else{
+						$allActionIsExecute = false;
 					}
 				}
+				if($allActionIsExecute)
+					$Reveil->NextStart();
 			}
 		}
 	}
@@ -192,7 +199,6 @@ class reveil extends eqLogic {
 			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
 		}
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
-		return $nextTime;
 	}
 	public function Snooze(){
 		if($this->EvaluateCondition()){
