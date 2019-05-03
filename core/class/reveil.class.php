@@ -35,11 +35,6 @@ class reveil extends eqLogic {
 			$this->NextStart();
 		}
 	}
-	public function preRemove() {
-		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-		if (is_object($cron)) 	
-			$cron->remove();
-	}
 	public function UpdateDynamic($id,$days,$heure,$minute){
 		$Programation=$this->getConfiguration('Programation');
 		$key=array_search($id, array_column($Programation, 'id'));
@@ -53,7 +48,6 @@ class reveil extends eqLogic {
 			$this->setConfiguration('Programation',$Programation);
 			$this->save();
 			$this->NextStart();
-      			$this->refreshWidget();
 		}
 	}
 	
@@ -114,7 +108,7 @@ class reveil extends eqLogic {
 	public static function cron() {	
 		foreach(eqLogic::byType('reveil') as $Reveil){	
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
-				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $this->getCmd(null,'NextStart')->execCmd())->getTimestamp();
+				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $Reveil->getCmd(null,'NextStart')->execCmd())->getTimestamp();
 				$allActionIsExecute = true;
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
 					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
