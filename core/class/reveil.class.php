@@ -67,11 +67,12 @@ class reveil extends eqLogic {
 		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
 		$replace['#cmdColor#'] = $cmdColor;
 		foreach ($this->getCmd() as $cmd) {
+			$action = '';
 			if ($cmd->getIsVisible() == 1) {
 				if ($cmd->getDisplay('hideOn' . $version) == 1) 
 					continue;
 				if ($cmd->getDisplay('forceReturnLineBefore', 0) == 1) 
-					$action = '<br/>';
+					$action .= '<br/>';
 				$action .= $cmd->toHtml($_version, $cmdColor);
 				if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) 
 					$action .= '<br/>';
@@ -115,8 +116,8 @@ class reveil extends eqLogic {
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
 				$NextStart = $Reveil->NextStart();
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
-					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']);
-					if($StartTimeCmd >= time() && time() < $StartTimeCmd + 60){
+					$StartTimeCmd =$NextStart - jeedom::evaluateExpression($cmd['delais']) * 60;
+					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 60){
 						if($Reveil->EvaluateCondition())
 							$Reveil->ExecuteAction($cmd,'on');
 					}
@@ -134,9 +135,9 @@ class reveil extends eqLogic {
 			if (isset($cmd['options'])) 
 				$options = $cmd['options'];
 			scenarioExpression::createAndExec('action', $cmd['cmd'], $options);
-			log::add('reveil','debug','Exécution de '.$cmd['cmd']);
+			log::add('reveil','debug',$this->getHumanName().' Exécution de '.$cmd['cmd'].' : '.json_encode($options));
 		} catch (Exception $e) {
-			log::add('reveil', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+			log::add('reveil', 'error', __($this->getHumanName().' Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}	
 	}
 	public function EvaluateCondition(){
@@ -150,7 +151,7 @@ class reveil extends eqLogic {
 			$message .=$this->boolToText($result);
 			log::add('reveil','info',$this->getHumanName().' '.$message);
 			if(!$result){
-				log::add('reveil','debug','Les conditions ne sont pas remplies');
+				log::add('reveil','debug',$this->getHumanName().' Les conditions ne sont pas remplies');
 				return false;	
 			}
 		}
@@ -186,8 +187,10 @@ class reveil extends eqLogic {
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
-		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false))
+		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
+			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
+		}
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 		return $nextTime;
 	}
