@@ -115,7 +115,8 @@ class reveil extends eqLogic {
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
 				$NextStart = $Reveil->NextStart();
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
-					if($NextStart + jeedom::evaluateExpression($cmd['delais']) >= time()){
+					$StartTimeCmd =$NextStart - jeedom::evaluateExpression($cmd['delais']);
+					if($StartTimeCmd >= time() && time() < $StartTimeCmd + 60){
 						if($Reveil->EvaluateCondition())
 							$Reveil->ExecuteAction($cmd,'on');
 					}
@@ -185,8 +186,8 @@ class reveil extends eqLogic {
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
-		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)
-			$nextTime = time() + $this->getConfiguration('snooze')*60;
+		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false))
+			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 		return $nextTime;
 	}
