@@ -18,25 +18,18 @@ $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=Reve
 	}
 });
 function saveEqLogic(_eqLogic) {
-	_eqLogic.configuration=new Object();
-	_eqLogic.configuration.Programation=new Object();
-	_eqLogic.configuration.Conditions=new Object();
-	_eqLogic.configuration.Equipements=new Object();
-	var ConditionArray= new Array();
-	var EquipementArray= new Array();
-	var ProgramationArray= new Array();
+	_eqLogic.configuration.Programation=new Array();
+	_eqLogic.configuration.Conditions=new Array();
+	_eqLogic.configuration.Equipements=new Array();
 	$('#programationtab .ProgramationGroup').each(function( index ) {
-		ProgramationArray.push($(this).getValues('.expressionAttr')[0])
+		_eqLogic.configuration.Programation.push($(this).getValues('.expressionAttr')[0])
 	});
 	$('#conditiontab .ConditionGroup').each(function( index ) {
-		ConditionArray.push($(this).getValues('.expressionAttr')[0])
+		_eqLogic.configuration.Conditions.push($(this).getValues('.expressionAttr')[0])
 	});
 	$('#actiontab .ActionGroup').each(function( index ) {
-		EquipementArray.push($(this).getValues('.expressionAttr')[0])
+		_eqLogic.configuration.Equipements.push($(this).getValues('.expressionAttr')[0])
 	});
-	_eqLogic.configuration.Programation=ProgramationArray;
-	_eqLogic.configuration.Conditions=ConditionArray;
-	_eqLogic.configuration.Equipements=EquipementArray;
    	return _eqLogic;
 }
 function printEqLogic(_eqLogic) {
