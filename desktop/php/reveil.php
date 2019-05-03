@@ -246,6 +246,7 @@
 						<tr>
 							<th></th>
 							<th>{{Action}}</th>
+							<th>{{Délais}}</th>
 							<th>{{Déclencheur}}</th>
 						</tr>
 					</thead>
