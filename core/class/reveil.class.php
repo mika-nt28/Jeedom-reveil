@@ -114,10 +114,10 @@ class reveil extends eqLogic {
 		foreach(eqLogic::byType('reveil') as $Reveil){	
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
 				$NextStart = $Reveil->NextStart();
-				foreach($this->getConfiguration('Equipements') as $cmd){
+				foreach($Reveil->getConfiguration('Equipements') as $cmd){
 					if($NextStart + jeedom::evaluateExpression($cmd['delais']) >= time()){
-						if($this->EvaluateCondition())
-							$this->ExecuteAction($cmd,'on');
+						if($Reveil->EvaluateCondition())
+							$Reveil->ExecuteAction($cmd,'on');
 					}
 				}
 			}
