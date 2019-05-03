@@ -1,43 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class reveil extends eqLogic {
-	public static function deamon_info() {
-		$return = array();
-		$return['log'] = 'reveil';
-		$return['launchable'] = 'ok';
-		$return['state'] = 'ok';
-		foreach(eqLogic::byType('reveil') as $reveil){
-			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
-				$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-				if (!is_object($cron)) 	{	
-					$return['state'] = 'nok';
-					return $return;
-				}
-			}
-		}
-		return $return;
-	}
-	public static function deamon_start($_debug = false) {
-		log::remove('reveil');
-		self::deamon_stop();
-		$deamon_info = self::deamon_info();
-		if ($deamon_info['launchable'] != 'ok') 
-			return;
-		if ($deamon_info['state'] == 'ok') 
-			return;
-		foreach(eqLogic::byType('reveil') as $reveil){
-			if($reveil->getIsEnable() && $reveil->getCmd(null,'isArmed')->execCmd()){
-				$Schedule=$reveil->NextStart();
-			}
-		}
-	}
-	public static function deamon_stop() {	
-		foreach(eqLogic::byType('reveil') as $reveil){
-			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-			if (is_object($cron)) 	
-				$cron->remove();
-		}
-	}
 	public function preSave() {
 		$Programation=$this->getConfiguration('Programation');
 		foreach($Programation as $key => $ConigSchedule){
@@ -53,6 +16,7 @@ class reveil extends eqLogic {
 		$this->setConfiguration('Programation', $Programation);
 	}
 	public function postSave() {
+		$this->AddCommande("Date de début","NextStart","info",'string',true);
 		$this->AddCommande("Arret ","stop","action","other",true);
 		$this->AddCommande("Snooze ","snooze","action","other",true);
 		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'lock','LOCK_STATE');
@@ -69,11 +33,6 @@ class reveil extends eqLogic {
 		$Released->setConfiguration('armed', '1');
 		if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
 			$this->NextStart();
-		}
-		else {
-			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-			if (is_object($cron)) 	
-				$cron->remove();
 		}
 	}
 	public function preRemove() {
@@ -107,23 +66,18 @@ class reveil extends eqLogic {
 			return '';
 		$cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
 		$replace['#cmdColor#'] = $cmdColor;
-		$shedule='';
-		$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getId()));
-		if (is_object($cron)) 	
-			$shedule=$cron->getNextRunDate();
-		$replace['#shedule#'] = $shedule;
 		foreach ($this->getCmd() as $cmd) {
 			if ($cmd->getIsVisible() == 1) {
 				if ($cmd->getDisplay('hideOn' . $version) == 1) 
 					continue;
 				if ($cmd->getDisplay('forceReturnLineBefore', 0) == 1) 
-					$action .= '<br/>';
+					$action = '<br/>';
 				$action .= $cmd->toHtml($_version, $cmdColor);
 				if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) 
 					$action .= '<br/>';
+				$replace['#'.$cmd->getLogicalId().'#'] = $action;
 			}
 		}
-		$replace['#action#'] = $action;
       		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'eqLogic', 'reveil')));
   	}
 
@@ -156,24 +110,19 @@ class reveil extends eqLogic {
 		$Commande->save();
 		return $Commande;
 	}
-	public static function pull($_option){
-		$reveil=eqLogic::byId($_option['id']);
-		if(is_object($reveil)){
-			if(!$reveil->getCmd(null,'isArmed')->execCmd())
-				return;
-      			//On verifie que l'on a toujours le cron associé
-      			$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $reveil->getId()));
-     		 	if (!is_object($cron)) 	{
-        			log::add('reveil','debug','Cron manquant on sort');
-				return;
-			} else  {
-				log::add('reveil','debug','Cron OK on continue');				
+	public static function cron() {	
+		foreach(eqLogic::byType('reveil') as $Reveil){	
+			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
+				$NextStart = $Reveil->NextStart();
+				foreach($this->getConfiguration('Equipements') as $cmd){
+					if($NextStart + $cmd['delais'] >= time()){
+						if($this->EvaluateCondition())
+							$this->ExecuteAction($cmd,'on');
+					}
+				}
 			}
-			$reveil->StartReveil();
-			$reveil->NextStart();
 		}
 	}
-	
 	public function ExecuteAction($cmd,$Declancheur) {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
 			return;
@@ -188,24 +137,6 @@ class reveil extends eqLogic {
 		} catch (Exception $e) {
 			log::add('reveil', 'error', __('Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}	
-	}
-	public function CreateCron($Schedule, $logicalId, $demon=false) {
-		log::add('reveil','debug','Création du cron "'.$logicalId.'" ID = '.$this->getId().' --> '.$Schedule);
-		$cron = cron::byClassAndFunction('reveil', $logicalId,array('id' => $this->getId()));
-		if (!is_object($cron)) 
-			$cron = new cron();
-		$cron->setClass('reveil');
-		$cron->setFunction($logicalId);
-		$options['id']= $this->getId();
-		if($demon!= false){
-			$options['cmd']= $demon->getId();
-			$cron->setDeamon(1);
-		}
-		$cron->setOption($options);
-		$cron->setEnable(1);
-		$cron->setSchedule($Schedule);
-		$cron->save();
-		return $cron;
 	}
 	public function EvaluateCondition(){
 		foreach($this->getConfiguration('Conditions') as $Condition){	
@@ -254,7 +185,10 @@ class reveil extends eqLogic {
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
-		$this->CreateCron(date('i H d m w Y',$nextTime), 'pull');
+		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)
+			$nextTime = time() + $this->getConfiguration('snooze')*60;
+		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
+		return $nextTime;
 	}
 	public function Snooze(){
 		if($this->EvaluateCondition()){
@@ -262,16 +196,11 @@ class reveil extends eqLogic {
 				$this->ExecuteAction($cmd,'off');
 			}
 		}
-		$this->CreateCron(date('i H d m w Y',time() + $this->getConfiguration('snooze')*60), 'pull');
-	}
-	public function StartReveil(){
-		if($this->EvaluateCondition()){
-			foreach($this->getConfiguration('Equipements') as $cmd){
-				$this->ExecuteAction($cmd,'on');
-			}
-		}
+		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
 	}
 	public function StopReveil(){
+		cache::set('reveil::Snooze::'.$this->getId(),false, 0);
+		cache::set('reveil::addSnooze::'.$this->getId(),false, 0);
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			$this->ExecuteAction($cmd,'off');
 		}
@@ -283,7 +212,6 @@ class reveilCmd extends cmd {
 		if (is_object($Listener)) {	
 			switch($this->getLogicalId()){
 				case 'stop':	
-					cache::set('reveil::Snooze::'.$this->getEqLogic()->getId(),false, 0);
 					$this->getEqLogic()->StopReveil();
 				break;
 				case 'snooze':	
@@ -292,16 +220,12 @@ class reveilCmd extends cmd {
 				break;
 				case 'armed':
 					$Listener->event(true);
-					$this->getEqLogic()->NextStart();
+					$Listener->getEqLogic()->NextStart();
 				break;
 				case 'released':
 					$Listener->event(false);
-					$cron = cron::byClassAndFunction('reveil', 'pull',array('id' => $this->getEqLogic()->getId()));
-					if (is_object($cron)) 	
-						$cron->remove();
 				break;
 			}
-			$Listener->setCollectDate(date('Y-m-d H:i:s'));
 			$Listener->save();
 		}
 	}
