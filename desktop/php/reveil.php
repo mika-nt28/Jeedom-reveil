@@ -164,7 +164,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label" >
+							<label class="col-sm-3 control-label" >
 								{{Temps après un snooze}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze" style="font-size : 1em;color:grey;"></i>
