@@ -27,7 +27,7 @@
     				<span>{{Testeur d'expression}}</span>
   			</div>
   		</div>
-  		<legend><i class="fas fa-table"></i> {{Mes templates}}</legend>
+  		<legend><i class="fas fa-table"></i> {{Mes reveils}}</legend>
 	   	<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
     		<?php
