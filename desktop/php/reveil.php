@@ -27,7 +27,7 @@
     				<span>{{Testeur d'expression}}</span>
   			</div>
   		</div>
-  		<legend><i class="fas fa-table"></i> {{Mes templates}}</legend>
+  		<legend><i class="fas fa-table"></i> {{Mes reveils}}</legend>
 	   	<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 		<div class="eqLogicThumbnailContainer">
     		<?php
@@ -164,7 +164,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label" >
+							<label class="col-sm-3 control-label" >
 								{{Temps après un snooze}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze" style="font-size : 1em;color:grey;"></i>
@@ -246,6 +246,7 @@
 						<tr>
 							<th></th>
 							<th>{{Action}}</th>
+							<th>{{Délais}}</th>
 							<th>{{Déclencheur}}</th>
 						</tr>
 					</thead>
