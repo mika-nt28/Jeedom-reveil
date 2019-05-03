@@ -165,6 +165,7 @@ function addAction(_action,  _el) {
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-default ActionAttr btn-sm" data-action="remove">')
 					.append($('<i class="fa fa-minus-circle">'))))
+			.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="delais">'))
 			.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>'))
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-success btn-sm listAction" title="Sélectionner un mot-clé">')
