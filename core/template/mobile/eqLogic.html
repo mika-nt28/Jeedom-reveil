@@ -4,22 +4,23 @@
 		<span style="font-weight:bold;"><a href="#eqLink#">#name#</a></span>
 	</center>
 	<center>	
-		#shedule#
+		#NextStart#
 	</center>
 	<center>	
-		#action#
+		#stop##snooze#
 	</center>
-	<div style="height:75%;overflow:scroll;">
-		<table class="table table-bordered table-condensed table_programation">
-			<thead>
-				<tr>
-					<th style="width:50%;">Jour actif</th>
-					<th>Heure</th>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-	</div>
+	<center>	
+		#armed##released#
+	</center>
+	<table class="table table-bordered table-condensed table_programation">
+		<thead>
+			<tr>
+				<th>Jour actif</th>
+				<th>Heure</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
 	<script type="text/javascript">
 		$.ajax({// fonction permettant de faire de l'ajax
 			type: "POST", // methode de transmission des données au fichier php
@@ -86,27 +87,35 @@
 			}
 			var tr = $('<tr class="ProgramationGroup" data-id="'+_programation.id+'">')
 				.append($('<td>')
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
-						.append('Lundi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
-						.append('Mardi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
-						.append('Mercredi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
-						.append('Jeudi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
-						.append('Vendredi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
-						.append('Samedi'))
-					.append($('<label class="checkbox-inline">')
-						.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
-						.append('Dimanche')))
+					.append($('<div class="form-group">')
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
+								.append('Lundi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
+								.append('Mardi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
+								.append('Mercredi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
+								.append('Jeudi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
+								.append('Vendredi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
+								.append('Samedi')))	
+						.append($('<div class="col-sm-7">')
+							.append($('<label class="checkbox-inline">')
+								.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
+								.append('Dimanche')))))
 				.append($('<td>')
 					.append(Heure)
 					.append(Minute));
