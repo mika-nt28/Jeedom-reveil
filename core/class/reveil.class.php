@@ -47,7 +47,9 @@ class reveil extends eqLogic {
 			$Programation[$key]["Minute"]=$minute;
 			$this->setConfiguration('Programation',$Programation);
 			$this->save();
-			$this->NextStart();
+			if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
+				$this->NextStart();
+			}
 		}
 	}
 	
@@ -114,11 +116,10 @@ class reveil extends eqLogic {
 					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
 					if($StartTimeCmd >= time()){
 						if($StartTimeCmd < time() + 60){
+							$allActionIsExecute = false;
 							if($Reveil->EvaluateCondition())
 								$Reveil->ExecuteAction($cmd,'on');
 						}
-					}else{
-						$allActionIsExecute = false;
 					}
 				}
 				if($allActionIsExecute)
