@@ -114,12 +114,12 @@ class reveil extends eqLogic {
 				$allActionIsExecute = true;
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
 					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
-					if($StartTimeCmd >= time()){
-						if($StartTimeCmd < time() + 60){
-							$allActionIsExecute = false;
-							if($Reveil->EvaluateCondition())
-								$Reveil->ExecuteAction($cmd,'on');
-						}
+					if($StartTimeCmd < time())
+						$allActionIsExecute = false;
+					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 30){
+						//Créneau de 30s pour l'execution de la commande
+						if($Reveil->EvaluateCondition())
+							$Reveil->ExecuteAction($cmd,'on');
 					}
 				}
 				if($allActionIsExecute)
