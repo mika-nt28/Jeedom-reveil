@@ -116,7 +116,7 @@ class reveil extends eqLogic {
 					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
 					if($StartTimeCmd < time())
 						$allActionIsExecute = false;
-					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 30){
+					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 60){
 						//Créneau de 30s pour l'execution de la commande
 						if($Reveil->EvaluateCondition())
 							$Reveil->ExecuteAction($cmd,'on');
