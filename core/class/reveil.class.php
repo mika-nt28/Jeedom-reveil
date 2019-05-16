@@ -112,18 +112,25 @@ class reveil extends eqLogic {
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
 				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $Reveil->getCmd(null,'NextStart')->execCmd())->getTimestamp();
 				$allActionIsExecute = true;
-				foreach($Reveil->getConfiguration('Equipements') as $cmd){
-					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
-					if($StartTimeCmd < time())
-						$allActionIsExecute = false;
-					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 60){
-						//Créneau de 30s pour l'execution de la commande
-						if($Reveil->EvaluateCondition())
+				if($Reveil->EvaluateCondition()){
+					foreach($Reveil->getConfiguration('Equipements') as $cmd){
+						$now = mktime(date("H"),date("i"), 0);
+						$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
+						if($StartTimeCmd <= $now){
+							log::add('reveil','debug',$Reveil->getHumanName().' Nous n\'avons pas executer toute les commandes ont attend avant la prochaine execution');
+							$allActionIsExecute = false;
+						}
+						if($StartTimeCmd >= $now && $StartTimeCmd < $now + 30){
+							log::add('reveil','debug',$Reveil->getHumanName().' '.$cmd['cmd'].' le temps est venue => '.$StartTimeCmd.' >= '.time());
+							//Créneau de 60s pour l'execution de la commande
 							$Reveil->ExecuteAction($cmd,'on');
+						}
 					}
 				}
-				if($allActionIsExecute)
+				if($allActionIsExecute){
+					log::add('reveil','debug',$Reveil->getHumanName().' Fin du reveil, Programmation du prochaine');
 					$Reveil->NextStart();
+                		}
 			}
 		}
 	}
@@ -189,6 +196,7 @@ class reveil extends eqLogic {
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
+		log::add('reveil','debug',$this->getHumanName().' Prochain reveil sera : '.date('d/m/Y H:i',$nextTime));
 		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
 			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
