@@ -113,13 +113,14 @@ class reveil extends eqLogic {
 				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $Reveil->getCmd(null,'NextStart')->execCmd())->getTimestamp();
 				$allActionIsExecute = true;
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
+					$now = mktime(date("H"),date("i"), 0);
 					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
-					if($StartTimeCmd < time())
+					if($now <= $StartTimeCmd){
 						$allActionIsExecute = false;
-					if($StartTimeCmd >= time() && $StartTimeCmd < time() + 30){
-						//Créneau de 30s pour l'execution de la commande
-						if($Reveil->EvaluateCondition())
-							$Reveil->ExecuteAction($cmd,'on');
+						if($StartTimeCmd <= $now + 30){
+							if($Reveil->EvaluateCondition())
+								$Reveil->ExecuteAction($cmd,'on');
+						}
 					}
 				}
 				if($allActionIsExecute)
@@ -189,6 +190,7 @@ class reveil extends eqLogic {
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
+		//log::add('reveil','debug',$this->getHumanName().' Prochain reveil sera : '.date('d/m/Y H:i',$nextTime));
 		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
 			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
