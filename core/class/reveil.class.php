@@ -214,9 +214,7 @@ class reveil extends eqLogic {
 	}
 }
 class reveilCmd extends cmd {
-    	public function execute($_options = null) {	
-		$Listener=cmd::byId(str_replace('#','',$this->getValue()));
-		if (is_object($Listener)) {	
+    	public function execute($_options = null) {		
 			switch($this->getLogicalId()){
 				case 'stop':	
 					$this->getEqLogic()->StopReveil();
@@ -225,15 +223,18 @@ class reveilCmd extends cmd {
 					if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
 						$this->getEqLogic()->Snooze();
 				break;
-				case 'armed':
-					$Listener->event(true);
-					$Listener->getEqLogic()->NextStart();
+						case 'armed':
+					$Listener=cmd::byId(str_replace('#','',$this->getValue()));
+					if (is_object($Listener)){
+						$Listener->event(true);
+						$Listener->getEqLogic()->NextStart();
+					}
 				break;
 				case 'released':
-					$Listener->event(false);
+					$Listener=cmd::byId(str_replace('#','',$this->getValue()));
+					if (is_object($Listener)) 
+						$Listener->event(false);
 				break;
-			}
-			$Listener->save();
 		}
 	}
 }
