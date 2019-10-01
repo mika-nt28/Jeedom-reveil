@@ -44,6 +44,7 @@ Chaque condition de la liste formera un ET
 Action
 ---
 Vous pouvez configurer le séquencement de votre réveil.
-Chaque action configurée sera exécutée dans l'ordre choisi
+Pour chaque action il est possible de mettre un delais (positif si on veux le decaler dans le future et negatif dans le passée)
+Chaque action configurée sera berifiée et/ou exécutée dans l'ordre choisi.
 
 ![introduction01](../images/ConfigurationAction.jpg)
