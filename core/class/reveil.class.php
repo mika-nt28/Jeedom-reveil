@@ -17,16 +17,16 @@ class reveil extends eqLogic {
 	}
 	public function postSave() {
 		$this->AddCommande("Date de début","NextStart","info",'string',true);
-		$this->AddCommande("Arret ","stop","action","other",true);
+		$this->AddCommande("Arrêt","stop","action","other",true);
 		$this->AddCommande("Snooze ","snooze","action","other",true);
-		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'lock','LOCK_STATE');
+		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'core::lock','LOCK_STATE');
 		$isArmed->execCmd(true);
-		$Armed=$this->AddCommande("Activer","armed","action","other",true,'lock','LOCK_CLOSE');
+		$Armed=$this->AddCommande("Activer","armed","action","other",true,'core::lock','LOCK_CLOSE');
 		$Armed->setValue($isArmed->getId());
 		$Armed->setConfiguration('state', '1');
 		$Armed->setConfiguration('armed', '1');
 		$Armed->save();
-		$Released=$this->AddCommande("Desactiver","released","action","other",true,'lock','LOCK_OPEN');
+		$Released=$this->AddCommande("Désactiver","released","action","other",true,'core::lock','LOCK_OPEN');
 		$Released->setValue($isArmed->getId());
 		$Released->save();
 		$Released->setConfiguration('state', '0');
