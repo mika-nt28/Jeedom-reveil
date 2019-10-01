@@ -84,7 +84,7 @@
     			<li role="presentation">
 				<a href="#programationtab" aria-controls="profile" role="tab" data-toggle="tab">
 					<i class="fa fa-calendar"></i> 
-					{{Programation}}
+					{{Programmation}}
 				</a>
 			</li>
     			<li role="presentation">
@@ -108,7 +108,7 @@
 						<div class="form-group ">
 							<label class="col-sm-3 control-label">{{Nom du réveil}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Indiquer le nom de votre réveil" style="font-size : 1em;color:grey;"></i>
+									<i class="fa fa-question-circle tooltips" title="Indiquer le nom de votre réveil"></i>
 								</sup>
 							</label>
 							<div class="col-sm-5">
@@ -119,7 +119,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 control-label" >{{Objet parent}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Indiquer l'objet dans lequel le widget de ce réveil apparaîtra sur le dashboard" style="font-size : 1em;color:grey;"></i>
+									<i class="fa fa-question-circle tooltips" title="Indiquer l'objet dans lequel le widget de ce réveil apparaîtra sur le dashboard"></i>
 								</sup>
 							</label>
 							<div class="col-sm-5">
@@ -137,7 +137,7 @@
 								{{Catégorie}}
 								<sup>
 									<i class="fa fa-question-circle tooltips" title="Choisissez une catégorie
-								Cette information n'est pas obligatoire mais peut être utile pour filtrer les widgets" style="font-size : 1em;color:grey;"></i>
+								Cette information n'est pas obligatoire mais peut être utile pour filtrer les widgets"></i>
 								</sup>
 							</label>
 							<div class="col-sm-9">
@@ -167,7 +167,7 @@
 							<label class="col-sm-3 control-label" >
 								{{Temps après un snooze}}
 								<sup>
-									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze" style="font-size : 1em;color:grey;"></i>
+									<i class="fa fa-question-circle tooltips" title="Saisir le temps pour un snooze"></i>
 								</sup>
 							</label>
 							<div class="col-sm-5">
@@ -232,7 +232,7 @@
 					<fieldset>
 						<legend>{{Les actions:}}
 							<sup>
-								<i class="fa fa-question-circle tooltips" title="Saisir toutes les actions à mener à l'ouverture"></i>
+								<i class="fa fa-question-circle tooltips" title="Saisir toutes les actions à exécuter"></i>
 							</sup>
 							<a class="btn btn-success btn-xs ActionAttr" data-action="add" style="margin-left: 5px;">
 								<i class="fa fa-plus-circle"></i>
