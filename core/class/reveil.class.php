@@ -96,11 +96,11 @@ class reveil extends eqLogic {
 			$Commande->setEqLogic_id($this->getId());
 			$Commande->setType($Type);
 			$Commande->setSubType($SubType);
+			$Commande->setTemplate('dashboard',$Template );
+			$Commande->setTemplate('mobile', $Template);
+			$Commande->setGeneric_type($GenericType);
+			$Commande->save();
 		}
-     		$Commande->setTemplate('dashboard',$Template );
-		$Commande->setTemplate('mobile', $Template);
-		$Commande->setGeneric_type($GenericType);
-		$Commande->save();
 		return $Commande;
 	}
 	public static function cron() {	
