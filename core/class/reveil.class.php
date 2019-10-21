@@ -84,14 +84,13 @@ class reveil extends eqLogic {
 	        'border' => true,
 	        'border-radius' => true
 	));
-	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='',$GenericType='') {
+	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$Visible=true,$Template='',$GenericType='') {
 		$Commande = $this->getCmd(null,$_logicalId);
-		if (!is_object($Commande))
-		{
+		if (!is_object($Commande)){
 			$Commande = new reveilCmd();
 			$Commande->setId(null);
 			$Commande->setName($Name);
-			$Commande->setIsVisible($visible);
+			$Commande->setIsVisible($Visible);
 			$Commande->setLogicalId($_logicalId);
 			$Commande->setEqLogic_id($this->getId());
 			$Commande->setType($Type);
