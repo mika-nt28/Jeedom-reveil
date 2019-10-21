@@ -16,17 +16,17 @@ class reveil extends eqLogic {
 		$this->setConfiguration('Programation', $Programation);
 	}
 	public function postSave() {
-		$this->AddCommande("Date de début","NextStart","info",'string',true);
-		$this->AddCommande("Arrêt","stop","action","other",true);
-		$this->AddCommande("Snooze ","snooze","action","other",true);
-		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",false,'core::lock','LOCK_STATE');
+		$this->AddCommande("Date de début","NextStart","info",'string',1);
+		$this->AddCommande("Arrêt","stop","action","other",1);
+		$this->AddCommande("Snooze ","snooze","action","other",1);
+		$isArmed=$this->AddCommande("Etat activation","isArmed","info","binary",0,'core::lock','LOCK_STATE');
 		$isArmed->execCmd(true);
-		$Armed=$this->AddCommande("Activer","armed","action","other",true,'core::lock','LOCK_CLOSE');
+		$Armed=$this->AddCommande("Activer","armed","action","other",1,'core::lock','LOCK_CLOSE');
 		$Armed->setValue($isArmed->getId());
 		$Armed->setConfiguration('state', '1');
 		$Armed->setConfiguration('armed', '1');
 		$Armed->save();
-		$Released=$this->AddCommande("Désactiver","released","action","other",true,'core::lock','LOCK_OPEN');
+		$Released=$this->AddCommande("Désactiver","released","action","other",1,'core::lock','LOCK_OPEN');
 		$Released->setValue($isArmed->getId());
 		$Released->save();
 		$Released->setConfiguration('state', '0');
@@ -84,14 +84,13 @@ class reveil extends eqLogic {
 	        'border' => true,
 	        'border-radius' => true
 	));
-	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$visible,$Template='',$GenericType='') {
+	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$Visible=true,$Template='',$GenericType='') {
 		$Commande = $this->getCmd(null,$_logicalId);
-		if (!is_object($Commande))
-		{
+		if (!is_object($Commande)){
 			$Commande = new reveilCmd();
 			$Commande->setId(null);
 			$Commande->setName($Name);
-			$Commande->setIsVisible($visible);
+			$Commande->setIsVisible($Visible);
 			$Commande->setLogicalId($_logicalId);
 			$Commande->setEqLogic_id($this->getId());
 			$Commande->setType($Type);
