@@ -52,38 +52,6 @@ class reveil extends eqLogic {
 			}
 		}
 	}
-	public function toHtml($_version = 'dashboard') {
-		$replace = $this->preToHtml($_version);
-		if (!is_array($replace)) 
-			return $replace;
-		$version = jeedom::versionAlias($_version);
-		if ($this->getDisplay('hideOn' . $version) == 1)
-			return '';
-		foreach ($this->getCmd() as $cmd) {
-			$action = '';
-			if ($cmd->getIsVisible() == 1) {
-				if ($cmd->getDisplay('hideOn' . $version) == 1) 
-					continue;
-				if ($cmd->getDisplay('forceReturnLineBefore', 0) == 1) 
-					$action .= '<br/>';
-				$action .= $cmd->toHtml($_version);
-				if ($cmd->getDisplay('forceReturnLineAfter', 0) == 1) 
-					$action .= '<br/>';
-				$replace['#'.$cmd->getLogicalId().'#'] = $action;
-			}
-		}
-      		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'eqLogic', 'reveil')));
-  	}
-	public static $_widgetPossibility = array('custom' => array(
-	        'visibility' => true,
-	        'displayName' => true,
-	        'displayObjectName' => true,
-	        'optionalParameters' => true,
-	        'background-color' => true,
-	        'text-color' => true,
-	        'border' => true,
-	        'border-radius' => true
-	));
 	public function AddCommande($Name,$_logicalId,$Type="info", $SubType='binary',$Visible=true,$Template='',$GenericType='') {
 		$Commande = $this->getCmd(null,$_logicalId);
 		if (!is_object($Commande)){
