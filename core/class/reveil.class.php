@@ -77,7 +77,8 @@ class reveil extends eqLogic {
 				$allActionIsExecute = true;
 				foreach($Reveil->getConfiguration('Equipements') as $cmd){
 					$now = mktime(date("H"),date("i"), 0);
-					$StartTimeCmd =$NextStart + jeedom::evaluateExpression($cmd['delais']) * 60;
+					$$cmd['delais']=$cmd['delais'];
+					$StartTimeCmd =$NextStart + jeedom::evaluateExpression(intval($cmd['delais'])) * 60;
 					if($now <= $StartTimeCmd){
 						$allActionIsExecute = false;
 						if($StartTimeCmd <= $now + 30){
