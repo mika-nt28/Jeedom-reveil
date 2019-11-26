@@ -48,6 +48,7 @@ Pour chaque action il est possible de mettre un delais (positif si on veux le de
 Chaque action configurée sera berifiée et/ou exécutée dans l'ordre choisi.
 
 ![introduction01](../images/ConfigurationAction.jpg)
+
 ChangeLog
 =========
 
