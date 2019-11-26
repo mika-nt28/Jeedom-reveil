@@ -48,3 +48,11 @@ Pour chaque action il est possible de mettre un delais (positif si on veux le de
 Chaque action configurée sera berifiée et/ou exécutée dans l'ordre choisi.
 
 ![introduction01](../images/ConfigurationAction.jpg)
+
+ChangeLog
+=========
+
+2019-11-24 08:09:34
+-------------------
+* Suppression des widgets de maniere a laisser cette tache au core
+* BugFix lorsqu'il n'y a aucun delais
