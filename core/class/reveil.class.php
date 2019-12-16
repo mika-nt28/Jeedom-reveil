@@ -73,21 +73,24 @@ class reveil extends eqLogic {
 	public static function cron() {	
 		foreach(eqLogic::byType('reveil') as $Reveil){	
 			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
-				$NextStart = DateTime::createFromFormat("d/m/Y H:i", $Reveil->getCmd(null,'NextStart')->execCmd())->getTimestamp();
-				$allActionIsExecute = true;
-				foreach($Reveil->getConfiguration('Equipements') as $cmd){
-					$now = mktime(date("H"),date("i"), 0);
-					$StartTimeCmd =$NextStart + jeedom::evaluateExpression(intval($cmd['delais'])) * 60;
-					if($now <= $StartTimeCmd){
-						$allActionIsExecute = false;
-						if($StartTimeCmd <= $now + 30){
-							if($Reveil->EvaluateCondition())
-								$Reveil->ExecuteAction($cmd,'on');
+				$NextStart =  $Reveil->getCmd(null,'NextStart');
+				if(is_object($NextStart)){
+					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
+					$allActionIsExecute = true;
+					foreach($Reveil->getConfiguration('Equipements') as $cmd){
+						$now = mktime(date("H"),date("i"), 0);
+						$StartTimeCmd =$NextStart + jeedom::evaluateExpression(intval($cmd['delais'])) * 60;
+						if($now <= $StartTimeCmd){
+							$allActionIsExecute = false;
+							if($StartTimeCmd <= $now + 30){
+								if($Reveil->EvaluateCondition())
+									$Reveil->ExecuteAction($cmd,'on');
+							}
 						}
 					}
+					if($allActionIsExecute)
+						$Reveil->NextStart();
 				}
-				if($allActionIsExecute)
-					$Reveil->NextStart();
 			}
 		}
 	}
@@ -136,6 +139,7 @@ class reveil extends eqLogic {
 		$nextTime=null;
 		foreach($this->getConfiguration('Programation') as $ConigSchedule){
 			$offset=0;
+			$timestamp=null;
 			if(date('H') > $ConigSchedule["Heure"])
 				$offset++;
 			if(date('H') == $ConigSchedule["Heure"] && date('i') >= $ConigSchedule["Minute"])	
@@ -150,9 +154,13 @@ class reveil extends eqLogic {
 					break;
 				}
 			}
+			if($timestamp == null)
+				continue;
 			if($nextTime == null || $nextTime > $timestamp)
 				$nextTime = $timestamp;
 		}
+		if($nextTime == null)
+			return false;
 		//log::add('reveil','debug',$this->getHumanName().' Prochain reveil sera : '.date('d/m/Y H:i',$nextTime));
 		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
