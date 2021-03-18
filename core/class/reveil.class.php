@@ -7,7 +7,7 @@ class reveil extends eqLogic {
 		$return['launchable'] = 'ok';
 		$return['state'] = 'nok';
 		foreach(eqLogic::byType('reveil') as $Reveil){
-			if($Reveil->getIsEnable() && $Reveil->getConfiguration('Etat') != ''){
+			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
 				$cron = cron::byClassAndFunction('reveil', 'CheckReveil', array('reveil_id' => $Reveil->getId()));
 				if (!is_object($cron))	
 					return $return;
@@ -24,8 +24,10 @@ class reveil extends eqLogic {
 			return;
 		if ($deamon_info['state'] == 'ok') 
 			return;
-		foreach(eqLogic::byType('reveil') as $Reveil)
-			$Reveil->createDeamon();
+		foreach(eqLogic::byType('reveil') as $Reveil){
+			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd())
+				$Reveil->createDeamon();
+		}
 	}
 	public static function deamon_stop() {	
 		foreach(eqLogic::byType('reveil') as $Reveil){
@@ -41,13 +43,15 @@ class reveil extends eqLogic {
 				$NextStart =  $Reveil->getCmd(null,'NextStart');
 				if(is_object($NextStart)){
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
-					$allActionIsExecute = true;
-					foreach($Reveil->getConfiguration('Equipements') as $cmd){
-						sleep($Reveil->getTime($cmd));
-						if($Reveil->EvaluateCondition())
-							$Reveil->ExecuteAction($cmd,'on');
+					if(time() >= $NextStart){
+						if($Reveil->EvaluateCondition()){
+							foreach($Reveil->getConfiguration('Equipements') as $cmd){
+								sleep($Reveil->getTime($cmd));
+								$Reveil->ExecuteAction($cmd,'on');
+							}
+						}
+						$Reveil->NextStart();
 					}
-					$Reveil->NextStart();
 				}
 				sleep(1);
 			}
