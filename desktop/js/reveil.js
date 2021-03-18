@@ -166,9 +166,12 @@ function addAction(_action,  _el) {
 					.append($('<i class="fa fa-list-alt">')))))	
 		.append($('<div class="actionOptions">')
 	       		.append($(jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options)))));
-	tr.append($('<td>')
-		.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="delais">')));
-	tr.append($('<td>')
+	tr.append($('<td class="input-group">')
+		.append($('<input class="expressionAttr form-control input-sm cmdAction" data-l1key="delais">'))
+		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="base">')
+				.append($('<option value="60">').text('Minute'))            
+				.append($('<option value="1">').text('Seconde'))));
+	tr.append($('<td class="input-group">')
 		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="declencheur">')
 			.append($('<option value="on">')
 				.text('{{Allumage}}'))
