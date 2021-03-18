@@ -1,6 +1,80 @@
 <?php
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 class reveil extends eqLogic {
+	public static function deamon_info() {
+		$return = array();
+		$return['log'] = 'reveil';
+		$return['launchable'] = 'ok';
+		$return['state'] = 'nok';
+		foreach(eqLogic::byType('reveil') as $Reveil){
+			if($Reveil->getIsEnable() && $Reveil->getConfiguration('Etat') != ''){
+				$cron = cron::byClassAndFunction('reveil', 'CheckReveil', array('reveil_id' => $Reveil->getId()));
+				if (!is_object($cron))	
+					return $return;
+			}
+		}
+		$return['state'] = 'ok';
+		return $return;
+	}
+	public static function deamon_start($_debug = false) {
+		log::remove('reveil');
+		self::deamon_stop();
+		$deamon_info = self::deamon_info();
+		if ($deamon_info['launchable'] != 'ok') 
+			return;
+		if ($deamon_info['state'] == 'ok') 
+			return;
+		foreach(eqLogic::byType('reveil') as $Reveil)
+			$Reveil->createDeamon();
+	}
+	public static function deamon_stop() {	
+		foreach(eqLogic::byType('reveil') as $Reveil){
+			$cron = cron::byClassAndFunction('reveil', 'CheckReveil', array('reveil_id' => $Reveil->getId()));
+			if(is_object($cron))	
+				$cron->remove();
+		}
+	}
+	public static function CheckReveil($_option) {	
+		$Reveil = eqLogic::byId($_option['reveil_id']);
+		if (is_object($Reveil) && $Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
+			while(true){
+				$NextStart =  $Reveil->getCmd(null,'NextStart');
+				if(is_object($NextStart)){
+					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
+					$allActionIsExecute = true;
+					foreach($Reveil->getConfiguration('Equipements') as $cmd){
+						sleep($Reveil->getTime($cmd));
+						if($Reveil->EvaluateCondition())
+							$Reveil->ExecuteAction($cmd,'on');
+					}
+					$Reveil->NextStart();
+				}
+				sleep(1);
+			}
+		}
+	}
+	private function getTime($cmd) {
+		$delais = jeedom::evaluateExpression(intval($cmd['delais']));
+		$base = intval($cmd['base']);
+		if($base == 0)
+			$base = 60;
+		return $delais * $base;
+	}
+	public function createDeamon() {
+		$cron = cron::byClassAndFunction('reveil', 'CheckReveil', array('reveil_id' => $this->getId()));
+		if (!is_object($cron)) {
+			$cron = new cron();
+			$cron->setClass('reveil');
+			$cron->setFunction('CheckReveil');
+			$cron->setOption(array('reveil_id' => $this->getId()));
+			$cron->setEnable(1);
+			$cron->setTimeout('1');
+			$cron->setSchedule('* * * * * *');
+			$cron->save();
+		}
+		$cron->start();
+		$cron->run();
+	}
 	public function preSave() {
 		$Programation=$this->getConfiguration('Programation');
 		foreach($Programation as $key => $ConigSchedule){
@@ -69,30 +143,6 @@ class reveil extends eqLogic {
 			$Commande->save();
 		}
 		return $Commande;
-	}
-	public static function cron() {	
-		foreach(eqLogic::byType('reveil') as $Reveil){	
-			if($Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
-				$NextStart =  $Reveil->getCmd(null,'NextStart');
-				if(is_object($NextStart)){
-					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
-					$allActionIsExecute = true;
-					foreach($Reveil->getConfiguration('Equipements') as $cmd){
-						$now = mktime(date("H"),date("i"), 0);
-						$StartTimeCmd =$NextStart + jeedom::evaluateExpression(intval($cmd['delais'])) * 60;
-						if($now <= $StartTimeCmd){
-							$allActionIsExecute = false;
-							if($StartTimeCmd <= $now + 30){
-								if($Reveil->EvaluateCondition())
-									$Reveil->ExecuteAction($cmd,'on');
-							}
-						}
-					}
-					if($allActionIsExecute)
-						$Reveil->NextStart();
-				}
-			}
-		}
 	}
 	public function ExecuteAction($cmd,$Declancheur) {
 		if (isset($cmd['enable']) && $cmd['enable'] == 0)
