@@ -46,8 +46,12 @@ class reveil extends eqLogic {
 					if(time() >= $NextStart){
 						if($Reveil->EvaluateCondition()){
 							foreach($Reveil->getConfiguration('Equipements') as $cmd){
+								if (isset($cmd['enable']) && $cmd['enable'] == 0)
+									continue;
+								if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'on')
+									continue;
 								sleep($Reveil->getTime($cmd));
-								$Reveil->ExecuteAction($cmd,'on');
+								$Reveil->ExecuteAction($cmd);
 							}
 						}
 						$Reveil->NextStart();
@@ -148,11 +152,7 @@ class reveil extends eqLogic {
 		}
 		return $Commande;
 	}
-	public function ExecuteAction($cmd,$Declancheur) {
-		if (isset($cmd['enable']) && $cmd['enable'] == 0)
-			return;
-		if (isset($cmd['declencheur']) && $cmd['declencheur'] != $Declancheur)
-			return;
+	public function ExecuteAction($cmd) {
 		try {
 			$options = array();
 			if (isset($cmd['options'])) 
@@ -225,6 +225,10 @@ class reveil extends eqLogic {
 	public function Snooze(){
 		if($this->EvaluateCondition()){
 			foreach($this->getConfiguration('Equipements') as $cmd){
+				if (isset($cmd['enable']) && $cmd['enable'] == 0)
+					continue;
+				if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'off')
+					continue;
 				$this->ExecuteAction($cmd,'off');
 			}
 		}
@@ -234,7 +238,11 @@ class reveil extends eqLogic {
 		cache::set('reveil::Snooze::'.$this->getId(),false, 0);
 		cache::set('reveil::addSnooze::'.$this->getId(),false, 0);
 		foreach($this->getConfiguration('Equipements') as $cmd){
-			$this->ExecuteAction($cmd,'off');
+			if (isset($cmd['enable']) && $cmd['enable'] == 0)
+				continue;
+			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'off')
+				continue;
+			$this->ExecuteAction($cmd);
 		}
 	}
 }
