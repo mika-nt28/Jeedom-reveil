@@ -43,12 +43,13 @@ class reveil extends eqLogic {
 				$NextStart =  $Reveil->getCmd(null,'NextStart');
 				if(is_object($NextStart)){
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
-					list $NextStart, $cmd = $Reveil->getNextDelaisAction($NextStart);
-					if(time() >= $NextStart){
-						if($Reveil->EvaluateCondition()){
-							$Reveil->ExecuteAction($cmd);
-						}
+					list($NextTime, $NextCmd) = $Reveil->getNextDelaisAction($NextStart);
+					if($NextTime == 0)
 						$Reveil->NextStart();
+					if(time() >= $NextTime){
+						if($Reveil->EvaluateCondition()){
+							$Reveil->ExecuteAction($NextCmd);
+						}
 					}
 				}
 				sleep(1);
@@ -56,15 +57,15 @@ class reveil extends eqLogic {
 		}
 	}
 	private function getNextDelaisAction($NextStart){
-		$NextTime = $NextStart;
+		$NextTime = 0;
 		$NextCmd = null;
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			if (isset($cmd['enable']) && $cmd['enable'] == 0)
 				continue;
 			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'on')
-				continue;
-			if($NextStart + $this->getTime($cmd) > time()){
-				if($NextStart + $this->getTime($cmd) < $NextTime){
+				continue;          
+			if($NextStart + $this->getTime($cmd) >= time()){
+				if($NextTime == 0 || $NextStart + $this->getTime($cmd) < $NextTime){
 					$NextTime = $NextStart + $this->getTime($cmd);
 					$NextCmd = $cmd;
 				}
@@ -126,6 +127,12 @@ class reveil extends eqLogic {
 		$Released->setConfiguration('armed', '1');
 		if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
 			$this->NextStart();
+			$cron = cron::byClassAndFunction('reveil', 'CheckReveil', array('reveil_id' => $this->getId()));
+			if(is_object($cron)){	
+				$cron->stop();	
+				$cron->start();	
+				$cron->run();
+			}
 		}
 	}
 	public function UpdateDynamic($id,$days,$heure,$minute){
@@ -259,26 +266,26 @@ class reveil extends eqLogic {
 }
 class reveilCmd extends cmd {
     	public function execute($_options = null) {		
-			switch($this->getLogicalId()){
-				case 'stop':	
-					$this->getEqLogic()->StopReveil();
-				break;
-				case 'snooze':	
-					if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
-						$this->getEqLogic()->Snooze();
-				break;
-						case 'armed':
-					$Listener=cmd::byId(str_replace('#','',$this->getValue()));
-					if (is_object($Listener)){
-						$Listener->event(true);
-						$Listener->getEqLogic()->NextStart();
-					}
-				break;
-				case 'released':
-					$Listener=cmd::byId(str_replace('#','',$this->getValue()));
-					if (is_object($Listener)) 
-						$Listener->event(false);
-				break;
+		switch($this->getLogicalId()){
+			case 'stop':	
+				$this->getEqLogic()->StopReveil();
+			break;
+			case 'snooze':	
+				if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
+					$this->getEqLogic()->Snooze();
+			break;
+					case 'armed':
+				$Listener=cmd::byId(str_replace('#','',$this->getValue()));
+				if (is_object($Listener)){
+					$Listener->event(true);
+					$Listener->getEqLogic()->NextStart();
+				}
+			break;
+			case 'released':
+				$Listener=cmd::byId(str_replace('#','',$this->getValue()));
+				if (is_object($Listener)) 
+					$Listener->event(false);
+			break;
 		}
 	}
 }
