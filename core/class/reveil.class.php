@@ -43,12 +43,15 @@ class reveil extends eqLogic {
 				$NextStart =  $Reveil->getCmd(null,'NextStart');
 				if(is_object($NextStart)){
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
-					list($NextTime, $NextCmd) = $Reveil->getNextDelaisAction($NextStart);
-					if($NextTime == 0)
+					list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
+					if($NextTime == 0){
 						$Reveil->NextStart();
+						continue;
+					}
 					if(time() >= $NextTime){
 						if($Reveil->EvaluateCondition()){
-							$Reveil->ExecuteAction($NextCmd);
+							foreach $NextCmds as $NextCmd
+								$Reveil->ExecuteAction($NextCmd);
 						}
 					}
 				}
@@ -58,20 +61,22 @@ class reveil extends eqLogic {
 	}
 	private function getNextDelaisAction($NextStart){
 		$NextTime = 0;
-		$NextCmd = null;
+		$NextCmds = null;
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			if (isset($cmd['enable']) && $cmd['enable'] == 0)
 				continue;
 			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'on')
 				continue;          
-			if($NextStart + $this->getTime($cmd) >= time()){
+			if($NextStart + $this->getTime($cmd) == time())
+				$NextCmds[] = $cmd;
+			if($NextStart + $this->getTime($cmd) > time()){
 				if($NextTime == 0 || $NextStart + $this->getTime($cmd) < $NextTime){
 					$NextTime = $NextStart + $this->getTime($cmd);
-					$NextCmd = $cmd;
+					$NextCmds = array($cmd);
 				}
 			}
 		}
-		return array($NextTime,$NextCmd);
+		return array($NextTime,$NextCmds);
 	}
 	private function getTime($cmd) {
 		$delais = jeedom::evaluateExpression(intval($cmd['delais']));
