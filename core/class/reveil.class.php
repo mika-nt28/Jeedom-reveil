@@ -50,7 +50,7 @@ class reveil extends eqLogic {
 					}
 					if(time() >= $NextTime){
 						if($Reveil->EvaluateCondition()){
-							foreach $NextCmds as $NextCmd
+							foreach($NextCmds as $NextCmd)
 								$Reveil->ExecuteAction($NextCmd);
 						}
 					}
