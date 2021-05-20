@@ -67,9 +67,9 @@ class reveil extends eqLogic {
 				continue;
 			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'on')
 				continue;          
-			if($NextStart + $this->getTime($cmd) == time())
+			if($NextStart + $this->getTime($cmd) == $NextTime)
 				$NextCmds[] = $cmd;
-			if($NextStart + $this->getTime($cmd) > time()){
+			if($NextStart + $this->getTime($cmd) >= time()){
 				if($NextTime == 0 || $NextStart + $this->getTime($cmd) < $NextTime){
 					$NextTime = $NextStart + $this->getTime($cmd);
 					$NextCmds = array($cmd);
