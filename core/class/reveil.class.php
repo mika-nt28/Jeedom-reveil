@@ -54,8 +54,11 @@ class reveil extends eqLogic {
 								$Reveil->ExecuteAction($NextCmd);
 						}
 					}
-				}
-				sleep(1);
+					$wait = $NextTime-time();
+					log::add('reveil','debug',$Reveil->getHumanName().' Attente du prochain reveil '.$wait);
+					sleep($wait);
+				}else
+					sleep(1);
 			}
 		}
 	}
