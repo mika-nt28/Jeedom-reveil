@@ -94,7 +94,8 @@ class reveil extends eqLogic {
 			$cron = new cron();
 			$cron->setClass('reveil');
 			$cron->setFunction('CheckReveil');
-			$cron->setOption(array('reveil_id' => $this->getId()));
+			$cron->setOption(array('reveil_id' => $this->getId()));			
+			$cron->setDeamon(1);
 			$cron->setEnable(1);
 			$cron->setTimeout('1');
 			$cron->setSchedule('* * * * * *');
