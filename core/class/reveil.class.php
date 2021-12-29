@@ -38,10 +38,10 @@ class reveil extends eqLogic {
 	}
 	public static function CheckReveil($_option) {	
 		$Reveil = eqLogic::byId($_option['reveil_id']);
-		if (is_object($Reveil) && $Reveil->getIsEnable() && $Reveil->getCmd(null,'isArmed')->execCmd()){
+		if (is_object($Reveil) && $Reveil->getIsEnable()){
 			while(true){
 				$NextStart =  $Reveil->getCmd(null,'NextStart');
-				if(is_object($NextStart)){
+				if(is_object($NextStart) && $Reveil->getCmd(null,'isArmed')->execCmd()){
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
 					list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 					if($NextTime == 0){
