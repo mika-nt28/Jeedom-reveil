@@ -44,21 +44,21 @@ class reveil extends eqLogic {
 				if(is_object($NextStart) && $Reveil->getCmd(null,'isArmed')->execCmd()){
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
 					list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
-					if($NextTime == 0){
-						$Reveil->NextStart();
-						continue;
-					}
 					if(time() >= $NextTime){
 						if($Reveil->EvaluateCondition()){
-							foreach($NextCmds as $NextCmd)
-								$Reveil->ExecuteAction($NextCmd);
+							while($NextTime != 0){
+								if(time() >= $NextTime){
+									foreach($NextCmds as $NextCmd)
+										$Reveil->ExecuteAction($NextCmd);
+								}
+								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
+								sleep(1);
+							}
+							$Reveil->NextStart();
 						}
 					}
-					$wait = $NextTime-time();
-					log::add('reveil','debug',$Reveil->getHumanName().' Attente du prochain reveil '.$wait);
-					sleep($wait);
-				}else
-					sleep(1);
+				}
+				sleep(1);
 			}
 		}
 	}
@@ -185,7 +185,7 @@ class reveil extends eqLogic {
 			if (isset($cmd['options'])) 
 				$options = $cmd['options'];
 			scenarioExpression::createAndExec('action', $cmd['cmd'], $options);
-			log::add('reveil','debug',$this->getHumanName().' Exécution de '.$cmd['cmd'].' : '.json_encode($options));
+			log::add('reveil','debug',$this->getHumanName().' Exécution de '.jeedom::toHumanReadable($cmd['cmd']).' : '.json_encode($options));
 		} catch (Exception $e) {
 			log::add('reveil', 'error', __($this->getHumanName().' Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}	
@@ -193,7 +193,7 @@ class reveil extends eqLogic {
 	public function EvaluateCondition(){
 		foreach($this->getConfiguration('Conditions') as $Condition){	
 			if (isset($Condition['enable']) && $Condition['enable'] == 0)
-				return;
+				continue;
 			$_scenario = null;
 			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
 			$message = __('Evaluation de la condition : ['.jeedom::toHumanReadable($Condition['expression']).'][', __FILE__) . trim($expression) . '] = ';
@@ -247,6 +247,7 @@ class reveil extends eqLogic {
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
 			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
 		}
+		log::add('reveil','info',$this->getHumanName().' Le prochain reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 	}
 	public function Snooze(){
