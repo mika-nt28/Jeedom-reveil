@@ -48,13 +48,18 @@ class reveil extends eqLogic {
 						if($Reveil->EvaluateCondition()){
 							while($NextTime != 0){
 								if(time() >= $NextTime){
-									foreach($NextCmds as $NextCmd)
+									foreach($NextCmds as $NextCmd){
+										if (isset($NextCmd['enable']) && $NextCmd['enable'] == 0)
+											continue;
+										if (isset($NextCmd['declencheur']) && $NextCmd['declencheur'] != 'on')
+											continue;
 										$Reveil->ExecuteAction($NextCmd);
+									}
 								}
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 								sleep(1);
 							}
-							$Reveil->NextStart();
+							//$Reveil->NextStart();
 						}
 					}
 				}
@@ -251,7 +256,7 @@ class reveil extends eqLogic {
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 	}
 	public function Snooze(){
-		if($this->EvaluateCondition()){
+		//if($this->EvaluateCondition()){
 			foreach($this->getConfiguration('Equipements') as $cmd){
 				if (isset($cmd['enable']) && $cmd['enable'] == 0)
 					continue;
@@ -259,8 +264,9 @@ class reveil extends eqLogic {
 					continue;
 				$this->ExecuteAction($cmd,'off');
 			}
-		}
+	//	}
 		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
+		$this->NextStart();
 	}
 	public function StopReveil(){
 		cache::set('reveil::Snooze::'.$this->getId(),false, 0);
@@ -272,6 +278,7 @@ class reveil extends eqLogic {
 				continue;
 			$this->ExecuteAction($cmd);
 		}
+		$this->NextStart();
 	}
 }
 class reveilCmd extends cmd {
