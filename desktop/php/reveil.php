@@ -222,6 +222,7 @@
 						<tr>
 							<th></th>
 							<th>{{Condition}}</th>
+							<th>{{Autorisation}}</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
