@@ -130,18 +130,26 @@ function addProgramation(_programation,  _el) {
 	});
 }
 function addCondition(_condition,_el) {
-	var tr = $('<tr class="ConditionGroup">')
-		.append($('<td>')
-			.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable" checked/>')))
-		.append($('<td>')
-			.append($('<div class="input-group">')
-				.append($('<span class="input-group-btn">')
-					.append($('<a class="btn btn-default conditionAttr btn-sm" data-action="remove">')
-						.append($('<i class="fa fa-minus-circle">'))))
-				.append($('<input class="expressionAttr form-control input-sm cmdCondition" data-l1key="expression"/>'))
-				.append($('<span class="input-group-btn">')
-					.append($('<a class="btn btn-warning btn-sm listCmdCondition">')
-						.append($('<i class="fa fa-list-alt">'))))));
+	var tr = $('<tr class="ConditionGroup">');
+	tr.append($('<td>')
+		.append($('<input type="checkbox" class="expressionAttr" data-l1key="enable" checked/>')));
+	tr.append($('<td>')
+		.append($('<div class="input-group">')
+			.append($('<span class="input-group-btn">')
+				.append($('<a class="btn btn-default conditionAttr btn-sm" data-action="remove">')
+					.append($('<i class="fa fa-minus-circle">'))))
+			.append($('<input class="expressionAttr form-control input-sm cmdCondition" data-l1key="expression"/>'))
+			.append($('<span class="input-group-btn">')
+				.append($('<a class="btn btn-warning btn-sm listCmdCondition">')
+					.append($('<i class="fa fa-list-alt">'))))));
+	tr.append($('<td class="input-group">')
+		  .append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
+			.append($('<option value="on">')
+				.text('{{Allumage}}'))
+			.append($('<option value="snooze">')
+				.text('{{Snooze}}'))
+			.append($('<option value="off">')
+				.text('{{Extinction}}'))));	
 
         _el.append(tr);
         _el.find('tr:last').setValues(_condition, '.expressionAttr');
@@ -172,9 +180,11 @@ function addAction(_action,  _el) {
 				.append($('<option value="60">').text('Minute'))            
 				.append($('<option value="1">').text('Seconde'))));
 	tr.append($('<td class="input-group">')
-		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="declencheur">')
+		  .append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
 			.append($('<option value="on">')
 				.text('{{Allumage}}'))
+			.append($('<option value="snooze">')
+				.text('{{Snooze}}'))
 			.append($('<option value="off">')
 				.text('{{Extinction}}'))));	
 	_el.append(tr);

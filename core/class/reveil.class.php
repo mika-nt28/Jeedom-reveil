@@ -45,21 +45,17 @@ class reveil extends eqLogic {
 					$NextStart = DateTime::createFromFormat("d/m/Y H:i", $NextStart->execCmd())->getTimestamp();
 					list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 					if(time() >= $NextTime){
-						if($Reveil->EvaluateCondition()){
+						if($Reveil->EvaluateCondition('on')){
 							while($NextTime != 0){
-								if(time() >= $NextTime){
-									foreach($NextCmds as $NextCmd){
-										if (isset($NextCmd['enable']) && $NextCmd['enable'] == 0)
-											continue;
-										if (isset($NextCmd['declencheur']) && $NextCmd['declencheur'] != 'on')
-											continue;
-										$Reveil->ExecuteAction($NextCmd);
-									}
-								}
+								if(time() >= $NextTime)
+									$Reveil->EvaluateAction('on');
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
+								if($Reveil->EvaluateCondition('snooze'))
+									$Reveil->Snooze();
+								if($Reveil->EvaluateCondition('off'))
+									$Reveil->StopReveil();
 								sleep(1);
 							}
-							//$Reveil->NextStart();
 						}
 					}
 				}
@@ -184,6 +180,16 @@ class reveil extends eqLogic {
 		}
 		return $Commande;
 	}
+	
+	public function EvaluateAction($Autorisation){
+		foreach($this->getConfiguration('Equipements') as $cmd){
+			if (isset($cmd['enable']) && $cmd['enable'] == 0)
+				continue;
+			if (isset($cmd['declencheur']) && $cmd['declencheur'] != $Autorisation)
+				continue;
+			$this->ExecuteAction($cmd);
+		}
+	}
 	public function ExecuteAction($cmd) {
 		try {
 			$options = array();
@@ -195,9 +201,11 @@ class reveil extends eqLogic {
 			log::add('reveil', 'error', __($this->getHumanName().' Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}	
 	}
-	public function EvaluateCondition(){
+	public function EvaluateCondition($Autorisation){
 		foreach($this->getConfiguration('Conditions') as $Condition){	
 			if (isset($Condition['enable']) && $Condition['enable'] == 0)
+				continue;
+			if (isset($Condition['declencheur']) && $Condition['declencheur'] != $Autorisation)
 				continue;
 			$_scenario = null;
 			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
@@ -256,28 +264,14 @@ class reveil extends eqLogic {
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 	}
 	public function Snooze(){
-		//if($this->EvaluateCondition()){
-			foreach($this->getConfiguration('Equipements') as $cmd){
-				if (isset($cmd['enable']) && $cmd['enable'] == 0)
-					continue;
-				if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'off')
-					continue;
-				$this->ExecuteAction($cmd,'off');
-			}
-	//	}
+		$this->EvaluateAction('snooze');
 		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
 		$this->NextStart();
 	}
 	public function StopReveil(){
 		cache::set('reveil::Snooze::'.$this->getId(),false, 0);
 		cache::set('reveil::addSnooze::'.$this->getId(),false, 0);
-		foreach($this->getConfiguration('Equipements') as $cmd){
-			if (isset($cmd['enable']) && $cmd['enable'] == 0)
-				continue;
-			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'off')
-				continue;
-			$this->ExecuteAction($cmd);
-		}
+		$this->EvaluateAction('off');
 		$this->NextStart();
 	}
 }
