@@ -185,7 +185,8 @@ class reveil extends eqLogic {
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			if (isset($cmd['enable']) && $cmd['enable'] == 0)
 				continue;
-			if (isset($cmd['declencheur']) && $cmd['declencheur'] != $Autorisation)
+			if (isset($cmd['declencheur']) && array_search($Autorisation, $cmd['declencheur']) === false)
+
 				continue;
 			$this->ExecuteAction($cmd);
 		}
@@ -205,7 +206,7 @@ class reveil extends eqLogic {
 		foreach($this->getConfiguration('Conditions') as $Condition){	
 			if (isset($Condition['enable']) && $Condition['enable'] == 0)
 				continue;
-			if (isset($Condition['declencheur']) && $Condition['declencheur'] != $Autorisation)
+			if (isset($Condition['declencheur']) && array_search($Autorisation, $Condition['declencheur']) === false)
 				continue;
 			$_scenario = null;
 			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
