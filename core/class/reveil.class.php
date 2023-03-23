@@ -69,7 +69,7 @@ class reveil extends eqLogic {
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			if (isset($cmd['enable']) && $cmd['enable'] == 0)
 				continue;
-			if (isset($cmd['declencheur']) && $cmd['declencheur'] != 'on')
+			if (isset($cmd['declencheur']) && array_search('on', $cmd['declencheur']) === false)
 				continue;          
 			if($NextStart + $this->getTime($cmd) == $NextTime)
 				$NextCmds[] = $cmd;
@@ -180,7 +180,6 @@ class reveil extends eqLogic {
 		}
 		return $Commande;
 	}
-	
 	public function EvaluateAction($Autorisation){
 		foreach($this->getConfiguration('Equipements') as $cmd){
 			if (isset($cmd['enable']) && $cmd['enable'] == 0)
