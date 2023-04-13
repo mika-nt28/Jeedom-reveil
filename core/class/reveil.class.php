@@ -222,7 +222,7 @@ class reveil extends eqLogic {
 			}
 		}
 		if($count == 0)
-			return $default
+			return $default;
 		return true;
 	}
 	public function boolToText($value){
