@@ -50,13 +50,14 @@ class reveil extends eqLogic {
 								if(time() >= $NextTime)
 									$Reveil->EvaluateAction('on');
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
-								if($Reveil->EvaluateCondition('snooze'))
+								if($Reveil->EvaluateCondition('snooze', false))
 									$Reveil->Snooze();
-								if($Reveil->EvaluateCondition('off'))
+								if($Reveil->EvaluateCondition('off', false))
 									$Reveil->StopReveil();
 								sleep(1);
 							}
-						}
+						}else
+							$Reveil->StopReveil();
 					}
 				}
 				sleep(1);
@@ -201,12 +202,14 @@ class reveil extends eqLogic {
 			log::add('reveil', 'error', __($this->getHumanName().' Erreur lors de l\'éxecution de ', __FILE__) . $cmd['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
 		}	
 	}
-	public function EvaluateCondition($Autorisation){
+	public function EvaluateCondition($Autorisation,$default=true){
+		$count = 0;
 		foreach($this->getConfiguration('Conditions') as $Condition){	
 			if (isset($Condition['enable']) && $Condition['enable'] == 0)
 				continue;
 			if (isset($Condition['declencheur']) && array_search($Autorisation, $Condition['declencheur']) === false)
 				continue;
+			$count++;
 			$_scenario = null;
 			$expression = scenarioExpression::setTags($Condition['expression'], $_scenario, true);
 			$message = __('Evaluation de la condition : ['.jeedom::toHumanReadable($Condition['expression']).'][', __FILE__) . trim($expression) . '] = ';
@@ -218,6 +221,8 @@ class reveil extends eqLogic {
 				return false;	
 			}
 		}
+		if($count == 0)
+			return $default;
 		return true;
 	}
 	public function boolToText($value){
