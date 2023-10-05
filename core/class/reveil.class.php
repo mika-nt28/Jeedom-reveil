@@ -181,12 +181,18 @@ class reveil extends eqLogic {
 		}
 		return $Commande;
 	}
+	public function checkAutorisation($Element,$Autorisation){
+		if (isset($Element['enable']) && $Element['enable'] == 0)
+			return false;
+		if (isset($Element['declencheur']) && array_search($Autorisation, $Element['declencheur']) === false)
+			return false;
+		if (isset($Element['programmationName']) && array_search(cache::byKey('reveil::NextProgramationName::'.$this->getId())->getValue(''), $Element['programmationName']) === false)
+			return false;
+		return true;
+	}
 	public function EvaluateAction($Autorisation){
-		foreach($this->getConfiguration('Equipements') as $cmd){
-			if (isset($cmd['enable']) && $cmd['enable'] == 0)
-				continue;
-			if (isset($cmd['declencheur']) && array_search($Autorisation, $cmd['declencheur']) === false)
-
+		foreach($this->getConfiguration('Equipements') as $cmd){			
+			if(!$this->checkAutorisation($cmd))
 				continue;
 			$this->ExecuteAction($cmd);
 		}
@@ -204,10 +210,8 @@ class reveil extends eqLogic {
 	}
 	public function EvaluateCondition($Autorisation,$default=true){
 		$count = 0;
-		foreach($this->getConfiguration('Conditions') as $Condition){	
-			if (isset($Condition['enable']) && $Condition['enable'] == 0)
-				continue;
-			if (isset($Condition['declencheur']) && array_search($Autorisation, $Condition['declencheur']) === false)
+		foreach($this->getConfiguration('Conditions') as $Condition){			
+			if(!$this->checkAutorisation($Condition))
 				continue;
 			$count++;
 			$_scenario = null;
@@ -250,6 +254,7 @@ class reveil extends eqLogic {
 				if($ConigSchedule[$jour]){
 					$offset+=$day;
 					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0)
 					break;
 				}
 			}
