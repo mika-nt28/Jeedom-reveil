@@ -254,7 +254,7 @@ class reveil extends eqLogic {
 				if($ConigSchedule[$jour]){
 					$offset+=$day;
 					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
-					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0)
+					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
 					break;
 				}
 			}
