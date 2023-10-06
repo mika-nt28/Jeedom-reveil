@@ -86,16 +86,16 @@ function addAutorisations() {
 	$.each(Programmation,function( index, value ) {
 		gestions.append($('<option value="'+value.name+'">').text(value.name));
 	});
-	var Autorisations=$('<td class="input-group">');
-	Autorisations.append(gestions);
-	Autorisations.append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
+	var Autorisations=$('<div>');
+	Autorisations.append($('<td>').append(gestions));
+	Autorisations.append($('<td>').append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
 		.append($('<option value="on">')
 			.text('{{Allumage}}'))
 		.append($('<option value="snooze">')
 			.text('{{Snooze}}'))
 		.append($('<option value="off">')
-			.text('{{Extinction}}')));
-	return Autorisations;	 		
+			.text('{{Extinction}}'))));
+	return Autorisations.children();	 		
 }
 function addProgramation(_programation,  _el) {
 	var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
@@ -116,8 +116,10 @@ function addProgramation(_programation,  _el) {
 		.append($('<td>')
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-default ProgramationAttr btn-sm" data-action="remove">')
-					.append($('<i class="fa fa-minus-circle">'))))
-			.append($('<span class="expressionAttr" data-l1key="id">'))
+					.append($('<i class="fa fa-minus-circle">')))))
+		.append($('<td>')
+			.append($('<span class="expressionAttr" data-l1key="id">')))
+		.append($('<td>')
 			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>')))
 		.append($('<td>')
 			.append($('<label class="checkbox-inline">')
@@ -376,4 +378,4 @@ $('body').on( 'click','.bt_selectCmdExpression', function() {
 	jeedom.cmd.getSelectModal({cmd: {type: 'info'},eqLogic: {eqType_name : ''}}, function (result) {
 		$(_this).closest('.input-group').find('.cmdAttr').val(result.human);
 	});
-});  
+});
