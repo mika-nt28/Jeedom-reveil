@@ -192,7 +192,7 @@ class reveil extends eqLogic {
 	}
 	public function EvaluateAction($Autorisation){
 		foreach($this->getConfiguration('Equipements') as $cmd){			
-			if(!$this->checkAutorisation($cmd))
+			if(!$this->checkAutorisation($cmd,$Autorisation))
 				continue;
 			$this->ExecuteAction($cmd);
 		}
@@ -211,7 +211,7 @@ class reveil extends eqLogic {
 	public function EvaluateCondition($Autorisation,$default=true){
 		$count = 0;
 		foreach($this->getConfiguration('Conditions') as $Condition){			
-			if(!$this->checkAutorisation($Condition))
+			if(!$this->checkAutorisation($Condition,$Autorisation))
 				continue;
 			$count++;
 			$_scenario = null;
