@@ -98,20 +98,6 @@ function addAutorisations() {
 	return Autorisations.children();	 		
 }
 function addProgramation(_programation,  _el) {
-	var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
-    var Minute=$('<select class="expressionAttr form-control" data-l1key="Minute" >');
-	var number = 0;
-    while (number < 24) {
-		Heure.append($('<option value="'+number+'">')
-			.text(number));
-    	number++;
-	}
-  	number = 0;
-    while (number < 60) {
-		Minute.append($('<option value="'+number+'">')
-			.text(number));
-    	number++;
-	}
 	var tr = $('<tr class="ProgramationGroup">')
 		.append($('<td>')
 			.append($('<span class="input-group-btn">')
@@ -144,8 +130,7 @@ function addProgramation(_programation,  _el) {
 				.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
 				.append('{{Dimanche}}')))
 		.append($('<td>')
-			.append(Heure)
-			.append(Minute))	
+			.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
 		.append($('<td>')
 		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
