@@ -154,8 +154,7 @@ class reveil extends eqLogic {
 				$Programation[$key][$day]=false;
 			foreach(str_split($days) as $day)
 				$Programation[$key][$day]=true;
-			$Programation[$key]["Heure"]=$heure;
-			$Programation[$key]["Minute"]=$minute;
+			$Programation[$key]["time"]=$heure.':'.$minute;
 			$this->setConfiguration('Programation',$Programation);
 			$this->save();
 			if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
@@ -243,9 +242,7 @@ class reveil extends eqLogic {
 		foreach($this->getConfiguration('Programation') as $ConigSchedule){
 			$offset=0;
 			$timestamp=null;
-			if(date('H') > $ConigSchedule["Heure"])
-				$offset++;
-			if(date('H') == $ConigSchedule["Heure"] && date('i') >= $ConigSchedule["Minute"])	
+			if(time() > strtotime($ConigSchedule["time"]))
 				$offset++;
 			for($day=0;$day<7;$day++){
 				$jour=date('w')+$day+$offset;
@@ -253,7 +250,7 @@ class reveil extends eqLogic {
 					$jour= $jour-7;
 				if($ConigSchedule[$jour]){
 					$offset+=$day;
-					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+					$timestamp=strtotime($ConigSchedule["time"]) + (3600 * 24) * $offset;
 					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
 					break;
 				}
