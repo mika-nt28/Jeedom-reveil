@@ -245,7 +245,7 @@ class reveil extends eqLogic {
           			$timestamp=strtotime($ConigSchedule["date"].' '.$ConigSchedule["time"]);
           			if(time() > $timestamp)
           				continue;
-          		break
+          		break;
           		case 'programme':
           			if(time() > strtotime($ConigSchedule["time"]))
 						$offset++;
