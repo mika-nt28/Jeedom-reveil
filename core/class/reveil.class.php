@@ -48,10 +48,11 @@ class reveil extends eqLogic {
 						if($Reveil->EvaluateCondition('on')){
 							while($NextTime != 0){
 								if(time() >= $NextTime){
-									if(!$Reveil->checkAutorisation($cmd,$Autorisation))
-										continue;
-									foreach($NextCmds as $cmd)
+									foreach($NextCmds as $cmd){
+										if(!$Reveil->checkAutorisation($cmd,'on'))
+											continue;
 										$Reveil->ExecuteAction($cmd);
+									}
 								}
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 								if($Reveil->EvaluateCondition('snooze', false))
@@ -241,7 +242,7 @@ class reveil extends eqLogic {
 			$timestamp=null;
 			if(time() > strtotime($ConigSchedule["time"]))
 				$offset++;
-          	for($day=0;$day<7;$day++){
+          		for($day=0;$day<7;$day++){
 				$jour=date('w')+$day+$offset;
 				if($jour > 6)
 					$jour= $jour-7;
@@ -271,7 +272,7 @@ class reveil extends eqLogic {
 			if(!$this->checkAutorisation($cmd,'snooze'))
 				continue;      
 			$this->ExecuteAction($cmd);
-        }
+		}
 		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
 		$this->NextStart();
 	}
@@ -282,7 +283,7 @@ class reveil extends eqLogic {
 			if(!$this->checkAutorisation($cmd,'off'))
 				continue;      
 			$this->ExecuteAction($cmd);
-        }
+		}
 		$this->NextStart();
 	}
 }
@@ -296,7 +297,7 @@ class reveilCmd extends cmd {
 				if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
 					$this->getEqLogic()->Snooze();
 			break;
-					case 'armed':
+			case 'armed':
 				$Listener=cmd::byId(str_replace('#','',$this->getValue()));
 				if (is_object($Listener)){
 					$Listener->event(true);
