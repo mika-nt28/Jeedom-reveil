@@ -106,38 +106,49 @@ function addProgramation(_programation,  _el) {
 		.append($('<td>')
 			.append($('<span class="expressionAttr" data-l1key="id">')))
 		.append($('<td>')
-			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>')))
+			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>'))
+			.append($('<select class="expressionAttr form-control input-sm" data-l1key="type">')
+				.append($('<option value="unique">').text("Unique"))
+				.append($('<option value="programme">').text("Programmée"))))
 		.append($('<td>')
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
-				.append('{{Lundi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
-				.append('{{Mardi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
-				.append('{{Mercredi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
-				.append('{{Jeudi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
-				.append('{{Vendredi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
-				.append('{{Samedi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
-				.append('{{Dimanche}}')))
+			.append($('<div class="unique">')
+				.append($('<input type="date" class="expressionAttr" data-l1key="date" />')))
+			.append($('<div class="programme">')
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
+                  .append('{{Lundi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
+                  .append('{{Mardi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
+                  .append('{{Mercredi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
+                  .append('{{Jeudi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
+                  .append('{{Vendredi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
+                  .append('{{Samedi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
+                  .append('{{Dimanche}}'))))
 		.append($('<td>')
-			.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
+				.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
 		.append($('<td>')
 		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
-        _el.find('tr:last').setValues(_programation, '.expressionAttr');
+	$('.expressionAttr[data-l1key=type]').off().on('change',function(){
+		$(this).closest('tr').find('.unique').hide();
+		$(this).closest('tr').find('.programme').hide();
+		$(this).closest('tr').find('.'+$(this).val()).show();
+	});
 	$('.ProgramationAttr[data-action=remove]').off().on('click',function(){
 		$(this).closest('tr').remove();
 	});
+	_el.find('tr:last').setValues(_programation, '.expressionAttr');
 }
 function addCondition(_condition,_el) {
 	var tr = $('<tr class="ConditionGroup">');
