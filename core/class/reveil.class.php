@@ -47,8 +47,13 @@ class reveil extends eqLogic {
 					if(time() >= $NextTime){
 						if($Reveil->EvaluateCondition('on')){
 							while($NextTime != 0){
-								if(time() >= $NextTime)
-									$Reveil->EvaluateAction('on');
+								if(time() >= $NextTime){
+									foreach($NextCmds as $cmd){
+										if(!$Reveil->checkAutorisation($cmd,'on'))
+											continue;
+										$Reveil->ExecuteAction($cmd);
+									}
+								}
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 								if($Reveil->EvaluateCondition('snooze', false))
 									$Reveil->Snooze();
@@ -68,9 +73,7 @@ class reveil extends eqLogic {
 		$NextTime = 0;
 		$NextCmds = null;
 		foreach($this->getConfiguration('Equipements') as $cmd){
-			if (isset($cmd['enable']) && $cmd['enable'] == 0)
-				continue;
-			if (isset($cmd['declencheur']) && array_search('on', $cmd['declencheur']) === false)
+			if(!$this->checkAutorisation($cmd,'on'))
 				continue;          
 			if($NextStart + $this->getTime($cmd) == $NextTime)
 				$NextCmds[] = $cmd;
@@ -154,8 +157,7 @@ class reveil extends eqLogic {
 				$Programation[$key][$day]=false;
 			foreach(str_split($days) as $day)
 				$Programation[$key][$day]=true;
-			$Programation[$key]["Heure"]=$heure;
-			$Programation[$key]["Minute"]=$minute;
+			$Programation[$key]["time"]=$heure.':'.$minute;
 			$this->setConfiguration('Programation',$Programation);
 			$this->save();
 			if($this->getIsEnable() && $this->getCmd(null,'isArmed')->execCmd()){
@@ -181,15 +183,14 @@ class reveil extends eqLogic {
 		}
 		return $Commande;
 	}
-	public function EvaluateAction($Autorisation){
-		foreach($this->getConfiguration('Equipements') as $cmd){
-			if (isset($cmd['enable']) && $cmd['enable'] == 0)
-				continue;
-			if (isset($cmd['declencheur']) && array_search($Autorisation, $cmd['declencheur']) === false)
-
-				continue;
-			$this->ExecuteAction($cmd);
-		}
+	public function checkAutorisation($Element,$Autorisation){
+		if (isset($Element['enable']) && $Element['enable'] == 0)
+			return false;
+		if (isset($Element['declencheur']) && array_search($Autorisation, $Element['declencheur']) === false)
+			return false;
+		if (isset($Element['programmationName']) && array_search(cache::byKey('reveil::NextProgramationName::'.$this->getId())->getValue(''), $Element['programmationName']) === false)
+			return false;
+		return true;
 	}
 	public function ExecuteAction($cmd) {
 		try {
@@ -204,10 +205,8 @@ class reveil extends eqLogic {
 	}
 	public function EvaluateCondition($Autorisation,$default=true){
 		$count = 0;
-		foreach($this->getConfiguration('Conditions') as $Condition){	
-			if (isset($Condition['enable']) && $Condition['enable'] == 0)
-				continue;
-			if (isset($Condition['declencheur']) && array_search($Autorisation, $Condition['declencheur']) === false)
+		foreach($this->getConfiguration('Conditions') as $Condition){			
+			if(!$this->checkAutorisation($Condition,$Autorisation))
 				continue;
 			$count++;
 			$_scenario = null;
@@ -237,19 +236,20 @@ class reveil extends eqLogic {
 	public function NextStart(){
 		$nextTime=null;
 		foreach($this->getConfiguration('Programation') as $ConigSchedule){
+			if(!is_array($ConigSchedule))
+				continue;
 			$offset=0;
 			$timestamp=null;
-			if(date('H') > $ConigSchedule["Heure"])
+			if(time() > strtotime($ConigSchedule["time"]))
 				$offset++;
-			if(date('H') == $ConigSchedule["Heure"] && date('i') >= $ConigSchedule["Minute"])	
-				$offset++;
-			for($day=0;$day<7;$day++){
+          		for($day=0;$day<7;$day++){
 				$jour=date('w')+$day+$offset;
 				if($jour > 6)
 					$jour= $jour-7;
 				if($ConigSchedule[$jour]){
 					$offset+=$day;
-					$timestamp=mktime ($ConigSchedule["Heure"], $ConigSchedule["Minute"], 0, date("n") , date("j") , date("Y"))+ (3600 * 24) * $offset;
+					$timestamp=strtotime($ConigSchedule["time"]) + (3600 * 24) * $offset;
+					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
 					break;
 				}
 			}
@@ -260,7 +260,6 @@ class reveil extends eqLogic {
 		}
 		if($nextTime == null)
 			return false;
-		//log::add('reveil','debug',$this->getHumanName().' Prochain reveil sera : '.date('d/m/Y H:i',$nextTime));
 		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
 			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
 			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
@@ -269,14 +268,22 @@ class reveil extends eqLogic {
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
 	}
 	public function Snooze(){
-		$this->EvaluateAction('snooze');
+		foreach($this->getConfiguration('Equipements') as $cmd){
+			if(!$this->checkAutorisation($cmd,'snooze'))
+				continue;      
+			$this->ExecuteAction($cmd);
+		}
 		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
 		$this->NextStart();
 	}
 	public function StopReveil(){
 		cache::set('reveil::Snooze::'.$this->getId(),false, 0);
 		cache::set('reveil::addSnooze::'.$this->getId(),false, 0);
-		$this->EvaluateAction('off');
+		foreach($this->getConfiguration('Equipements') as $cmd){
+			if(!$this->checkAutorisation($cmd,'off'))
+				continue;      
+			$this->ExecuteAction($cmd);
+		}
 		$this->NextStart();
 	}
 }
@@ -290,7 +297,7 @@ class reveilCmd extends cmd {
 				if(cache::byKey('reveil::Snooze::'.$this->getEqLogic()->getId())->getValue(false))
 					$this->getEqLogic()->Snooze();
 			break;
-					case 'armed':
+			case 'armed':
 				$Listener=cmd::byId(str_replace('#','',$this->getValue()));
 				if (is_object($Listener)){
 					$Listener->event(true);

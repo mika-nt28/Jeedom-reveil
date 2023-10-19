@@ -1,3 +1,4 @@
+var Programmation = [];
 $("#table_cmd").sortable({axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_Prorgamationtab").sortable({axis: "y", cursor: "move", items: ".ProgramationGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
 $("#table_condition").sortable({axis: "y", cursor: "move", items: ".ConditionGroup", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true});
@@ -16,6 +17,10 @@ $('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=Reve
 			$(this).closest('.ActionGroup').find('.DawnSimulatorEngine').hide();
 		break;
 	}
+});
+$('body').off('change','.ProgramationGroup .expressionAttr[data-l1key=name]').on('change','.ProgramationGroup .expressionAttr[data-l1key=name]',  function () {
+	//$(".expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").text($(this).text());
+	$(".expressionAttr[data-l1key=programmationName]").text($(this).text());
 });
 function saveEqLogic(_eqLogic) {
 	_eqLogic.configuration.Programation=new Array();
@@ -36,6 +41,7 @@ function printEqLogic(_eqLogic) {
 	$('.ProgramationGroup').remove();
 	$('.ConditionGroup').remove();
 	$('.ActionGroup').remove();
+	Programmation = _eqLogic.configuration.Programation;
 	if (typeof(_eqLogic.configuration.Programation) !== 'undefined') {
 		for(var index in _eqLogic.configuration.Programation) {
 			if( (typeof _eqLogic.configuration.Programation[index] === "object") && (_eqLogic.configuration.Programation[index] !== null) )
@@ -75,27 +81,32 @@ function addCmdToTable(_cmd) {
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+function addAutorisations() {
+	var gestions=$('<select class="expressionAttr form-control custom-select cmdAction" data-l1key="programmationName" multiple>');
+	$.each(Programmation,function( index, value ) {
+		gestions.append($('<option value="'+value.name+'">').text(value.name));
+	});
+	var Autorisations=$('<div>');
+	Autorisations.append($('<td>').append(gestions));
+	Autorisations.append($('<td>').append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
+		.append($('<option value="on">')
+			.text('{{Allumage}}'))
+		.append($('<option value="snooze">')
+			.text('{{Snooze}}'))
+		.append($('<option value="off">')
+			.text('{{Extinction}}'))));
+	return Autorisations.children();	 		
+}
 function addProgramation(_programation,  _el) {
-	var Heure=$('<select class="expressionAttr form-control" data-l1key="Heure" >');
-    var Minute=$('<select class="expressionAttr form-control" data-l1key="Minute" >');
-	var number = 0;
-    while (number < 24) {
-		Heure.append($('<option value="'+number+'">')
-			.text(number));
-    	number++;
-	}
-  	number = 0;
-    while (number < 60) {
-		Minute.append($('<option value="'+number+'">')
-			.text(number));
-    	number++;
-	}
 	var tr = $('<tr class="ProgramationGroup">')
 		.append($('<td>')
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-default ProgramationAttr btn-sm" data-action="remove">')
-					.append($('<i class="fa fa-minus-circle">'))))
-		       	.append($('<span class="expressionAttr" data-l1key="id">')))
+					.append($('<i class="fa fa-minus-circle">')))))
+		.append($('<td>')
+			.append($('<span class="expressionAttr" data-l1key="id">')))
+		.append($('<td>')
+			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>')))
 		.append($('<td>')
 			.append($('<label class="checkbox-inline">')
 				.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
@@ -119,8 +130,7 @@ function addProgramation(_programation,  _el) {
 				.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
 				.append('{{Dimanche}}')))
 		.append($('<td>')
-			.append(Heure)
-			.append(Minute))	
+			.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
 		.append($('<td>')
 		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
@@ -142,14 +152,7 @@ function addCondition(_condition,_el) {
 			.append($('<span class="input-group-btn">')
 				.append($('<a class="btn btn-warning btn-sm listCmdCondition">')
 					.append($('<i class="fa fa-list-alt">'))))));
-	tr.append($('<td class="input-group">')
-		  .append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
-			.append($('<option value="on">')
-				.text('{{Allumage}}'))
-			.append($('<option value="snooze">')
-				.text('{{Snooze}}'))
-			.append($('<option value="off">')
-				.text('{{Extinction}}'))));	
+	tr.append(addAutorisations());
 
         _el.append(tr);
         _el.find('tr:last').setValues(_condition, '.expressionAttr');
@@ -179,14 +182,7 @@ function addAction(_action,  _el) {
 		.append($('<select class="expressionAttr form-control input-sm cmdAction" data-l1key="base">')
 				.append($('<option value="60">').text('Minute'))            
 				.append($('<option value="1">').text('Seconde'))));
-	tr.append($('<td class="input-group">')
-		  .append($('<select class="expressionAttr form-control custom-select" data-l1key="declencheur"  style="width: 80px" multiple>')
-			.append($('<option value="on">')
-				.text('{{Allumage}}'))
-			.append($('<option value="snooze">')
-				.text('{{Snooze}}'))
-			.append($('<option value="off">')
-				.text('{{Extinction}}'))));	
+	tr.append(addAutorisations());
 	_el.append(tr);
         _el.find('tr:last').setValues(_action, '.expressionAttr');
 	_el.find('tr:last .DawnSimulatorEngine').hide();
@@ -367,4 +363,4 @@ $('body').on( 'click','.bt_selectCmdExpression', function() {
 	jeedom.cmd.getSelectModal({cmd: {type: 'info'},eqLogic: {eqType_name : ''}}, function (result) {
 		$(_this).closest('.input-group').find('.cmdAttr').val(result.human);
 	});
-});  
+});

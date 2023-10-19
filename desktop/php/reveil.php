@@ -195,6 +195,8 @@
 					<thead>
 						<tr>
 							<th style="width:30px;"></th>
+							<th style="width:60px;"></th>
+							<th style="width:100px;"></th>
 							<th style="width:600px;">{{Jour actif}}</th>
 							<th style="width:100px;">{{Heure}}</th>
 							<th>{{Reprogrammation}}</th>
@@ -223,6 +225,7 @@
 							<th></th>
 							<th>{{Condition}}</th>
 							<th>{{Autorisation}}</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -249,6 +252,7 @@
 							<th>{{Action}}</th>
 							<th>{{Délais}}</th>
 							<th>{{Déclencheur}}</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody></tbody>
