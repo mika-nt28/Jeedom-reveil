@@ -7,21 +7,6 @@ $('.bt_showExpressionTest').off('click').on('click', function () {
   $('#md_modal').dialog({title: "{{Testeur d'expression}}"});
   $("#md_modal").load('index.php?v=d&modal=expression.test').dialog('open');
 });
-$('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
-	switch($(this).val()){
-		case 'DawnSimulatorEngine':
-			$(this).closest('.ActionGroup').find('.DawnSimulatorEngine').show();
-			$(this).closest('.ActionGroup').find('.actionOptions').hide();
-		break;
-		default:
-			$(this).closest('.ActionGroup').find('.DawnSimulatorEngine').hide();
-		break;
-	}
-});
-$('body').off('change','.ProgramationGroup .expressionAttr[data-l1key=name]').on('change','.ProgramationGroup .expressionAttr[data-l1key=name]',  function () {
-	//$(".expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").text($(this).text());
-	$(".expressionAttr[data-l1key=programmationName]").text($(this).text());
-});
 function saveEqLogic(_eqLogic) {
 	_eqLogic.configuration.Programation=new Array();
 	_eqLogic.configuration.Conditions=new Array();
@@ -106,38 +91,56 @@ function addProgramation(_programation,  _el) {
 		.append($('<td>')
 			.append($('<span class="expressionAttr" data-l1key="id">')))
 		.append($('<td>')
-			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>')))
+			.append($('<input class="expressionAttr form-control input-sm" data-l1key="name"/>'))
+			.append($('<select class="expressionAttr form-control input-sm" data-l1key="type">')
+				.append($('<option value="unique">').text("Unique"))
+				.append($('<option value="programme">').text("Programmée"))))
 		.append($('<td>')
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
-				.append('{{Lundi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
-				.append('{{Mardi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
-				.append('{{Mercredi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
-				.append('{{Jeudi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
-				.append('{{Vendredi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
-				.append('{{Samedi}}'))
-			.append($('<label class="checkbox-inline">')
-				.append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
-				.append('{{Dimanche}}')))
+			.append($('<div class="unique">')
+				.append($('<input type="date" class="expressionAttr" data-l1key="date" />')))
+			.append($('<div class="programme">')
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="1">'))
+                  .append('{{Lundi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="2">'))
+                  .append('{{Mardi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="3">'))
+                  .append('{{Mercredi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="4">'))
+                  .append('{{Jeudi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="5">'))
+                  .append('{{Vendredi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="6">'))
+                  .append('{{Samedi}}'))
+              .append($('<label class="checkbox-inline">')
+                  .append($('<input type="checkbox" class="expressionAttr" data-l1key="0" />'))
+                  .append('{{Dimanche}}'))))
 		.append($('<td>')
-			.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
+				.append($('<input type="time" class="expressionAttr" data-l1key="time" />')))
 		.append($('<td>')
 		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
-        _el.find('tr:last').setValues(_programation, '.expressionAttr');
+      	var previousName ='';
+	$('.expressionAttr[data-l1key=name]').off().on('keydown',function(event){
+		previousName = $(this).val();
+	}).on('keyup',function(event){
+		$("body .expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").text($(this).val());
+		$("body .expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").attr('value',$(this).val());
+	});	
+	$('.expressionAttr[data-l1key=type]').off().on('change',function(){
+		$(this).closest('tr').find('.unique').hide();
+		$(this).closest('tr').find('.programme').hide();
+		$(this).closest('tr').find('.'+$(this).val()).show();
+	});
 	$('.ProgramationAttr[data-action=remove]').off().on('click',function(){
 		$(this).closest('tr').remove();
 	});
+	_el.find('tr:last').setValues(_programation, '.expressionAttr');
 }
 function addCondition(_condition,_el) {
 	var tr = $('<tr class="ConditionGroup">');

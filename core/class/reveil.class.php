@@ -52,7 +52,7 @@ class reveil extends eqLogic {
 										if(!$Reveil->checkAutorisation($cmd,'on'))
 											continue;
 										$Reveil->ExecuteAction($cmd);
-									}
+                                    }
 								}
 								list($NextTime, $NextCmds) = $Reveil->getNextDelaisAction($NextStart);
 								if($Reveil->EvaluateCondition('snooze', false))
@@ -240,23 +240,33 @@ class reveil extends eqLogic {
 				continue;
 			$offset=0;
 			$timestamp=null;
-			if(time() > strtotime($ConigSchedule["time"]))
-				$offset++;
-          		for($day=0;$day<7;$day++){
-				$jour=date('w')+$day+$offset;
-				if($jour > 6)
-					$jour= $jour-7;
-				if($ConigSchedule[$jour]){
-					$offset+=$day;
-					$timestamp=strtotime($ConigSchedule["time"]) + (3600 * 24) * $offset;
-					cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
-					break;
-				}
-			}
+          	switch($ConigSchedule["type"]){
+          		case 'unique':
+          			$timestamp=strtotime($ConigSchedule["date"].' '.$ConigSchedule["time"]);
+          			if(time() > $timestamp)
+          				continue;
+          		break;
+          		case 'programme':
+          			if(time() > strtotime($ConigSchedule["time"]))
+						$offset++;
+          			for($day=0;$day<7;$day++){
+						$jour=date('w')+$day+$offset;
+						if($jour > 6)
+							$jour= $jour-7;
+						if($ConigSchedule[$jour]){
+							$offset+=$day;
+							$timestamp=strtotime($ConigSchedule["time"]) + (3600 * 24) * $offset;
+							break;
+						}
+					}
+          		break;
+          	}
 			if($timestamp == null)
 				continue;
-			if($nextTime == null || $nextTime > $timestamp)
+			if($nextTime == null || $nextTime > $timestamp){
 				$nextTime = $timestamp;
+				cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
+            }
 		}
 		if($nextTime == null)
 			return false;
@@ -272,7 +282,7 @@ class reveil extends eqLogic {
 			if(!$this->checkAutorisation($cmd,'snooze'))
 				continue;      
 			$this->ExecuteAction($cmd);
-		}
+        }
 		cache::set('reveil::addSnooze::'.$this->getId(),true, 0);
 		$this->NextStart();
 	}
@@ -283,7 +293,7 @@ class reveil extends eqLogic {
 			if(!$this->checkAutorisation($cmd,'off'))
 				continue;      
 			$this->ExecuteAction($cmd);
-		}
+        }
 		$this->NextStart();
 	}
 }
