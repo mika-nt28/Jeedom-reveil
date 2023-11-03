@@ -7,21 +7,6 @@ $('.bt_showExpressionTest').off('click').on('click', function () {
   $('#md_modal').dialog({title: "{{Testeur d'expression}}"});
   $("#md_modal").load('index.php?v=d&modal=expression.test').dialog('open');
 });
-$('body').on('change','.expressionAttr[data-l1key=configuration][data-l2key=ReveilType]',function(){
-	switch($(this).val()){
-		case 'DawnSimulatorEngine':
-			$(this).closest('.ActionGroup').find('.DawnSimulatorEngine').show();
-			$(this).closest('.ActionGroup').find('.actionOptions').hide();
-		break;
-		default:
-			$(this).closest('.ActionGroup').find('.DawnSimulatorEngine').hide();
-		break;
-	}
-});
-$('body').off('change','.ProgramationGroup .expressionAttr[data-l1key=name]').on('change','.ProgramationGroup .expressionAttr[data-l1key=name]',  function () {
-	//$(".expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").text($(this).text());
-	$(".expressionAttr[data-l1key=programmationName]").text($(this).text());
-});
 function saveEqLogic(_eqLogic) {
 	_eqLogic.configuration.Programation=new Array();
 	_eqLogic.configuration.Conditions=new Array();
@@ -140,6 +125,13 @@ function addProgramation(_programation,  _el) {
 		.append($('<td>')
 		       	.append($('<span class="expressionAttr" data-l1key="url">')));
         _el.append(tr);
+      	var previousName ='';
+	$('.expressionAttr[data-l1key=name]').off().on('keydown',function(event){
+		previousName = $(this).val();
+	}).on('keyup',function(event){
+		$("body .expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").text($(this).val());
+		$("body .expressionAttr[data-l1key=programmationName] option[value='"+previousName+"']").attr('value',$(this).val());
+	});	
 	$('.expressionAttr[data-l1key=type]').off().on('change',function(){
 		$(this).closest('tr').find('.unique').hide();
 		$(this).closest('tr').find('.programme').hide();
