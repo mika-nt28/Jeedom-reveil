@@ -240,16 +240,14 @@ class reveil extends eqLogic {
 				continue;
 			$offset=0;
 			$timestamp=null;
-          	switch($ConigSchedule["type"]){
-          		case 'unique':
-          			$timestamp=strtotime($ConigSchedule["date"].' '.$ConigSchedule["time"]);
-          			if(time() > $timestamp)
-          				continue;
-          		break;
-          		case 'programme':
-          			if(time() > strtotime($ConigSchedule["time"]))
+			switch($ConigSchedule["type"]){
+				case 'unique':
+					$timestamp=strtotime($ConigSchedule["date"].' '.$ConigSchedule["time"]);
+				break;
+				case 'programme':
+					if(time() > strtotime($ConigSchedule["time"]))
 						$offset++;
-          			for($day=0;$day<7;$day++){
+					for($day=0;$day<7;$day++){
 						$jour=date('w')+$day+$offset;
 						if($jour > 6)
 							$jour= $jour-7;
@@ -259,20 +257,22 @@ class reveil extends eqLogic {
 							break;
 						}
 					}
-          		break;
-          	}
+				break;
+			}
+			if(time() > $timestamp)
+				continue;
 			if($timestamp == null)
 				continue;
 			if($nextTime == null || $nextTime > $timestamp){
 				$nextTime = $timestamp;
 				cache::set('reveil::NextProgramationName::'.$this->getId(),$ConigSchedule["name"], 0);
-            }
+			}
 		}
 		if($nextTime == null)
 			return false;
 		if(cache::byKey('reveil::addSnooze::'.$this->getId())->getValue(false)){
-			$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
-			log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
+				$nextTime = time() + jeedom::evaluateExpression($this->getConfiguration('snooze'))*60;
+				log::add('reveil','info',$this->getHumanName().' Le snooze a été activé, le reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
 		}
 		log::add('reveil','info',$this->getHumanName().' Le prochain reveil sera relancé a '.date('d/m/Y H:i',$nextTime));
 		$this->checkAndUpdateCmd('NextStart',date('d/m/Y H:i',$nextTime));
