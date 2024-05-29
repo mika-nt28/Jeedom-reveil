@@ -84,7 +84,7 @@
     			<li role="presentation">
 				<a href="#programationtab" aria-controls="profile" role="tab" data-toggle="tab">
 					<i class="fa fa-calendar"></i> 
-					{{Programmation}}
+					{{Programmations}}
 				</a>
 			</li>
     			<li role="presentation">
@@ -214,7 +214,7 @@
 							</sup>
 							<a class="btn btn-success btn-xs conditionAttr" data-action="add" style="margin-left: 5px;">
 								<i class="fa fa-plus-circle"></i>
-								{{Ajouter une Condition}}
+								{{Ajouter une condition}}
 							</a>
 						</legend>
 					</fieldset>
